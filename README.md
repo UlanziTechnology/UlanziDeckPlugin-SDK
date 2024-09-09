@@ -1,22 +1,36 @@
 
-**U-Studio Plugin Open-Source**
+# U-Studio Plugin Open-Source
 
-<a name="heading_0"></a>**To enhance creators' productivity and meet diverse needs, the U-Studio team has initiated the UlanziDeck project. We believe that creators are not only consumers but also producers. Through co-creation and content sharing, a win-win situation can be achieved. We have launched the UlanziDeck plugin development plan and have successfully developed many feature-rich plugins through close cooperation with numerous developers. To further facilitate and incentivize developers, we have decided to create an open-source repository, inviting all developers to participate and jointly build a more open, flexible, and powerful plugin platform.**
+<p align="start">
+   <strong>English</strong> | <a href="/README.zh.md">简体中文</a>
+</p>
+
+---
+
+ To enhance creators' productivity and meet diverse needs, the U-Studio team has initiated the UlanziDeck project. We believe that creators are not only consumers but also producers. Through co-creation and content sharing, a win-win situation can be achieved. We have launched the UlanziDeck plugin development plan and have successfully developed many feature-rich plugins through close cooperation with numerous developers. To further facilitate and incentivize developers, we have decided to create an open-source repository, inviting all developers to participate and jointly build a more open, flexible, and powerful plugin platform.
 
 
 
-<a name="heading_1"></a>**I. Plugin Component Library**
+## I. Plugin Component Library
 
 **The open-source library for plugin development is primarily focused on simple and easy-to-use protocol calls, event distribution, and secure and stable network connections. It provides developers with a set of common tools, interfaces, and specifications to lower the barrier to plugin development. The development scope includes but is not limited to protocol encapsulation, common components, custom pop-up components, and more.**
 
 
-<a name="heading_3"></a>**II. Participating in Plugin Development**
+<p align="start">
+   <strong><a href="/common-html/README.md">Library for H5 Plugin</a></strong>
+</p>
+
+<p align="start">
+   <strong><a href="/common-node/README.md">Library for Node.js Plugin</a></strong>
+</p>
+
+## II. Participating in Plugin Development
 
 Developers interested in participating in plugin development can contact frank1@ulanzi.cn or chenxudong@ulanzi.cn to obtain the specific development agreement.
 
 
 
-<a name="heading_4"></a>**III. Declaration**
+## III. Declaration
 
 **Project Interpretation Rights:**
 
