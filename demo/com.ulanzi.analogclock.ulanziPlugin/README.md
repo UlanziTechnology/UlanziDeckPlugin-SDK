@@ -72,24 +72,24 @@ localization: 插件内容本地化
 ### zh_ CN.json 的示例
 ```json
 {
-	"Name" : "时钟模拟",
-	"Description": "实时显示时间", 
-	"Actions" :[
-		{
-			"Name": "设置时钟",
-			"Tooltip": "更改时钟样式"
-		}
-	],
+  "Name" : "时钟模拟",
+  "Description": "实时显示时间", 
+  "Actions" :[
+    {
+      "Name": "设置时钟",
+      "Tooltip": "更改时钟样式"
+    }
+  ],
   "Localization": {  
-      "Face": "钟面",
-      "Digital": "数字",
-      "Black" : "黑色",
-      "Blue" : "蓝色",
-      "Blueish" : "浅蓝",
-      "Green" : "绿色",
-      "Red": "红色",
-      "White": "白色",
-      "Transparent": "透明"
+    "Face": "钟面",
+    "Digital": "数字",
+    "Black" : "黑色",
+    "Blue" : "蓝色",
+    "Blueish" : "浅蓝",
+    "Green" : "绿色",
+    "Red": "红色",
+    "White": "白色",
+    "Transparent": "透明"
   }
 }
 

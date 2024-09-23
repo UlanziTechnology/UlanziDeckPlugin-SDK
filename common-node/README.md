@@ -65,7 +65,7 @@ An action function may be configured on multiple keys, so the common library con
 npm install ulanzideck-api --save
 ```
 
-#### <span id="#title-2">2. Generate random port</span>
+#### <span id="title-2">2. Generate random port</span>
 
 After calling the method getPort() of the randomly generated interface, a ws-port.js will be automatically generated under the main service of the plugin, and the content of the js file is window.__port = port number;
 The HTML of the action can be connected to the main node service by introducing a 'ws-port.js' file to get the port of the main service

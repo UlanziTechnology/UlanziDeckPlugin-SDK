@@ -67,7 +67,7 @@ ulanzideck-api   //通用node包
 npm install ulanzideck-api --save
 ```
 
-#### <span id="#title-2">2. 生成随机端口</span>
+#### <span id="title-2">2. 生成随机端口</span>
 调用随机生成接口的方法getPort()之后，将在插件主服务下会自动生成ws-port.js ，该js文件内容为 window.__port = 端口号;
 action的html可以通过引入'ws-port.js"文件，获得主服务的端口，连接到node主服务
 
