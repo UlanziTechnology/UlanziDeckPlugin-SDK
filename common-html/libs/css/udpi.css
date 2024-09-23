@@ -1626,3 +1626,35 @@ input[type="range"].colortemperature::-webkit-slider-thumb {
   opacity: 1;
   transition: opacity 0.25s ease-out;
 }
+form{
+  position: relative;
+}
+.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.loading {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(0, 0, 0, 0.2);  /*  设置整体边框背景颜色*/
+  border-top-color: #d8d8d8;  /* 单独设置顶部边框颜色来表示动态部分 */
+  border-radius: 50%;
+  animation: loading 1s linear infinite;  /* 设置循环动画参数 */
+}
+
+@keyframes loading {
+  to {
+    transform: rotate(360deg);  /* 设置旋转360度 */
+  }
+}
+.none{
+  display: none;
+}

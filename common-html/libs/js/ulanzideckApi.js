@@ -11,7 +11,7 @@ class UlanziStreamDeck  {
     this.websocket = null;
     this.language = 'en';
     this.localization = null;
-    this.localPathPrefix = '../../langs/';
+    this.localPathPrefix = '../../';
     this.on = EventEmitter.on;
     this.emit = EventEmitter.emit;
   }
@@ -142,7 +142,9 @@ class UlanziStreamDeck  {
     const selectorsList = '[data-localize]';
     el.querySelectorAll(selectorsList).forEach(e => {
       const s = e.innerText.trim();
-      e.innerHTML = e.innerHTML.replace(s, this.localization[s] || s);
+      if(s){
+        e.innerText = this.localization[s] || e.innerText;
+      }
       if (e.placeholder && e.placeholder.length) {
         e.placeholder = this.localization[e.placeholder] || e.placeholder;
       }
@@ -151,6 +153,9 @@ class UlanziStreamDeck  {
       }
       if(e.label){
           e.label = this.localization[e.label] || e.label;
+      }
+      if(e.textContent){
+          e.textContent = this.localization[e.textContent] || e.textContent;
       }
     });
   };

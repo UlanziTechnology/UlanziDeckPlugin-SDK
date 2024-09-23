@@ -1,76 +1,82 @@
-# ulanzideck-plugin-common html版本
+# ulanzideck-plugin-sdk-html
 
-## 简介
-为了让开发者提升创作者的工作效率，降低插件开发门槛，我们开发了这套Ulanzideck的插件通用库html版本。使用该插件库，无需再次开发socket连接，开发者只需关注插件本身所需要实现的功能，根据上位机的事件触发即可。
+<p align="start">
+   <strong>English</strong> | <a href="/common-html/README.zh.md">简体中文</a>
+</p>
+
+## Introduction
+The ulanzideck-plugin-sdk encapsulates the WebSocket connection with the UlanziDeck and its related communication events. This simplifies the development process and enables developers to communicate with the UlanziDeck through simple event calls, allowing them to focus more on the development of plugin functions.
 
 
 ```bash
-当前版本根据 Ulanzi JS 插件开发协议-V1.2.1 来编写
+The current version is developed according to the Ulanzi JS Plugin Development Protocol - V1.2.1.
 ```
 
 
-## 文件介绍
+## File directory
 ```bash
-libs   //该文件夹就是插件通用库的功能
+libs   //This folder is the function of the plugin general library
 ├── css
-│   └── udpi.css      //通用样式，按照约定格式编写html, 即可生效
+│   └── udpi.css      //Common style, according to the convention format to write html, can take effect
 ├── js
-│   ├── constants.js      //上位机的事件常量，无需二次编写
-│   ├── eventEmitter.js   //引发事件工具类，无需二次编写
-│   ├── timers.js         //timer工具类，无需二次编写，用于提高性能
-│   ├── utils.js          //一些常用方法的封装，欢迎大家补充，目前主要功能：获取配置项html的form表单和重载配置项html的form的表单
-│   └── ulanzideckApi.js    //包括 ulanzi所有事件的封装，socket的连接，以及本地化的处理
+│   ├── constants.js      //Event constants of the UlanziDeck
+│   ├── eventEmitter.js   //Event Emitter
+│   ├── timers.js         //Used to improve performance
+│   ├── utils.js          //Some common methods of encapsulation, welcome to add, the current main functions: get the form of the action's html and the form of the form that overloads the action's html
+│   └── ulanzideckApi.js    //This includes the encapsulation of all UlanziDeck events, websocket connection, and localized processing
 ├── assets
-│   └── xxx.png          //css需要的icon，无需更改
+│   └── xxx.png          //CSS icon required, no need to change
 
 ```
 
 
-## 使用
+## Instructions
 
-### 一些说明和约定
+### Some instructions and conventions
+
+1. The main service of the plugin library (for example app.html) will always be connected to the host computer. Implement the main functions of the plugin, receive changes to action's params, update the status of icons, etc.
+
+2. The action of the plugin library (for example inspector.html). The page will be destroyed after toggling the UlanziDeck button, so it is not appropriate to do functional processing. It is mainly used to send params to UlanziDeck and synchronize params from UlanziDeck.
+
+3. For unified management, the name of our plugin package is com.ulanzi.pluginname.ulanziPlugin
+
+4. For the normal use of the ulanzideck-plugin-sdk library, we agree that the uuid length of the main service connection is 4. Example: com.ulanzi.ulanzideck.pluginname
+
+5. The uuid of the action connection must be greater than 4 for differentiation. Example: com.ulanzi.ulanzideck.pluginname.pluginaction
+
+6. The localization file is placed in the plugin root directory, which is at the same level as the ulanzideck-plugin-sdk libs. (For the writing rules of localized json files, you can view the demo example) Example: zh_CN.json en.json。
+
+7. In order to unify UI fonts, we have set up the open source font Source Han Sans in udpi.css, and we also need to reference the font library in app.html. Please use 'Source Han Sans' uniformly when drawing icons。
+
+8. The background color of UlanziDeck is '#282828', and the generic css (udpi.css) has been set to '--udpi-bgcolor: #282828; '。 If you want to customize the background color of the action, it should be the same as the background color of the host computer, so as to avoid the background color of the plug-in being too abrupt.
+
+
+### How to use
+
 ```bash
-1. 插件库的主服务（例app.html）会一直与上位机连接，用于做主要功能，包括上位机icon的更新等。
-
-2. 插件库的配置项（例inspector.html），配置项我们后续称为action。切换功能按键之后就会被销毁，不宜做功能处理。主要用于发送配置项到上位机和同步上位机数据。
-
-3. 为了统一管理，我们的插件包的名称为 com.ulanzi.插件名.ulanziPlugin
-
-4. 为了通用库的正常使用，主服务连接的uuid我们约定长度是4。例：com.ulanzi.ulanzideck.插件名
-
-5. 配置项连接的uuid要大于4用于区分。例：com.ulanzi.ulanzideck.插件名.插件action
-
-6. 本地化文件夹（langs）需放在与libs同级目录下，例：langs/zh.json
-
-7. 为了UI字体的统一，我们已经在udpi.css设置了开源字体思源黑体（Source Han Sans），在app.html也同样需要引用字体库。请大家在绘制icon时，统一使用'Source Han Sans'。
-
-8. 上位机的背景颜色为 '#282828'，通用css（udpi.css）已经设定了'--udpi-bgcolor: #282828;'。若要自定义action的背景颜色应与上位机背景色相同，避免插件背景颜色过于突兀。
-
+For details on the usage and folder specifications of ulanzideck-plugin-sdk, see demo/com.ulanzi.analogclock.ulanziPlugin.
+The following briefly describes how to use：
 ```
-### 使用步骤
+
+#### * context （A special parameter）
+
+An action function may be configured on multiple keys, so the common library concatenates a unique value context. When we create a feature instance, we only need to save the unique value <strong>context</strong>. If you need to update the data, you can send the message to the corresponding key value based on the corresponding unique value <strong>context</strong>.
 
 ```bash
-通用库的具体使用和文件夹规范，可以查看 demo/com.ulanzi.analogclock.ulanziPlugin 的实现。
-以下简单介绍通用库的使用：
-```
+1. The special parameter context, which is a unique value concatenated from the common library, is passed to the main service and action along with the received message。
 
-#### * 特殊参数 context
-由于一个action功能会配置到多个按键key上，因此common库为大家拼接了一个唯一值context。在我们创建功能实例的时候，只需保存唯一值context。若需要更新数据时，再根据对应的唯一值context，即可将消息发送到对应的key值上。
-```bash
-1. 特殊参数context, 是common库拼接出的唯一值，它连同接收到的message一起传递给主服务和action。
+2. The concatenation rule for context is uuid + '___' + key + '__' + actionid, generated by the corresponding $UD.encodeContext(msg).
 
-2. context的拼接规则是 uuid + '___' + key + '___' + actionid，由对应的$UD.encodeContext(msg)生成。
+3. We also provide $UD.decodeContext(context) to deconstruct unique values and return { uuid, key, actionid }.
 
-3. 同时我们提供 $UD.decodeContext(context) 来解构唯一值，返回 { uuid, key, actionid }。
-
-4. 由于clear事件的param是数组形式，因此clear的context拼接在param里。请大家做clear处理时，注意循环获取。
+4. Since the param of the clear event is in the form of an array, the context of clear is spliced ​​into the param. Please pay attention to loop acquisition when doing clear processing.
 
 ```
 
-#### 1. 引入通用库
+#### 1. Import files from the ulanzideck-plugin-sdk
 ```html
 /**
- * ulanzideckApi 依赖 eventEmitter 和 utils ，需按以下顺序在html页面中引用
+ * The ulanzideckApi.js relies on eventEmitter.js and utils.js, which need to be referenced in the html page in the following order
 */
 
 <script src="../../libs/js/constants.js"></script>
@@ -81,21 +87,21 @@ libs   //该文件夹就是插件通用库的功能
 
 ```
 
-#### 2. HTML适用通用css结构
+#### 2. How html adapts to udpi.css
 ```html
 /**
- * 以配置项页面为例
+ *Take the action html page as an example
 */
 
 
-<!-- 配置项需用form包裹, 配置项用name来表示 -->
-<!-- 即可使用Utils.getFormValue获取表单数据和Utils.setFormValue重载表单数据 -->
+<!-- The action items need to be wrapped in form, and the items are associated with the name attribute. -->
+<!-- After that, you can use Utils.getFormValue() to get the form data and Utils.setFormValue() to overload the form data. -->
 <form id="property-inspector">   
 
 
-  <!-- 配置项的label和value用div.udpi-item包裹，label用udpi-item-label表示，value用udpi-item-value表示 -->
+  <!-- The label and value of the configuration item are wrapped with div.udpi-item, the label uses the udpi-item-label class name, and the value uses the udpi-item-value class name. -->
   <div class="udpi-item">
-    <!-- data-localize 表示需要本地化，编写页面默认使用英文，在langs文件夹下配置对应的json-->
+    <!-- data-localize means localization is required. By default, the page is written in English. Configure the corresponding json in the root directory, such as zh.json. -->
     <div class="udpi-item-label" data-localize>Name</div>
     <input type="text" class="udpi-item-value" name="name" value="test">
   </div>
@@ -110,35 +116,37 @@ libs   //该文件夹就是插件通用库的功能
 
 ```
 
-#### 3. 连接上位机
-以配置项页面为例, 简单展示一些方法使用，具体可查看[<a href="#title-4">4.接收事件 上位机->插件</a>][<a href="#title-5">5.发送事件 插件->上位机</a>]
+#### 3. Connect the UlanziDeck
+Take the action's html page as an example to briefly demonstrate some methods. For details, please see[<a href="#title-4">4. Receive events(UlanziDeck->plugin)</a>][<a href="#title-5">5. Send Events(plugin->UlanziDeck)</a>]
+
+
 ```html
 
 /**
- * $UD 是 ulanzideckApi 的实例，通过 $UD.connect(uuid) 来连接websocket
+ * $UD is an instance of the ulanzideckApi that connects to the UlanziDeck's websocket via $UD.connect(uuid).
  * 
 */
 
 <script>
-  //连接socket，连接成功后，会触发事件onConnected
+  //Connect to the websocket of the UlanziDeck. After successful connection, the event onConnected will be triggered
   $UD.connect('com.ulanzi.ulanzideck.analogclock.clock');
   $UD.onConnected(conn => {
-    //表示已连接，可在此处渲染动态节点
+    //Connected, dynamic nodes can be rendered here
 
   })
 
 
-  //配置到按键
+  //Drag to the button
   $UD.onAdd( message => {
-    //实现功能，可以在此处实现配置项的重载
+    //Overloading of form can be implemented here.  Utils.setFormValue(message.param,form)
   })
 
-  //获取初始化参数
+  //Get initialization parameters
   $UD.onParamFromApp( message => {
-      //实现功能，可以在此处实现配置项的重载
+      //Overloading of form can be implemented here.  Utils.setFormValue(message.param,form)
   })
 
-  //配置参数
+  //Send parameters
   function sendData(params){
     $UD.sendParamFromPlugin(params)
   }
@@ -147,114 +155,108 @@ libs   //该文件夹就是插件通用库的功能
 
 ```
 
-#### <a id="title-4">4. 接收事件 上位机->插件</a>
+#### <span id="title-4" >4. Receive events(UlanziDeck->plugin)</span>
 ```js
 /**
- * 监听socket连接成功的事件，以及上位机发出的事件
+ * Listen for events from websocket connections and events from the UlanziDeck
 */
-1. $UD.onConnected(conn => ())  //websocket连接成功
-2. $UD.onClose(conn => ())  // websocket 断开连接
-3. $UD.onError(conn => ())  //websocket 错误
-4. $UD.onAdd(message => ())     //接收上位机发出 "cmd": "add" 的事件
-5. $UD.onParamFromApp(message => ())  //接收上位机发出 "cmd": "paramfromapp" 的事件
-6. $UD.onParamFromPlugin(message => ())  //接收上位机发出 "cmd": "paramfromplugin" 的事件
-7. $UD.onRun(message => ())  //接收上位机发出 "cmd": "run" 的事件
-8. $UD.onSetActive(message => ())  //接收上位机发出 "cmd": "setactive" 的事件
-9. $UD.onClear(message => ())  //接收上位机发出 "cmd": "clear" 的事件
-10. $UD.onSelectdialog(message => ())  //接收上位机返回的 "cmd": "selectdialog" 的事件，用于接收选择文件/文件夹的结果
+1. $UD.onConnected(conn => ())  //The websocket connection to the UlanziDeck is successful
+2. $UD.onClose(conn => ())  //The websocket connection is closed
+3. $UD.onError(conn => ())  //websocket connection error
+4. $UD.onAdd(message => ())     //Receive event "cmd": "add" from UlanziDeck
+5. $UD.onParamFromApp(message => ())  //Receive event "cmd": "paramfromapp" from UlanziDeck
+6. $UD.onParamFromPlugin(message => ())  //Receive event "cmd": "paramfromplugin" from UlanziDeck
+7. $UD.onRun(message => ())  //Receive event "cmd": "run" from UlanziDeck
+8. $UD.onSetActive(message => ())  //Receive event "cmd": "setactive" from UlanziDeck
+9. $UD.onClear(message => ())  //Receive event "cmd": "clear" from UlanziDeck
+10. $UD.onSelectdialog(message => ())  //Receive event "cmd": "selectdialog" from UlanziDeck.Used to receive the results of selecting files/folders
 
 ```
 
-#### <a id="title-5">5. 发送事件 插件->上位机</a>
+#### <span id="title-5">5. Send Events(plugin->UlanziDeck)</span>
 
 ```js
 /**
- * 向上位机发送配置参数
- * @param {object} settings 必传 | 配置参数
- * @param {object} context 可选 | 唯一值。非必传，由action页面发出时可以不传，由主服务发出必传
+ * Send  parameters to the UlanziDeck
+ * @param {object} settings Required | parameters
+ * @param {object} context Optional | Unique value。It is not required to be passed. It does not need to be passed when it is sent from the action page. It must be passed when it is sent from the main service.
 */
 1. $UD.sendParamFromPlugin(settings, context) 
 
 /**
- * 设置图标-使⽤配置⾥的图标列表编号，请对照manifest.json。
- * @param {string} context 必传 |唯一值, 接收到的message里面common库会自动拼接给出
- * @param {number} state 必传 | 图标列表编号，
- * @param {string} text 可选 | icon是否显示文字
+ * Set icon - use the icon list number in the configuration, please refer to manifest.json.
+ * @param {string} context Required | Unique value, the  ulanzideck-plugin-sdk library in the received message will be automatically spliced ​​and given.
+ * @param {number} state Required | Icon list number
+ * @param {string} text Optional | Whether the icon displays text
 */
 2. $UD.setStateIcon(context, state, text) 
 
 
   /**
- * 设置图标-使⽤⾃定义图标
- * @param {string} context 必传 |唯一值,每个message里面common库会自动拼接给出
- * @param {string} data 必传 | base64格式的icon
- * @param {string} text 可选 | icon是否显示文字
+ * Set icon - use custom icon
+ * @param {string} context Required | Unique value, the  ulanzideck-plugin-sdk library in the received message will be automatically spliced ​​and given.
+ * @param {string} data Required | icon in base64 format
+ * @param {string} text Optional | Whether the icon displays text
 */
 3. $UD.setBaseDataIcon(context, data, text) 
 
 
 /**
- * 设置图标-使⽤本地图片文件
- * @param {string} context 必传 |唯一值,每个message里面common库会自动拼接给出
- * @param {string} path  必传 | 本地图片路径，⽀持打开插件根⽬录下的url链接（以/ ./ 起始的链接）
- * @param {string} text 可选 | icon是否显示文字
+ * Set icon-use local image file
+ * @param {string} context Required | Unique value, the  ulanzideck-plugin-sdk library in the received message will be automatically spliced ​​and given.
+ * @param {string} path  Required | Local image path, supports opening URL links under the plugin root directory (links starting with / ./)
+ * @param {string} text Optional | Whether the icon displays text
 */
 4. $UD.setPathIcon(context, path, text) 
 
 
 /**
- * 设置图标-使⽤⾃定义的动图
- * @param {string} context 必传 |唯一值,每个message里面common库会自动拼接给出
- * @param {string} gifdata  必传 | ⾃定义gif的base64编码数据
- * @param {string} text 可选 | icon是否显示文字
+ * Set icon - use custom gif
+ * @param {string} context Required | Unique value, the  ulanzideck-plugin-sdk library in the received message will be automatically spliced ​​and given.
+ * @param {string} gifdata Required | Base64 encoded data of custom gif
+ * @param {string} text Optional | Whether the icon displays text
 */
 5. $UD.setGifDataIcon(context, gifdata, text) 
 
 
 
   /**
- * 设置图标-使⽤本地gif⽂件
- * @param {string} context 必传 |唯一值,每个message里面common库会自动拼接给出，
- * @param {string} gifdata  必传 | 本地gif图片路径，⽀持打开插件根⽬录下的url链接（以/ ./ 起始的链接）
- * @param {string} text 可选 | icon是否显示文字
+ * Set icon - use local gif file
+ * @param {string} context Required | Unique value, the  ulanzideck-plugin-sdk library in the received message will be automatically spliced ​​and given.，
+ * @param {string} gifdata  Required | Local gif image path, supports opening URL links under the plugin root directory (links starting with / ./)
+ * @param {string} text Optional | Whether the icon displays text
 */
 6. $UD.setGifPathIcon(context, gifpath, text) 
 
 
 /**
- * 请求上位机弹出Toast消息提⽰
- *  @param {string} msg 必传 | 窗口级消息提示
+ * A toast message pops up on the requesting UlanziDeck
+ *  @param {string} msg Required | Window level message prompt
 */
 7. $UD.toast(msg) 
 
 /**
- * 请求上位机弹出选择对话框:选择文件
- *  @param {string} filter 可选 | 文件过滤器。筛选文件的类型，例如 "filter": "image(*.jpg *.png *.gif)" 或者 筛选文件 file(*.txt *.json) 等
- * 该请求的选择结果请通过 onSelectdialog 事件接收
+ * Request the UlanziDeck to pop up a selection dialog box: select file
+ *  @param {string} filter Optional | File filter. Filter file type, such as "filter": "image(*.jpg *.png *.gif)" or filter file file(*.txt *.json) etc.
+ * Please receive the selection result of this request through the onSelectdialog event
 */
 8. $UD.selectFileDialog(filter) 
 
 
 /**
- * 请求上位机弹出选择对话框:选择文件夹
- * 该请求的选择结果请通过 onSelectdialog 事件接收
+ * Request the UlanziDeck to pop up a selection dialog box: select a folder
+ * Please receive the selection result of this request through the onSelectdialog event
 */
 9. $UD.selectFolderDialog() 
 
 
 /**
- * 请求上位机使⽤浏览器打开url
- * @param {string} url 必传 | 直接远程地址和本地地址，⽀持打开插件根⽬录下的url链接（以/ ./ 起始的链接）
- * @param {local} boolean 可选 | 若为本地地址为true
+ * Request the UlanziDeck to use the browser to open the url
+ * @param {string} url Required | Supports remote paths and local paths, supports opening url links under the plug-in root directory (links starting with / ./)
+ * @param {local} boolean Optional | true if it is a local path
 */
 10. $UD.openUrl(url, local) 
 
-
-/**
- * 请求上位机机显⽰弹窗；弹窗后，test.html需要主动关闭，测试到window.close()可以通知弹窗关闭
- *  @param {string} url 必传 | 本地html路径  (即将废弃， openUrl 方法已满足大多数打开链接的场景。若需要弹窗场景，我们后续会更新弹窗组件库，请关注)
-*/
-11. $UD.openView(url, width = 200, height = 200, x = 100, y = 100) 
 
 
 ```

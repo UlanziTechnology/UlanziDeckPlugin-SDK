@@ -12,7 +12,7 @@ $UD.onConnected(conn => {
     let option = document.createElement('option');
     option.setAttribute('value', e);
     option.setAttribute('label', clockfaces[e].name);
-    option.setAttribute('data-localize', clockfaces[e].name);
+    option.setAttribute('data-localize', true);
     oClockSelector.appendChild(option);
   });
 

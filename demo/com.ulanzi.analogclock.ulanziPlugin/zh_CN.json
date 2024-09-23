@@ -1,11 +1,13 @@
 {
-  "Description": "总是准时。", 
-  "Name": "Analog Clock", 
-  "com.ulanzi.ulanzideck.analogclock.clock": {
-    "Name": "Analog Clock", 
-    "Tooltip": "显示为精准的模拟时钟"
-  },
-  
+	"Name" : "时钟模拟",
+	"Description": "实时显示时间", 
+	"Actions" :
+	[
+		{
+			"Name": "设置时钟",
+			"Tooltip": "更改时钟样式"
+		}
+	],
   "Localization": {
       "Face": "钟面",
       "Digital": "数字",

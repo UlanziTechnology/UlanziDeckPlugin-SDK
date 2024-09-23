@@ -3,19 +3,25 @@
 
 
 class UlanziStreamDeck  {
-  key;
-  uuid;
-  actionid;
-  websocket;
-  language = 'en';
-  localization = null;
-  localPathPrefix = '../../langs/';
-  on = EventEmitter.on;
-  emit = EventEmitter.emit;
+
+  constructor(){
+    this.key = '';
+    this.uuid = '';
+    this.actionid = '';
+    this.websocket = null;
+    this.language = 'en';
+    this.localization = null;
+    this.localPathPrefix = '../../langs/';
+    this.on = EventEmitter.on;
+    this.emit = EventEmitter.emit;
+  }
+  
 
 
 
   connect(uuid) {
+    Utils.log('[ULANZIDECK] WEBSOCKET CONNECT:',uuid)
+
     this.port = Utils.getQueryParams('port') || 3906;
     this.address = Utils.getQueryParams('address') || '127.0.0.1';
     this.actionid = Utils.getQueryParams('actionid') || ''; 
@@ -51,20 +57,20 @@ class UlanziStreamDeck  {
     };
 
     this.websocket.onerror = (evt) => {
-      const error = `[ULANZIDECK] WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors[evt?.code || 'DEFAULT']}`;
+      const error = `[ULANZIDECK] WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
       Utils.warn(error);
       this.emit(Events.ERROR, error);
     };
 
     this.websocket.onclose = (evt) => {
-      Utils.warn('[ULANZIDECK] WEBSOCKET CLOSED:', SocketErrors[evt?.code || 'DEFAULT']);
+      Utils.warn('[ULANZIDECK] WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
       this.emit(Events.CLOSE);
     };
 
     this.websocket.onmessage = (evt) => {
       Utils.log('[ULANZIDECK] WEBSOCKET MESSGE ');
 
-      const data = evt?.data ? JSON.parse(evt.data) : null;
+      const data = evt && evt.data ? JSON.parse(evt.data) : null;
 
 
       Utils.log('[ULANZIDECK] WEBSOCKET MESSGE DATA:', JSON.stringify(data));
@@ -125,7 +131,7 @@ class UlanziStreamDeck  {
     if (!this.localization) {
       try {
         const localJson = await Utils.readJson(`${this.localPathPrefix}${this.language}.json`)
-        this.localization = localJson['Localization'] ?? null
+        this.localization = localJson['Localization'] ? localJson['Localization'] : null
       } catch (e) {
         Utils.log(`${this.localPathPrefix}${this.language}.json`)
         Utils.warn("No FILE found to localize " + this.language);
