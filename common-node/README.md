@@ -46,7 +46,7 @@ ulanzideck-api   //ulanzideck-plugin-sdk node package
 
 #### * context （A special parameter）
 
-An action function may be configured on multiple keys, so the common library concatenates a unique value context. When we create a feature instance, we only need to save the unique value <strong>context</strong>. If you need to update the data, you can send the message to the corresponding key value based on the corresponding unique value <strong>context</strong>.
+An action function may be configured on multiple keys, so the ulanzideck-plugin-sdk library concatenates a unique value <strong>context</strong>. When we create a feature instance, we only need to save the unique value <strong>context</strong>. If you need to update the data, you can send the message to the corresponding key value based on the corresponding unique value <strong>context</strong>.
 
 ```bash
 1. The special parameter context, which is a unique value concatenated from the common library, is passed to the main service and action along with the received message。
@@ -67,7 +67,7 @@ npm install ulanzideck-api --save
 
 #### <span id="title-2">2. Generate random port</span>
 
-After calling the method getPort() of the randomly generated interface, a ws-port.js will be automatically generated under the main service of the plugin, and the content of the js file is window.__port = port number;
+After calling the method <strong>getPort()</strong> of the randomly generated interface, a ws-port.js will be automatically generated under the main service of the plugin, and the content of the js file is <strong>window.__port = port number</strong>;
 The HTML of the action can be connected to the main node service by introducing a 'ws-port.js' file to get the port of the main service
 
 

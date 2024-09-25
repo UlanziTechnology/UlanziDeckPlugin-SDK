@@ -60,7 +60,7 @@ The following briefly describes how to use：
 
 #### * context （A special parameter）
 
-An action function may be configured on multiple keys, so the common library concatenates a unique value context. When we create a feature instance, we only need to save the unique value <strong>context</strong>. If you need to update the data, you can send the message to the corresponding key value based on the corresponding unique value <strong>context</strong>.
+An action function may be configured on multiple keys, so the ulanzideck-plugin-sdk library concatenates a unique value <strong>context</strong>. When we create a feature instance, we only need to save the unique value <strong>context</strong>. If you need to update the data, you can send the message to the corresponding key value based on the corresponding unique value <strong>context</strong>.
 
 ```bash
 1. The special parameter context, which is a unique value concatenated from the common library, is passed to the main service and action along with the received message。
