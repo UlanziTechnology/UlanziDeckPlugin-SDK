@@ -30,7 +30,11 @@ class RandomPort {
         // 文件路径
         const currentFilePath = process.argv[1];
         
-        const pathArr = currentFilePath.split("/");
+        let split_tag = '/'
+        if(currentFilePath.indexOf('\\') > -1){
+          split_tag = '\\'
+        }
+        const pathArr = currentFilePath.split(split_tag);
         const idx = pathArr.findIndex(f => f.endsWith('ulanziPlugin'));
         const __folderpath = `${pathArr.slice(0, idx + 1).join("/")}/`;
 
