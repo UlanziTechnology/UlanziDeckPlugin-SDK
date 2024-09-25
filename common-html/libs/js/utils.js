@@ -106,7 +106,9 @@ class UlanziUtils {
   */
   getLanguage() {
     let userLanguage = navigator.languages && navigator.languages.length ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
-    if(userLanguage.indexOf('zh-') >= 0){
+    if(userLanguage == 'zh'){
+			userLanguage = 'zh_CN'
+		}else if(userLanguage.indexOf('zh-') >= 0){
 			userLanguage = userLanguage.split('-').join('_')
 		}else if(userLanguage.indexOf('-') !== -1 ) {
       userLanguage = userLanguage.split('-')[0];
