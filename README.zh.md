@@ -14,11 +14,11 @@
 **插件开发的开源库，是以简单易用的协议调用和事件分发，安全稳定的网络连接为主旨，为开发者提供一套通用的工具、接口和规范，降低插件开发门槛。开发范围包括但不限于协议封装、通用组件、自定义弹窗组件等等。**
 
 <p align="start">
-   <strong><a href="/common-html/README.md">H5插件开发库</a></strong>
+   <strong><a href="https://github.com/UlanziTechnology/plugin-common-html">H5插件开发库</a></strong>
 </p>
 
 <p align="start">
-   <strong><a href="/common-node/README.md">Node.js插件开发库</a></strong>
+   <strong><a href="https://github.com/UlanziTechnology/plugin-common-node">Node.js插件开发库</a></strong>
 </p>
 
 

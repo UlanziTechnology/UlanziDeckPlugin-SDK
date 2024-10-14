@@ -1,0 +1,6 @@
+[submodule "plugin-common-node"]
+	path = plugin-common-node
+	url = git@github.com:UlanziTechnology/plugin-common-node.git
+[submodule "plugin-common-html"]
+	path = plugin-common-html
+	url = git@github.com:UlanziTechnology/plugin-common-html.git

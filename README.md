@@ -17,11 +17,11 @@
 
 
 <p align="start">
-   <strong><a href="/common-html/README.md">Library for H5 Plugin</a></strong>
+   <strong><a href="https://github.com/UlanziTechnology/plugin-common-html/blob/main/README.md">Library for H5 Plugin</a></strong>
 </p>
 
 <p align="start">
-   <strong><a href="/common-node/README.md">Library for Node.js Plugin</a></strong>
+   <strong><a href="https://github.com/UlanziTechnology/plugin-common-node/blob/main/README.md">Library for Node.js Plugin</a></strong>
 </p>
 
 ## II. Participating in Plugin Development
