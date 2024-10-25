@@ -1,31 +1,38 @@
-/// <reference path="eventEmitter.js"/>
-/// <reference path="utils.js"/>
 
 
-class UlanziStreamDeck  {
+import WebSocket from 'ws';
+import EventEmitter from 'events';
 
-  constructor(){
+
+import { Events, SocketErrors } from "./constants.js";
+import Utils from "./utils.js";
+
+
+class UlanzideckApi extends EventEmitter {
+  
+  constructor() {
+    super();
+
     this.key = '';
     this.uuid = '';
     this.actionid = '';
     this.websocket = null;
-    this.language = 'en';
-    this.localization = null;
-    this.localPathPrefix = '../../';
-    this.on = EventEmitter.on;
-    this.emit = EventEmitter.emit;
+    // language = 'en';
+    // localization = null;
+    // localPathPrefix = '../../langs/';
+    // on = EventEmitter.on;
+    // emit = EventEmitter.emit;
   }
-  
 
 
+  connect(uuid, port = 3906, address = '127.0.0.1') {
+    
+    //动态获取ip和端口
+    const [ argv_address, argv_port ] = process.argv.splice(2);
 
-  connect(uuid) {
-    Utils.log('[ULANZIDECK] CLIENT WEBSOCKET CONNECT:',uuid)
+    this.address = argv_address || address;
+    this.port = argv_port || port;
 
-    this.port = Utils.getQueryParams('port') || 3906;
-    this.address = Utils.getQueryParams('address') || '127.0.0.1';
-    this.actionid = Utils.getQueryParams('actionid') || ''; 
-    this.key = Utils.getQueryParams('key') || ''; 
     this.uuid = uuid;
 
     if (this.websocket) {
@@ -39,7 +46,7 @@ class UlanziStreamDeck  {
     this.websocket = new WebSocket(`ws://${this.address}:${this.port}`);
 
     this.websocket.onopen = () => {
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET OPEN:', uuid);
+      Utils.log('[ULANZIDECK] WEBSOCKET OPEN:', uuid);
       const json = {
         code: 0,
         cmd: Events.CONNECTED,
@@ -52,28 +59,29 @@ class UlanziStreamDeck  {
 
       //如果是主服务，则不进行本地化
       if (!isMain) {
-        this.localizeUI();
+        // this.localizeUI();  //node 不做本地化
       }
     };
 
     this.websocket.onerror = (evt) => {
-      const error = `[ULANZIDECK] CLIENT WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
+      const error = `[ULANZIDECK] WEBSOCKET ERROR: ${JSON.stringify(evt)}, ${ JSON.stringify(evt.data)}, ${SocketErrors[evt?.code || 'DEFAULT']}`;
       Utils.warn(error);
+
       this.emit(Events.ERROR, error);
     };
 
     this.websocket.onclose = (evt) => {
-      Utils.warn('[ULANZIDECK] CLIENT WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
+      Utils.warn('[ULANZIDECK] WEBSOCKET CLOSED:', SocketErrors[evt?.code || 'DEFAULT']);
       this.emit(Events.CLOSE);
     };
 
     this.websocket.onmessage = (evt) => {
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE ');
+      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE ');
 
-      const data = evt && evt.data ? JSON.parse(evt.data) : null;
+      const data = evt?.data ? JSON.parse(evt.data) : null;
 
 
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE DATA:', JSON.stringify(data));
+      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE DATA:', JSON.stringify(data));
 
 
       //没有数据或者有data.code属性,且cmdType不等于REQUEST，则返回
@@ -81,7 +89,7 @@ class UlanziStreamDeck  {
 
 
 
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE IN');
+      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE IN');
 
       //没有key时，保存key
       if (!this.key && data.uuid == this.uuid && data.key) {
@@ -99,6 +107,7 @@ class UlanziStreamDeck  {
           ...data
         })
       }
+
 
       //特殊处理clear,因为clear事件变量是数组形式
       if(data.cmd == 'clear'){
@@ -131,7 +140,7 @@ class UlanziStreamDeck  {
     if (!this.localization) {
       try {
         const localJson = await Utils.readJson(`${this.localPathPrefix}${this.language}.json`)
-        this.localization = localJson['Localization'] ? localJson['Localization'] : null
+        this.localization = localJson['Localization'] ?? null
       } catch (e) {
         Utils.log(`${this.localPathPrefix}${this.language}.json`)
         Utils.warn("No FILE found to localize " + this.language);
@@ -142,9 +151,7 @@ class UlanziStreamDeck  {
     const selectorsList = '[data-localize]';
     el.querySelectorAll(selectorsList).forEach(e => {
       const s = e.innerText.trim();
-      if(s){
-        e.innerText = this.localization[s] || e.innerText;
-      }
+      e.innerHTML = e.innerHTML.replace(s, this.localization[s] || s);
       if (e.placeholder && e.placeholder.length) {
         e.placeholder = this.localization[e.placeholder] || e.placeholder;
       }
@@ -154,15 +161,8 @@ class UlanziStreamDeck  {
       if(e.label){
           e.label = this.localization[e.label] || e.label;
       }
-      if(e.textContent){
-          e.textContent = this.localization[e.textContent] || e.textContent;
-      }
     });
   };
-
-  t(key){
-    return this.localization && this.localization[key] || key
-  }
 
   /**
    * 创建唯一值
@@ -403,6 +403,7 @@ class UlanziStreamDeck  {
     return this;
   }
 
+
   /**
    * 监听socket断开事件
   */
@@ -416,8 +417,8 @@ class UlanziStreamDeck  {
     this.on(Events.CLOSE, (jsn) => fn(jsn));
     return this;
   }
-  
-  
+
+
   /**
    * 监听socket错误事件
   */
@@ -431,6 +432,7 @@ class UlanziStreamDeck  {
     this.on(Events.ERROR, (jsn) => fn(jsn));
     return this;
   }
+
 
   /**
    * 接收上位机事件：add
@@ -535,4 +537,4 @@ class UlanziStreamDeck  {
 }
 
 
-const $UD = new UlanziStreamDeck();
+export default UlanzideckApi;

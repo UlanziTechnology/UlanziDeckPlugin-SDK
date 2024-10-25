@@ -161,6 +161,9 @@ class UlanziStreamDeck  {
   };
 
   t(key){
+    if(!this.localization){
+      
+    }
     return this.localization && this.localization[key] || key
   }
 

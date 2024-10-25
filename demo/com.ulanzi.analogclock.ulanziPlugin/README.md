@@ -4,7 +4,7 @@
 为了更直观的演示通用库 html 版本的使用，我们用analogclock来做插件例子
 
 ```bash
-当前版本根据 Ulanzi JS 插件开发协议-V1.2.0 来编写
+当前版本根据 Ulanzi JS 插件开发协议-V1.2.1 来编写
 ```
 
 
@@ -14,8 +14,7 @@ com.ulanzi.analogclock.ulanziPlugin
 ├── assets         //主要用于存放上位机icon的展示和action状态的切换
 │   └── icons      
 │       └── icon.png
-├── libs    //插件通用库，此处不做具体介绍，可前往common-html目录查看。libs更新版本请以common-html/libs目录为准
-│  
+├── libs    //插件html通用库（action页面引用），此处不做具体介绍，可前往 UlanziTechnology/plugin-common-html 目录查看。libs更新版本请以 UlanziTechnology/plugin-common-html 目录为准。
 ├── plugin  //js主要功能模块,包括action的处理
 │   ├── actions   //处理具体action逻辑
 │   ├── app.html  //主服务html，作为入口

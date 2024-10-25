@@ -1,0 +1,175 @@
+{
+	"Version": "1.0.0",
+	"Author": "Ulanzi",
+	"Name": "TeamSpeak 5",
+	"Description": "Control TeamSpeak 5 trough Remote Apps",
+	"Icon": "assets/icons/icon_plugin.svg",
+	"UUID": "com.ulanzi.ulanzideck.teamspeak5",
+	"Category": "TeamSpeak 5",
+	"CategoryIcon": "assets/icons/icon_category.svg",
+	"CodePath": "dist/app.js",
+	"Type": "JavaScript",
+	"PrivateAPI": true,
+	"SupportedInMultiActions": false,
+	"Actions": [
+		{
+      "Name": "Mic Mute",
+      "Tooltip": "Toggle your Audio Input",
+			"Icon": "assets/actions/micmute/icon_mic.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.micmute",
+			"PropertyInspectorPath": "property-inspector/micmute/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/micmute/mic_on.svg"
+				},
+				{
+					"Image": "assets/actions/micmute/mic_off.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "Sound Mute",
+      "Tooltip": "Toggle your Audio Output",
+			"Icon": "assets/actions/soundmute/icon_sound.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.soundmute",
+			"PropertyInspectorPath": "property-inspector/soundmute/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/soundmute/sound_on.svg"
+				},
+				{
+					"Image": "assets/actions/soundmute/sound_off.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "AFK",
+      "Tooltip": "Toggle your AFK Status",
+			"Icon": "assets/actions/afk/icon_afk.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.afk",
+			"PropertyInspectorPath": "property-inspector/afk/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/afk/afk_bak.svg"
+				},
+				{
+					"Image": "assets/actions/afk/afk_afk.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "Push To Talk",
+      "Tooltip": "Push to activate your Microphone",
+			"Icon": "assets/actions/ptt/icon_ptt.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.ptt",
+			"PropertyInspectorPath": "property-inspector/ptt/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/ptt/ptt_on.svg"
+				},
+				{
+					"Image": "assets/actions/ptt/ptt_off.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "Push To Mute",
+      "Tooltip": "Push to deactivate your Microphone",
+			"Icon": "assets/actions/ptm/icon_ptm.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.ptm",
+			"PropertyInspectorPath": "property-inspector/ptm/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/ptm/ptm_on.svg"
+				},
+				{
+					"Image": "assets/actions/ptm/ptm_off.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "Reply to Whisper",
+      "Tooltip": "Push to whisper a reply",
+			"Icon": "assets/actions/rwhisper/icon_rwhisper.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.rwhisper",
+			"PropertyInspectorPath": "property-inspector/rwhisper/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/rwhisper/rwhisper_off.svg"
+				},
+				{
+					"Image": "assets/actions/rwhisper/rwhisper_on.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "Quick Whisper to selected",
+      "Tooltip": "Push to whisper to selected Clients",
+			"Icon": "assets/actions/qwhisper/icon_qwhisper.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.qwhisper",
+			"PropertyInspectorPath": "property-inspector/qwhisper/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/qwhisper/qwhisper_off.svg"
+				},
+				{
+					"Image": "assets/actions/qwhisper/qwhisper_on.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "Whisper To List",
+      "Tooltip": "Push to whisper to a List",
+			"Icon": "assets/actions/lwhisper/icon_lwhisper.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.lwhisper",
+			"PropertyInspectorPath": "property-inspector/lwhisper/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/lwhisper/lwhisper_off.svg"
+				},
+				{
+					"Image": "assets/actions/lwhisper/lwhisper_on.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		},
+		{
+      "Name": "Overlay [Work In Progress]",
+      "Tooltip": "See currently Talking Users",
+			"Icon": "assets/actions/overlay/icon_overlay.svg",
+			"UUID": "com.ulanzi.ulanzideck.teamspeak5.overlay",
+			"PropertyInspectorPath": "property-inspector/overlay/inspector.html",
+			"state": 0,
+			"States": [
+				{
+					"Image": "assets/actions/overlay/overlay_blank.svg"
+				}
+			],
+			"SupportedInMultiActions": false
+		}
+	],
+	"OS": [
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Software": {
+		"MinimumVersion": "5.0"
+	}
+}
