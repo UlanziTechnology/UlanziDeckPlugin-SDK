@@ -13,6 +13,7 @@ export default class Clients extends EventEmitter {
     this.contextDatas = {};  //存储插件数据
 
     this.activeKeys = {};//已使用的key
+    
 
     this.deckClient = null; //上位机模拟器客户端
 
@@ -25,6 +26,8 @@ export default class Clients extends EventEmitter {
     })
 
 
+    
+
   }
 
   addClient(client, type) {
@@ -32,7 +35,7 @@ export default class Clients extends EventEmitter {
       this.deckClient = new DeckClient(client);
       this.log('连接上位机模拟器成功！等待加载插件...')
       this.deckClient.send('init',{
-        rootPath:utils.getRootPath(),
+        config:this.config,
         activeKeys:this.activeKeys
       })
       if (this.plugins) {
@@ -60,6 +63,7 @@ export default class Clients extends EventEmitter {
       })
       this.deckClient.on('add', (data) => {
         const { uuid,key,actionid } = data;
+        this.currentAddKey = { uuid,key,actionid }
         const context = utils.encodeContext(data)
         const param = this.contextDatas[context] || null
         this.send('add',{
@@ -89,6 +93,15 @@ export default class Clients extends EventEmitter {
         this.send('clear',data,true)
       })
 
+      this.deckClient.on('config', (data) => {
+        const oldLanguage = this.config.language
+        this.config = data.config;
+        if(this.config.language != oldLanguage){
+          this.log('正在切换插件语言环境...')
+          menu.getList()
+        }
+      })
+
     }else{
       client.on('message', (msg)=>{
         const data = JSON.parse(msg.toString());
@@ -99,6 +112,8 @@ export default class Clients extends EventEmitter {
         }
         if(data.cmd === 'state') {
           this.deckClient && this.deckClient.send('state', data)
+          //回复
+          this.replay(client,data)
         }
         if(data.cmd === 'paramfromplugin' && typeof data.code == 'undefined') {
           this.paramfromplugin(data, client)
@@ -126,13 +141,15 @@ export default class Clients extends EventEmitter {
     const mainUuid = this.getMainUuid(uuid)
 
     //回复
-    client.send(JSON.stringify({
+    this.replay(client,{
       cmd: 'paramfromplugin',
       ...data,
-      code: 0
-    }))
+    })
 
     const isMainSend = this.clientList[mainUuid] == client  // 判断是不是主服务发送的
+
+
+    this.log(`${isMainSend?'插件主服务':context} 发送paramfromplugin事件。上位机将转发给 ${isMainSend?context:'插件主服务'} ，转发的数据上位机会保存下来，再次连接action页面会通过paramfromapp接收到之前的配置数据。以下是转发的数据：`,JSON.stringify(data))
     //转发
     if(isMainSend){
       if (this.clientList[context] && this.clientList[context].readyState == 1){
@@ -149,8 +166,6 @@ export default class Clients extends EventEmitter {
         }))
       }
     }
-
-
   }
 
 
@@ -164,15 +179,15 @@ export default class Clients extends EventEmitter {
     }else{
       const context = utils.encodeContext(data)
       this.clientList[context] = client;
-      const param = this.contextDatas[context] || null
+      const param = this.contextDatas[context] || null;
       if(this.activeKeys[key] && this.activeKeys[key].uuid === uuid && this.activeKeys[key].actionid === actionid){
         
-        this.log(`配置项 ${uuid} 已连接！键值为${key},actionid为${actionid}。上位机模拟器向该action页面发送paramfromapp事件。`)
+        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送paramfromapp事件。`)
         this.send('paramfromapp',{
           uuid,key,actionid,param
         })
       }else{
-        this.log(`配置项 ${uuid} 已连接！键值为${key},actionid为${actionid}。上位机模拟器向该action页面发送add和paramfromapp事件。`)
+        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送add和paramfromapp事件。`)
         this.send('add',{
           uuid,key,actionid,param
         })
@@ -189,6 +204,13 @@ export default class Clients extends EventEmitter {
     menu.getList()
   }
 
+  replay(client, data) {
+     //回复
+     client.send(JSON.stringify({
+      ...data,
+      code: 0
+    }))
+  }
 
   checkMainState(onlyCheck) {
     let connectedMain = []

@@ -18,7 +18,7 @@ export default class DeckClient extends EventEmitter {
     message(msg) {
         // Handle incoming messages from the client
         const data = JSON.parse(msg.toString());
-        console.log('Received message from client:', data);
+        // console.log('Received message from client:', data);
 
         // if(data.cmd === 'refreshList') {
         //     this.emit('refreshList')
@@ -32,7 +32,7 @@ export default class DeckClient extends EventEmitter {
 
     close() {
         // Handle client disconnection
-        console.log('ulanzideck Client disconnected');
+        // console.log('ulanzideck Client disconnected');
         this.socket.close();
 
     }

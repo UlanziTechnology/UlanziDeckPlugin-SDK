@@ -23,7 +23,8 @@ let clientConfig = {
     "language": "zh_CN",
     "loadAction": "no",
     "runMain": "no",
-    serverPort
+    serverPort,
+    rootPath:utils.getRootPath(),
 }
 
 
@@ -34,15 +35,15 @@ const clients = new Clients(clientConfig)
 wsServer.on('connection', (ws,msg) => {
 
     //当有客户端连接上服务器，将会进到connection
-    console.log('=======connection========');
+    // console.log('=======connection========');
 
 
-    //say hello
-    ws.send(JSON.stringify({code:0}),function (err) {
-        if(err){
-            console.log('send notify error');
-        }
-    });
+    // //say hello
+    // ws.send(JSON.stringify({code:0}),function (err) {
+    //     if(err){
+    //         console.log('send notify error');
+    //     }
+    // });
 
     let roomid = msg.url.split('/');
     const len = roomid.length-1;

@@ -1,7 +1,7 @@
 
 @font-face {
   font-family: 'Source Han Sans';
-  src: url('./SourceHanSansSC-Regular-2.otf') format('opentype');
+  src: url('../plugins/SourceHanSansSC-Regular-2.otf') format('opentype');
 }
 
 :root {

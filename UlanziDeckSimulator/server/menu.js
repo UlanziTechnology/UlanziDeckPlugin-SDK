@@ -29,7 +29,7 @@ class PluginMenu extends EventEmitter {
             // 同步检查是否为文件夹并且以'ulanziPlugin'结尾
             const stats = fs.statSync(filePath);
             if (stats.isDirectory() && file.endsWith('ulanziPlugin')) {
-              console.log('===file',file)
+              // console.log('===file',file)
                 // 构造manifest.json的完整路径
                 const manifestPath = path.join(filePath, 'manifest.json');
 
@@ -50,7 +50,7 @@ class PluginMenu extends EventEmitter {
                 this.plugins[file] = manifest;
             }
         });
-        console.log('===plugins',this.plugins)
+        // console.log('===plugins',this.plugins)
         this.emit('listUpdated', this.plugins)
       } catch (err) {
         console.error('An error occurred:', err);

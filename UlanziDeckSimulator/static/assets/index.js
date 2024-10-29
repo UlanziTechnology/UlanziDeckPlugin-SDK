@@ -12,10 +12,11 @@ let config = {
 let activeKeys = {} // 当前激活的插件列表
 let currentActiveKey = ''; // 当前激活的插件
 
+let contextmenuKey = ''; // 右键菜单的key
+
 
 const websocket = new WebSocket(`ws://127.0.0.1:${config.serverPort}/deckClient`)
 websocket.onopen = function (evt) {
-  console.log('===websocket.onopen===')
 
 };
 websocket.onclose = function (evt) {
@@ -24,7 +25,6 @@ websocket.onclose = function (evt) {
 
 websocket.onmessage = function (evt) {
   const jsonObj = JSON.parse(evt.data)
-  console.log('===websocket.onmessage===', jsonObj)
   if (jsonObj.cmd === 'log') {
     log(jsonObj)
   }
@@ -32,8 +32,9 @@ websocket.onmessage = function (evt) {
     listUpdated(jsonObj.data)
   }
   if (jsonObj.cmd === 'init') {
-    config.rootPath = jsonObj.rootPath
+    config = jsonObj.config
     activeKeys = jsonObj.activeKeys
+    initRender()
   }
   if (jsonObj.cmd === 'state') {
     setStateIcon(jsonObj.param.statelist[0])
@@ -43,19 +44,20 @@ websocket.onmessage = function (evt) {
   }
 }
 
+function initRender(){
+  setFormValue(config,form)
+}
+
 function connectedMain(data){
   for (const v of data) {
-    console.log('===connectedMain===', v)
     const overlay = document.querySelector(`.slider-item-overlay[data-uuid="${v.UUID}"]`)
     overlay.style.display = 'none'
   }
 }
 
 function setStateIcon(iconData) {
-  console.log('===setStateIcon===', iconData)
   const data = iconData
   const { type, key } = data
-  console.log('===setStateIcon type, key ===', type, key )
 
   const uk = document.querySelector(`.ulanzi-key[data-key="${key}"]`)
   
@@ -88,7 +90,6 @@ function listUpdated(data) {
   let listBuffer = []
   for (const k in data) {
     const v = data[k]
-    console.log('===value', v)
     const renderDate = config.language === 'zh_CN' ? v.zhData : v
 
     let liBuffer = []
@@ -204,6 +205,41 @@ function getFormValue(form) {
   return formValue;
 }
 
+function setFormValue(jsn, form) {
+  if (!jsn) {
+    return;
+  }
+
+  if (typeof form === 'string') {
+    form = document.querySelector(form);
+  }
+
+  const elements = form ? form.elements:'';
+
+  if (!elements) {
+    console.error('Could not find form!');
+  }
+
+  Array.from(elements)
+    .filter((element) => element?element.name:null)
+    .forEach((element) => {
+      const { name, type } = element;
+      const value = name in jsn ? jsn[name] : null;
+      const isCheckOrRadio = type === 'checkbox' || type === 'radio';
+
+      if (value === null) return;
+
+      if (isCheckOrRadio) {
+        const isSingle = value === element.value;
+        if (isSingle || (Array.isArray(value) && value.includes(element.value))) {
+          element.checked = true;
+        }
+      } else {
+        element.value = value ? value : '';
+      }
+    });
+}
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -241,11 +277,13 @@ document.addEventListener('DOMContentLoaded', function () {
     'input',
     () => {
       const value = getFormValue(form);
+      
       config = {
         ...config,
         ...value
       }
-      console.log('===config value', config)
+      send('config', { config })
+      handleActiveCurrentKey()
     })
 
 
@@ -288,8 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const imgLength = uk.getElementsByTagName('img')
       if (imgLength.length > 0) {
         showCustomMenu(event);
-        currentActiveKey = uk.dataset.key
-        handleActiveCurrentKey()
+        contextmenuKey = uk.dataset.key
       }
     });
 
@@ -376,7 +413,7 @@ function hideCustomMenu() {
 
 // 处理菜单项点击的具体逻辑
 function handleMenuItemClick(itemId) {
-  const { uuid, key, actionid } = activeKeys[currentActiveKey]
+  const { uuid, key, actionid } = activeKeys[contextmenuKey]
   switch (itemId) {
     case 'menu-run':
       send('run', { uuid, key, actionid })
@@ -393,9 +430,11 @@ function handleMenuItemClick(itemId) {
       })
       const element = document.querySelector('.ulanzi-key[data-key="' + key + '"]');
       element.removeChild(element.firstChild);
-      document.querySelector('.action-iframe').innerHTML = ''
-      currentActiveKey = ''
-      handleActiveCurrentKey()
+      if(contextmenuKey == currentActiveKey){
+        document.querySelector('.action-iframe').innerHTML = ''
+        currentActiveKey = ''
+        handleActiveCurrentKey()
+      }
       break;
     case 'menu-setactive':
       send('setactive', { uuid, key, actionid, active: true })
