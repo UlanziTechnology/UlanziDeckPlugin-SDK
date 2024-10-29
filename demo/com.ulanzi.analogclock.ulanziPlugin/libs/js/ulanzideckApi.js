@@ -24,8 +24,9 @@ class UlanziStreamDeck  {
 
     this.port = Utils.getQueryParams('port') || 3906;
     this.address = Utils.getQueryParams('address') || '127.0.0.1';
-    this.actionid = Utils.getQueryParams('actionid') || ''; 
+    this.actionid = Utils.getQueryParams('actionId') || ''; 
     this.key = Utils.getQueryParams('key') || ''; 
+    this.language = Utils.getQueryParams('language') || 'en';
     this.uuid = uuid;
 
     if (this.websocket) {
@@ -43,6 +44,8 @@ class UlanziStreamDeck  {
       const json = {
         code: 0,
         cmd: Events.CONNECTED,
+        actionid:this.actionid,
+        key:this.key,
         uuid
       };
 
@@ -127,7 +130,7 @@ class UlanziStreamDeck  {
     const el = document.querySelector('.udpi-wrapper');
     if (!el) return Utils.warn("No element found to localize");
 
-    this.language = Utils.getLanguage() || 'en';
+    // this.language = Utils.getLanguage() || 'en';
     if (!this.localization) {
       try {
         const localJson = await Utils.readJson(`${this.localPathPrefix}${this.language}.json`)
@@ -227,16 +230,25 @@ class UlanziStreamDeck  {
 
   /**
    * 请求上位机机显⽰弹窗；弹窗后，test.html需要主动关闭，测试到window.close()可以通知弹窗关闭
-   *  @param {string} url 必传 | 本地html路径  (即将废弃， openUrl 方法已满足大多数打开链接的场景。若需要弹窗场景，我们后续会更新组件库，请关注)
+   *  @param {string} url 必传 | 本地html路径 
+   * @param {string} width 可选 | 窗口宽度，默认200
+   * @param {string} height 可选 | 窗口高度，默认200
+   * @param {string} x 可选 | 窗口x坐标，不传值默认居中
+   * @param {string} y 可选 | 窗口y坐标，不传值默认居中
   */
-  openView(url, width = 200, height = 200, x = 100, y = 100) {
-    this.send(Events.OPENVIEW, {
+  openView(url, width = 200, height = 200, x, y) {
+    const params = {
       url,
       width,
-      height,
-      x,
-      y
-    })
+      height
+    }
+    if(x){
+      params.x = x
+    }
+    if(y){
+      params.y = y
+    }
+    this.send(Events.OPENVIEW, params)
   }
 
   /**
