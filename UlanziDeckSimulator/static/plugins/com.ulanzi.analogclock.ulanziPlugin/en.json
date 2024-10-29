@@ -1,0 +1,22 @@
+{
+	"Name" : "Analog Clock",
+	"Description": "Always be on time.", 
+	"Actions" :
+	[
+		{
+			"Name": "clock",
+      "Tooltip": "Show a nice analog clock"
+		}
+	],
+  "Localization": {
+    "Face": "Face",
+    "Digital": "Digital",
+    "Black" : "Black",
+    "Blue" : "Blue",
+    "Blueish" : "Blueish",
+    "Green" : "Green",
+    "Red": "Red",
+    "White": "White",
+    "Transparent": "Transparent"
+  }
+}

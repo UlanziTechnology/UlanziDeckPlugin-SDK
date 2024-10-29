@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ulanzi Deck 开发模拟器</title>
+  <link rel="stylesheet" href="./assets/index.css">
+</head>
+<body>
+  <div class="wrapper">
+    <div class="ulanzi-left" id="ulanzi-log">
+      <!-- <div class="log-item">
+        <p class="log-time">[2024/10/28 10:18:47]</p> <p>加载插件成功</p>
+        <div class="fence-box code-box">
+          <span> node.exe "app.js" "127.0.0.1" "3906" </span>
+        </div>
+      </div> -->
+      <div class="log-item">
+        <p>欢迎使用Ulanzi Deck开发模拟器！</p>
+      </div>
+
+      <div class="toast" id="toast">复制成功！</div>
+    </div>
+    <div class="ulanzi-window">
+      <div class="ulanzi-slider" id="ulanzi-list">
+        <!-- <div class="ulanzi-slider-item">
+          <div class="slider-item-title">
+
+            <div class="icon-name category-icon">
+              <img src="./plugins/com.ulanzi.analogclock.ulanziPlugin/assets/icons/icon.png">
+              <span>模拟时钟</span>
+            </div>
+          </div>
+
+          <ul class="slider-item-actions">
+            <li class="active">
+              <div class="icon-name action-icon">
+                <img src="./plugins/com.ulanzi.analogclock.ulanziPlugin/assets/icons/actionIcon.png">
+                <span>clock</span>
+              </div>
+            </li>
+            <li>
+              <div class="icon-name action-icon">
+                <img src="./plugins/com.ulanzi.analogclock.ulanziPlugin/assets/icons/actionIcon.png">
+                <span>clock</span>
+              </div>
+            </li>
+          </ul>
+
+        </div> -->
+
+      </div>
+
+      <div class="ulanzi-main">
+        <div class="ulanzi-keyboard">
+          <div class="ulanzi-key" data-key="0_0" data-index="0"></div>
+          <div class="ulanzi-key" data-key="0_1" data-index="1"></div>
+          <div class="ulanzi-key" data-key="0_2" data-index="2"></div>
+          <div class="ulanzi-key" data-key="1_0" data-index="3"></div>
+          <div class="ulanzi-key" data-key="1_1" data-index="4"></div>
+          <div class="ulanzi-key" data-key="1_2" data-index="5"></div>
+          <div class="ulanzi-key" data-key="2_0" data-index="6"></div>
+          <div class="ulanzi-key" data-key="2_1" data-index="7"></div>
+          <div class="ulanzi-key" data-key="2_2" data-index="8"></div>
+        </div>
+        <div class="ulanzi-action">
+          <div class="action-iframe">
+            <!-- <iframe src="./plugins/com.ulanzi.analogclock.ulanziPlugin/property-inspector/clock/inspector.html"></iframe> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ulanzi-right">
+
+      <form class="ulanzi-form fence-box" id="ulanzi-config">
+        <div>
+          <label>语言环境：</label>
+          <label><input type="radio" name="language" value="zh_CN" checked />中文</label>
+          <label><input type="radio" name="language" value="en" />English</label>
+        </div>
+        <div>
+          <label>加载action：</label>
+          <label><input type="radio" name="loadAction" value="no" checked /><span>否</span></label>
+          <label><input type="radio" name="loadAction" value="yes"  /><span>是</span></label>
+        </div>
+        <!-- <div>
+          <label>运行主服务：</label>
+          <label><input type="radio" name="runMain" value="no" checked /><span>否</span></label>
+          <label><input type="radio" name="runMain" value="yes"  /><span>是</span></label>
+        </div> -->
+        <br/>
+        <div>
+          <button type="button" onclick="refreshList()">刷新插件列表</button>
+        </div>
+      </form>
+
+      <div>
+        <h4>本模拟器主要用于方便开发调试，具体运行效果请以桌面软件运行结果为准。</h4>
+        <ol style="padding-left: 20px;">
+          <li>开始编写插件前，请前往<a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK
+            " target="_blank">插件开发SDK</a>和 <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">从零开始：UlanziDeck插件开发之旅</a> 了解一些开发说明和介绍</li>
+          <li>测试插件请按照协议要求填写manifest.json，然后放在 UlanziDeckSimulator/static/plugins 目录中。模拟器会自动解析插件，并展示在模拟器左侧列表当中。插件更新需要点击 <strong>刷新插件列表</strong> 按钮，让模拟器重载插件。</li>
+          <li>当前版本，主服务需要开发者自行启动，请按照提示启动主服务再进行操作。</li>
+          <li>调试顺序：启动上位机模拟器 -> 确认插件主服务已连接 -> 拖入键盘，调试action</li>
+          <li>模拟器不支持上位机的特殊事件：openview, selectdialog。若有打开弹窗和选择文件/文件夹功能，请在上位机中测试。</li>
+          <li>模拟器暂时没有页面切换，不主动发送setactive事件，请开发者右键自行发送事件来测试功能。</li>
+        </ol>
+        
+        <!-- <p>6. 不建议启用 <strong>运行主服务</strong>，希望开发者自己运行主服务来查看连接状态。当插件过多时，需要更多的cpu运行空间，可能会导致浏览器闪退等一些不必要的后果😵。需要完整运行效果请使用桌面软件，就放过小小模拟器吧😭。</p> -->
+      </div>
+    </div>
+
+    <ul id="custom-menu">
+      <li id="menu-run">运行</li>
+      <li id="menu-clear">删除</li>
+      <li id="menu-setactive">设置活跃状态</li>
+      <li id="menu-setnoactive">设置非活跃状态</li>
+  </ul>
+
+  </div>
+  <script src="./assets/keys.js"></script>
+  <script src="./assets/index.js"></script>
+</body>
+</html>

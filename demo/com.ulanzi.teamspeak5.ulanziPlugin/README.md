@@ -21,7 +21,7 @@ com.ulanzi.teamspeak5.ulanziPlugin
 │   ├── actions   //处理具体action逻辑
 │       ├── plugin-common-node  // 插件node通用库（node服务引用），此处不做具体介绍，可前往 UlanziTechnology/plugin-common-node 目录查看。更新版本请以 UlanziTechnology/plugin-common-node 目录为准
 │       └── ...   // 剩下的都是插件功能js
-│   └── app.js    //主服务js，此处可引用 ulanzideck-api，连接上位机
+│   └── app.js    //主服务js，此处可引用 plugin-common-node，连接上位机
 ├── property-inspector // 配置项html和form表单的读写
 │   ├── afk      //action的名称
 │       ├── inspector.html  //配置项html
@@ -47,7 +47,9 @@ com.ulanzi.teamspeak5.ulanziPlugin
 
 5. 配置项连接的uuid要大于4用于区分。例：com.ulanzi.ulanzideck.插件名.插件action
 
-6. 在使用node来做主服务时，为了避免端口冲突，请通过 ulanzideck-api 提供的 RandomPort 来生成端口。具体可查看 UlanziTechnology/plugin-common-node 
+6. 在使用node来做主服务时，为了避免端口冲突，请通过 plugin-common-node 提供的 RandomPort 来生成端口。具体可查看 UlanziTechnology/plugin-common-node 
+
+7. 由于本地的node环境和上位机node环境运行的区别，以及程序打包之后获取本地路径会出现一些的bug，因此我们提供Utils.getPluginPath()方法来获取插件根目录的本地路径，大家按需使用。具体可查看 UlanziTechnology/plugin-common-node
 
 ```
 
