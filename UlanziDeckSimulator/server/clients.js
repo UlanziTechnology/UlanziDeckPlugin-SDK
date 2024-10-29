@@ -59,7 +59,6 @@ export default class Clients extends EventEmitter {
         this.refreshList()
       })
       this.deckClient.on('add', (data) => {
-        console.log('===DE add',data)
         const { uuid,key,actionid } = data;
         const context = utils.encodeContext(data)
         const param = this.contextDatas[context] || null
@@ -163,7 +162,6 @@ export default class Clients extends EventEmitter {
       this.clientList[uuid] = client;
       this.checkMainState('onlyCheck')
     }else{
-      console.log('==data',data)
       const context = utils.encodeContext(data)
       this.clientList[context] = client;
       const param = this.contextDatas[context] || null
@@ -208,7 +206,7 @@ export default class Clients extends EventEmitter {
               msg = renderDate.Name  + ' 主服务 '+ v.UUID +' 未连接，请到插件的根目录下运行以下代码启动主服务'
               code = `node ${v.CodePath} 127.0.0.1 ${this.config.serverPort} ${this.config.language}`
           } else {
-              msg = renderDate.Name + '主服务未连接，请使用浏览器打开以下链接启动主服务'
+              msg = renderDate.Name + ' 主服务未连接，请使用浏览器打开以下链接启动主服务'
               code = `http://127.0.0.1:${this.config.serverPort}/plugins/${k}/${v.CodePath}?address=127.0.0.1&port=${this.config.serverPort}&language=${this.config.language}&uuid=${v.UUID}`
           }
           if(!onlyCheck)this.log(msg, code)
@@ -242,9 +240,6 @@ export default class Clients extends EventEmitter {
     }else{
       uuid = utils.encodeContext(data)
     }
-    console.log('==uuid',uuid)
-    console.log('==typeof uuid',this.clientList[uuid])
-    console.log('==typeof data',data)
     this.clientList[uuid] && this.clientList[uuid].send(JSON.stringify({
       cmd,
       ...data

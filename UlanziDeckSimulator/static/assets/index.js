@@ -34,14 +34,21 @@ websocket.onmessage = function (evt) {
   if (jsonObj.cmd === 'init') {
     config.rootPath = jsonObj.rootPath
     activeKeys = jsonObj.activeKeys
-    initRender()
   }
   if (jsonObj.cmd === 'state') {
     setStateIcon(jsonObj.param.statelist[0])
   }
+  if (jsonObj.cmd === 'connectedMain') {
+    connectedMain(jsonObj.connectedMain)
+  }
 }
 
-function initRender(){
+function connectedMain(data){
+  for (const v of data) {
+    console.log('===connectedMain===', v)
+    const overlay = document.querySelector(`.slider-item-overlay[data-uuid="${v.UUID}"]`)
+    overlay.style.display = 'none'
+  }
 }
 
 function setStateIcon(iconData) {
@@ -105,11 +112,12 @@ function listUpdated(data) {
               <span>${renderDate.Name}</span>
             </div>
           </div>
-
-          <ul class="slider-item-actions">
-            ${liBuffer.join('')}
-          </ul>
-
+          <div class="slider-item-content">
+            <ul class="slider-item-actions">
+              ${liBuffer.join('')}
+            </ul>
+            <div class="slider-item-overlay" data-uuid="${v.UUID}">请先启动主服务</div>
+          </div>
         </div>`)
 
   }
