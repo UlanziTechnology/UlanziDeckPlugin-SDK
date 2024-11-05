@@ -42,6 +42,10 @@ websocket.onmessage = function (evt) {
   if (jsonObj.cmd === 'connectedMain') {
     connectedMain(jsonObj.connectedMain)
   }
+  if (jsonObj.cmd === 'openurl') {
+    window.open(jsonObj.url)
+  }
+  
 }
 
 function initRender(){
@@ -67,7 +71,7 @@ function setStateIcon(iconData) {
   const { plugin, actionData, actionid, uuid } = activeKeys[key]
 
   if (type === 0) {
-    //本地文件
+    //本地文件,状态列表
     src = `./plugins/${plugin}/${actionData.States[data.state].Image}`
   } else if ( type === 1) {
     //base64

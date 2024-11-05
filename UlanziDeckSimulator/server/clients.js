@@ -105,18 +105,23 @@ export default class Clients extends EventEmitter {
     }else{
       client.on('message', (msg)=>{
         const data = JSON.parse(msg.toString());
-        // console.log('Received message from client:', data);
 
         if(data.cmd === 'connected') {
           this.connected(client, data)
         }
+
+        
+        if(typeof data.code != 'undefined') return;
         if(data.cmd === 'state') {
           this.deckClient && this.deckClient.send('state', data)
           //回复
           this.replay(client,data)
         }
-        if(data.cmd === 'paramfromplugin' && typeof data.code == 'undefined') {
+        if(data.cmd === 'paramfromplugin') {
           this.paramfromplugin(data, client)
+        }
+        if(data.cmd === 'openurl') {
+          this.deckClient.send('openurl',data)
         }
       });
       client.on('close', (msg)=>{
@@ -182,12 +187,16 @@ export default class Clients extends EventEmitter {
       const param = this.contextDatas[context] || null;
       if(this.activeKeys[key] && this.activeKeys[key].uuid === uuid && this.activeKeys[key].actionid === actionid){
         
-        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送paramfromapp事件。`)
+        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送paramfromapp事件。${param?'以下是重载数据':''}`
+          ,param?JSON.stringify(param):null
+        )
         this.send('paramfromapp',{
           uuid,key,actionid,param
         })
       }else{
-        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送add和paramfromapp事件。`)
+        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送add和paramfromapp事件。${param?'以下是重载数据':''}`
+          ,param?param:null
+        )
         this.send('add',{
           uuid,key,actionid,param
         })
