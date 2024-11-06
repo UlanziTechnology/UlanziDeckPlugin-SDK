@@ -26,7 +26,8 @@ class UlanziStreamDeck  {
     this.address = Utils.getQueryParams('address') || '127.0.0.1';
     this.actionid = Utils.getQueryParams('actionId') || ''; 
     this.key = Utils.getQueryParams('key') || ''; 
-    this.language = Utils.getQueryParams('language') || 'en';
+    this.language = Utils.getQueryParams('language') || Utils.getLanguage() || 'en';
+    this.language = Utils.adaptLanguage(this.language) ; 
     this.uuid = uuid;
 
     if (this.websocket) {
@@ -144,21 +145,24 @@ class UlanziStreamDeck  {
 
     const selectorsList = '[data-localize]';
     el.querySelectorAll(selectorsList).forEach(e => {
+
       const s = e.innerText.trim();
+      let dl = e.dataset.localize;
+      
       if(s){
-        e.innerText = this.localization[s] || e.innerText;
+        e.innerText = this.localization[dl ? dl : s] || e.innerText;
       }
       if (e.placeholder && e.placeholder.length) {
-        e.placeholder = this.localization[e.placeholder] || e.placeholder;
+        e.placeholder = this.localization[ dl ? dl : e.placeholder] || e.placeholder;
       }
       if (e.title && e.title.length) {
-        e.title = this.localization[e.title] || e.title;
+        e.title = this.localization[dl ? dl : e.title] || e.title;
       }
       if(e.label){
-          e.label = this.localization[e.label] || e.label;
+          e.label = this.localization[dl ? dl : e.label] || e.label;
       }
       if(e.textContent){
-          e.textContent = this.localization[e.textContent] || e.textContent;
+          e.textContent = this.localization[dl ? dl : e.textContent] || e.textContent;
       }
     });
   };
@@ -218,25 +222,29 @@ class UlanziStreamDeck  {
 
   /**
    * 请求上位机使⽤浏览器打开url
-   * @param {string} url 必传 | 直接远程地址和本地地址，⽀持打开插件根⽬录下的url链接（以/ ./ 起始的链接）
+   * @param {string} url 必传 | 直接远程地址和本地地址，⽀持打开插件根⽬录下的url链接（以/ ./ 起始的链接）。
+   *                            只能是基本路径，不能带参数，需要带参数请设置在param值里面
    * @param {local} boolean 可选 | 若为本地地址为true
+   * @param {object} param 可选 | 路径的参数值
   */
-  openUrl(url, local) {
+  openUrl(url, local, param) {
     this.send(Events.OPENURL, {
       url,
-      local: local ? true : false
+      local: local ? true : false,
+      param: param ? param : null
     })
   }
 
   /**
    * 请求上位机机显⽰弹窗；弹窗后，test.html需要主动关闭，测试到window.close()可以通知弹窗关闭
-   *  @param {string} url 必传 | 本地html路径 
+   *  @param {string} url 必传 | 本地html路径，只能是基本路径，不能带参数，需要带参数请设置在param值里面
    * @param {string} width 可选 | 窗口宽度，默认200
    * @param {string} height 可选 | 窗口高度，默认200
    * @param {string} x 可选 | 窗口x坐标，不传值默认居中
    * @param {string} y 可选 | 窗口y坐标，不传值默认居中
+   * @param {object} param 可选 | 路径的参数值
   */
-  openView(url, width = 200, height = 200, x, y) {
+  openView(url, width = 200, height = 200, x, y, param) {
     const params = {
       url,
       width,
@@ -247,6 +255,9 @@ class UlanziStreamDeck  {
     }
     if(y){
       params.y = y
+    }
+    if(param){
+      params.param = param
     }
     this.send(Events.OPENVIEW, params)
   }

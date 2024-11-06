@@ -4,7 +4,7 @@
 为了更直观的演示通用库 html 版本的使用，我们用analogclock来做插件例子
 
 ```bash
-当前版本根据 Ulanzi JS 插件开发协议-V1.2.1 来编写
+当前版本根据 Ulanzi JS 插件开发协议-V1.2.2 来编写
 ```
 
 
@@ -61,10 +61,16 @@ name:插件名称
 description:插件描述
 actions:插件action列表，数组形式。每个action需要填写name(action名称)和tooltip(悬浮提示)
 
-
 localization: 插件内容本地化
-使用规则：在action的html页面，将需要翻译的节点加上data-localize的属性。common-html的通用库会自动读取对应。
-注意：编写页面时请默认使用英文，然后在根目录下添加语言环境对应的json，例如zh_CN.json
+本地化有两种方式
+
+1. 根据英文内容翻译
+使用规则：在action的html页面，将需要翻译的节点加上data-localize的属性。html的sdk会自动读取节点的英文内容进行对应翻译。
+注意：此时data-localize不需要赋予值，但是编写页面时请使用英文。之后在根目录下添加语言环境对应的json，例如zh_CN.json
+
+2. 根据data-localize的值翻译
+使用规则：在action的html页面，将需要翻译的节点加上data-localize="Blue"的属性。
+注意：与第一种不同，此时的sdk会根据data-localize的值（例：Blue）来进行对应翻译。
 
 ```
 
