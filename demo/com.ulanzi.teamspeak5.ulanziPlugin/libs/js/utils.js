@@ -49,14 +49,14 @@ class UlanziUtils {
 			form = document.querySelector(form);
 		}
 
-		const elements = form ? form.elements:'';
+		const elements = form ? form.elements : '';
 
 		if (!elements) {
 			console.error('Could not find form!');
 		}
 
 		Array.from(elements)
-			.filter((element) => element?element.name:null)
+			.filter((element) => element ? element.name : null)
 			.forEach((element) => {
 				const { name, type } = element;
 				const value = name in jsn ? jsn[name] : null;
@@ -92,103 +92,103 @@ class UlanziUtils {
 		};
 	}
 
-  /**
-   * 返回url的查询参数
-  */
-  getQueryParams(param) {
-    const searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get(param);
-  }
-
-  /**
-	 * 获取浏览器语言
-   * Returns the user language
-  */
-  getLanguage() {
-    let userLanguage = navigator.languages && navigator.languages.length ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
-	if(userLanguage == 'zh'){
-		userLanguage = 'zh_CN'
-	}else if(userLanguage.indexOf('zh-') >= 0){
-		userLanguage = userLanguage.split('-').join('_')
-	}else if(userLanguage.indexOf('-') !== -1 ) {
-      userLanguage = userLanguage.split('-')[0];
-    }
-    return this.adaptLanguage(userLanguage);
-  }
-
-   /**
-	 * 适配语言环境
-  */
-   adaptLanguage(ln){
-	let userLanguage = ln ; 
-	if(ln.indexOf('zh') == 0){
-		userLanguage = 'zh_CN'
-	}else if(ln.indexOf('en') == 0){
-		userLanguage = 'en'
-	}else if(userLanguage.indexOf('-') !== -1 ) {
-		userLanguage = userLanguage.split('-')[0];
+	/**
+	 * 返回url的查询参数
+	*/
+	getQueryParams(param) {
+		const searchParams = new URLSearchParams(window.location.search);
+		return searchParams.get(param);
 	}
 
-	return userLanguage
-   }
+	/**
+	   * 获取浏览器语言
+	 * Returns the user language
+	*/
+	getLanguage() {
+		let userLanguage = navigator.languages && navigator.languages.length ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
+		if (userLanguage == 'zh') {
+			userLanguage = 'zh_CN'
+		} else if (userLanguage.indexOf('zh-') >= 0) {
+			userLanguage = userLanguage.split('-').join('_')
+		} else if (userLanguage.indexOf('-') !== -1) {
+			userLanguage = userLanguage.split('-')[0];
+		}
+		return this.adaptLanguage(userLanguage);
+	}
 
-  /**
-	 * JSON.parse优化
-   * parse json
-   * @param {string} jsonString
-   * @returns {object} json
-  */
-  parseJson(jsonString) {
-    if (typeof jsonString === 'object') return jsonString;
-    try {
-        const o = JSON.parse(jsonString);
-        if (o && typeof o === 'object') {
-            return o;
-        }
-    } catch (e) {}
+	/**
+	  * 适配语言环境
+   */
+	adaptLanguage(ln) {
+		let userLanguage = ln;
+		if (ln.indexOf('zh') == 0) {
+			userLanguage = 'zh_CN'
+		} else if (ln.indexOf('en') == 0) {
+			userLanguage = 'en'
+		} else if (userLanguage.indexOf('-') !== -1) {
+			userLanguage = userLanguage.split('-')[0];
+		}
 
-    return false;
-  }
+		return userLanguage
+	}
 
-  /**
-	 * 读取json文件
-   * Reads a json file 
-   * @param {string} path
-   * @returns {Promise<any>} json
-  */
-  async readJson(path) {
-    if(!path) {
-        console.error('A path is required to readJson.');
-    }
+	/**
+	   * JSON.parse优化
+	 * parse json
+	 * @param {string} jsonString
+	 * @returns {object} json
+	*/
+	parseJson(jsonString) {
+		if (typeof jsonString === 'object') return jsonString;
+		try {
+			const o = JSON.parse(jsonString);
+			if (o && typeof o === 'object') {
+				return o;
+			}
+		} catch (e) { }
 
-    return new Promise((resolve, reject) => {
-			try{
-        const req = new XMLHttpRequest();
-        req.onerror = reject;
-        req.overrideMimeType('application/json');
-        req.open('GET', path, true);
-        req.onreadystatechange = (response) => {
-            if(req.readyState === 4) {
-                const jsonString = response && response.target && response.target.response || '';
-                if(jsonString) {
-									try{
-                    resolve(JSON.parse(jsonString));
-									}catch(e){
-                    reject();
-									}
-                } else {
-                    reject();
-                }
-            }
-        };
+		return false;
+	}
 
-        req.send();
+	/**
+	   * 读取json文件
+	 * Reads a json file 
+	 * @param {string} path
+	 * @returns {Promise<any>} json
+	*/
+	async readJson(path) {
+		if (!path) {
+			console.error('A path is required to readJson.');
+		}
 
-			}catch(e){
+		return new Promise((resolve, reject) => {
+			try {
+				const req = new XMLHttpRequest();
+				req.onerror = reject;
+				req.overrideMimeType('application/json');
+				req.open('GET', path, true);
+				req.onreadystatechange = (response) => {
+					if (req.readyState === 4) {
+						const jsonString = response && response.target && response.target.response || '';
+						if (jsonString) {
+							try {
+								resolve(JSON.parse(jsonString));
+							} catch (e) {
+								reject();
+							}
+						} else {
+							reject();
+						}
+					}
+				};
+
+				req.send();
+
+			} catch (e) {
 				reject();
 			}
-    });
-  }
+		});
+	}
 
 
 	/**
@@ -201,17 +201,17 @@ class UlanziUtils {
 	 * @return { string | HTMLCanvasElement }  默认返回base64的图片路径，returnCanvas为true返回画布
    */
 	async drawImage(url, width = 196, height = 196, inCanvas, returnCanvas) {
-    const canvas = inCanvas && inCanvas instanceof HTMLCanvasElement ? inCanvas : document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
+		const canvas = inCanvas && inCanvas instanceof HTMLCanvasElement ? inCanvas : document.createElement('canvas');
+		canvas.width = width;
+		canvas.height = height;
+		const ctx = canvas.getContext('2d');
 
-    const imgData = await this.loadImagePromise(url)
-		if(imgData.status == 'ok'){
+		const imgData = await this.loadImagePromise(url)
+		if (imgData.status == 'ok') {
 			ctx.drawImage(imgData.img, 0, 0, canvas.width, canvas.height);
 		}
-    return returnCanvas? canvas : canvas.toDataURL('image/png'); //需要是否需要返回画布或者直接返回base64
-  }
+		return returnCanvas ? canvas : canvas.toDataURL('image/png'); //需要是否需要返回画布或者直接返回base64
+	}
 
 	/**
    * 裁剪图片转base64
@@ -232,12 +232,12 @@ class UlanziUtils {
 
 
 		const imgData = await this.loadImagePromise(url)
-		if(imgData.status == 'ok'){
+		if (imgData.status == 'ok') {
 			ctx.drawImage(imgData.img, offsetX, offsetY, width, height, 0, 0, canvas.width, canvas.height);
 		}
 
-    return returnCanvas? canvas : canvas.toDataURL('image/png'); //需要是否需要返回画布或者直接返回base64
-	
+		return returnCanvas ? canvas : canvas.toDataURL('image/png'); //需要是否需要返回画布或者直接返回base64
+
 	};
 
 	/**
@@ -245,43 +245,43 @@ class UlanziUtils {
    * @param {string} url 图片地址
 	 * @return {object}  {url, status: 'ok', img} or {url, status: 'error'}  
    */
-	loadImagePromise(url){
+	loadImagePromise(url) {
 		return new Promise(resolve => {
 			const img = new Image();
 			img.onload = () => resolve({ url, status: 'ok', img });
-			img.onerror = () => resolve({ url, status: 'error'});
+			img.onerror = () => resolve({ url, status: 'error' });
 			img.src = url;
 		});
 	}
 
 
-	getData(url,param){
-		
+	getData(url, param) {
+
 		param = Object.assign(param || {}, Utils.joinTimestamp());
 
 		//若参数有数组，进行特殊拼接
-		url =  url + '?' + Object.keys(param).map(e => {
+		url = url + '?' + Object.keys(param).map(e => {
 			let str = ''
 			//判断数组拼接
-			if(param[e] instanceof Array){
-				str = param[e].map((item)=>{
+			if (param[e] instanceof Array) {
+				str = param[e].map((item) => {
 					return `${e}=${item}`
 				}).join('&')
-			}else{
+			} else {
 				str = `${e}=${param[e]}`
 			}
 			return str
 		}).join('&');
-		console.warn('=====getData url:',url)
+		console.warn('=====getData url:', url)
 		return new Promise(function (resolve, reject) {
 			var req = new XMLHttpRequest();
 
 			req.timeout = 1500; // 设置超时时间为 5 秒
 
-			req.ontimeout = function() {
+			req.ontimeout = function () {
 				console.error('Request timed out');
 			};
-	
+
 			req.onload = function () {
 				console.warn('=====getData onload:')
 				if (req.status === 200) {
@@ -292,12 +292,12 @@ class UlanziUtils {
 					reject(Error(req.statusText));
 				}
 			};
-	
+
 			req.onerror = function () {
 				console.warn('=====getData error:')
 				reject(Error('Network Error'));
 			};
-	
+
 			req.open('GET', url, true);
 			req.send();
 		});
@@ -310,26 +310,26 @@ class UlanziUtils {
 	 * @param {string} method 请求方式：GET/POST/PUT/DELETE
 	 * @param {object} headers 请求头
    */
-	fetchData(url, param, method = 'GET', headers = {}){
+	fetchData(url, param, method = 'GET', headers = {}) {
 
 		if (method.toUpperCase() === 'GET') {
 			param = Object.assign(param || {}, Utils.joinTimestamp());
 
 			//若参数有数组，进行特殊拼接
-			url =  url + '?' + Object.keys(param).map(e => {
+			url = url + '?' + Object.keys(param).map(e => {
 				let str = ''
 				//判断数组拼接
-				if(param[e] instanceof Array){
-					str = param[e].map((item)=>{
+				if (param[e] instanceof Array) {
+					str = param[e].map((item) => {
 						return `${e}=${item}`
 					}).join('&')
-				}else{
+				} else {
 					str = `${e}=${param[e]}`
 				}
 				return str
 			}).join('&');
 		}
-	
+
 		const opts = {
 			cache: 'no-cache',
 			headers,
@@ -341,25 +341,25 @@ class UlanziUtils {
 		return new Promise(function (resolve, reject) {
 			Utils.fetchWithTimeout(url, opts)
 				.then(async (resp) => {
-					console.warn('==fetch success:',url)
+					console.warn('==fetch success:', url)
 					if (!resp) {
 						reject(new Error('No Resp'));
 					}
 					if (!resp.ok) {
 						const errData = await resp.json();
-						if(errData){
-							reject(errData) ;
-						}else{
-							reject(new Error(`{${resp.status}: ${await resp.text()}}`)) ;
+						if (errData) {
+							reject(errData);
+						} else {
+							reject(new Error(`{${resp.status}: ${await resp.text()}}`));
 						}
-	
-					}else{
+
+					} else {
 						resolve(await resp.json());
 					}
 				})
 				.catch((err) => {
-					console.warn('==fetch error:',JSON.stringify(err))
-					reject(err); 
+					console.warn('==fetch error:', JSON.stringify(err))
+					reject(err);
 				})
 		});
 	}
@@ -367,15 +367,15 @@ class UlanziUtils {
 	/**
    * 封装fetch请求，设置超时时间
    */
-	fetchWithTimeout(url, options = {}){
+	fetchWithTimeout(url, options = {}) {
 		const { timeout = 15000 } = options; // 设置默认超时时间为8000ms
-		console.warn('====fetchWithTimeout timeout:',timeout)
-	 
+		console.warn('====fetchWithTimeout timeout:', timeout)
+
 		const controller = new AbortController();
 		const id = setTimeout(() => controller.abort(), timeout);
-	 
 
-		console.warn('==fetchWithTimeout:',url, JSON.stringify(options))
+
+		console.warn('==fetchWithTimeout:', url, JSON.stringify(options))
 		const response = fetch(url, {
 			...options,
 			signal: controller.signal
@@ -388,15 +388,15 @@ class UlanziUtils {
 			clearTimeout(id);
 			throw error;
 		});
-	 
+
 		return response;
-	
+
 	}
 
 	/**
    * 获取随机时间戳
    */
-	joinTimestamp(){
+	joinTimestamp() {
 		const now = new Date().getTime();
 		return { _t: now };
 	}
@@ -422,26 +422,31 @@ class UlanziUtils {
 		});
 	}
 
-	drawText (text, stroke = "#fff", background = "#000", wh = 196, textLabel, inCanvas) {
-		console.log('==drawText:',text, textLabel)
+	drawText(text, stroke = "#fff", background = "#000", wh = 196, textLabel, inCanvas) {
+		console.log('==drawText:', text, textLabel)
 		const canvas = inCanvas ? inCanvas : document.createElement('canvas');
-		canvas.width = wh;
-		canvas.height = wh;
 		const ctx = canvas.getContext('2d');
-	
-		if (background == "transparent") {
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-		} else {
-			ctx.fillStyle = background;
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
+		
+		if(!inCanvas){
+			canvas.width = wh;
+			canvas.height = wh;
+			if (background == "transparent") {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+			} else {
+				ctx.fillStyle = background;
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+			}
+
 		}
+	
+		
 	
 		const fSize = text.length > 8 ? 30 - text.length / 2 : 40;
 		ctx.fillStyle = stroke;
 		ctx.font = `${fSize}px "Source Han Sans"`;
-		// ctx.textBaseline = 'middle';
+		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
-		ctx.fillText(text, ctx.canvas.width / 2, (ctx.canvas.height + fSize / 3) / 2);
+		ctx.fillText(text, ctx.canvas.width / 2, ctx.canvas.height / 2);
 	
 		if(textLabel){
 			ctx.font = `24px "Source Han Sans"`;
@@ -466,7 +471,7 @@ class UlanziUtils {
 						// get the index string length (i.e. '21'.length === 2)
 						const posLen = pos.length;
 						arr.splice(idx + 1, 0, Number(pos));
-	
+
 						// keep the key (array name) without the index comprehension:
 						// (i.e. key without [] (string of length 2)
 						// and the length of the index (posLen))
@@ -481,33 +486,33 @@ class UlanziUtils {
 		}
 		return obj === undefined ? defaultValue : obj;
 	};
-	
-	getProp (jsn, str, defaultValue = {}, sep = '.'){
+
+	getProp(jsn, str, defaultValue = {}, sep = '.') {
 		const arr = str.split(sep);
 		return arr.reduce((obj, key) => (obj && obj.hasOwnProperty(key) ? obj[key] : defaultValue), jsn);
 	};
 
-  /**
-   * Logs a message 
-   * @param {any} msg
-   */
-  log(...msg){
-    console.warn(`[${new Date().toLocaleString('zh-CN', {hour12: false})}]`, ...msg);
-    // this.getQueryParams('debug') && console.log(`[${new Date().toLocaleString('zh-CN', {hour12: false})}]`, ...msg);
-  }
+	/**
+	 * Logs a message 
+	 * @param {any} msg
+	 */
+	log(...msg) {
+		console.warn(`[${new Date().toLocaleString('zh-CN', { hour12: false })}]`, ...msg);
+		// this.getQueryParams('debug') && console.log(`[${new Date().toLocaleString('zh-CN', {hour12: false})}]`, ...msg);
+	}
 
-  /**
-   * Logs a warning message 
-   */
-  warn(...msg){
-    console.warn(`[${new Date().toLocaleString('zh-CN', {hour12: false})}]`, ...msg);
-  }
+	/**
+	 * Logs a warning message 
+	 */
+	warn(...msg) {
+		console.warn(`[${new Date().toLocaleString('zh-CN', { hour12: false })}]`, ...msg);
+	}
 
 	/**
 	 * Logs an error message
 	*/
-	error(...msg){
-		console.error(`[${new Date().toLocaleString('zh-CN', {hour12: false})}]`, ...msg);
+	error(...msg) {
+		console.error(`[${new Date().toLocaleString('zh-CN', { hour12: false })}]`, ...msg);
 	}
 }
 

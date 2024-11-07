@@ -46,7 +46,7 @@ class UlanzideckApi extends EventEmitter {
     this.websocket = new WebSocket(`ws://${this.address}:${this.port}`);
 
     this.websocket.onopen = () => {
-      Utils.log('[ULANZIDECK] WEBSOCKET OPEN:', uuid);
+      Utils.log('[ULANZIDECK] MAIN WEBSOCKET OPEN:', uuid);
       const json = {
         code: 0,
         cmd: Events.CONNECTED,
@@ -64,24 +64,24 @@ class UlanzideckApi extends EventEmitter {
     };
 
     this.websocket.onerror = (evt) => {
-      const error = `[ULANZIDECK] WEBSOCKET ERROR: ${JSON.stringify(evt)}, ${ JSON.stringify(evt.data)}, ${SocketErrors[evt?.code || 'DEFAULT']}`;
+      const error = `[ULANZIDECK] MAIN WEBSOCKET ERROR: ${JSON.stringify(evt)}, ${ JSON.stringify(evt.data)}, ${SocketErrors[evt?.code || 'DEFAULT']}`;
       Utils.warn(error);
 
       this.emit(Events.ERROR, error);
     };
 
     this.websocket.onclose = (evt) => {
-      Utils.warn('[ULANZIDECK] WEBSOCKET CLOSED:', SocketErrors[evt?.code || 'DEFAULT']);
+      Utils.warn('[ULANZIDECK] MAIN WEBSOCKET CLOSED:', SocketErrors[evt?.code || 'DEFAULT']);
       this.emit(Events.CLOSE);
     };
 
     this.websocket.onmessage = (evt) => {
-      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE ');
+      Utils.log('[ULANZIDECK] MAIN WEBSOCKET MESSGE ');
 
       const data = evt?.data ? JSON.parse(evt.data) : null;
 
 
-      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE DATA:', JSON.stringify(data));
+      Utils.log('[ULANZIDECK] MAIN WEBSOCKET MESSGE DATA:', JSON.stringify(data));
 
 
       //没有数据或者有data.code属性,且cmdType不等于REQUEST，则返回
@@ -89,7 +89,7 @@ class UlanzideckApi extends EventEmitter {
 
 
 
-      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE IN');
+      Utils.log('[ULANZIDECK] MAIN WEBSOCKET MESSGE IN');
 
       //没有key时，保存key
       if (!this.key && data.uuid == this.uuid && data.key) {

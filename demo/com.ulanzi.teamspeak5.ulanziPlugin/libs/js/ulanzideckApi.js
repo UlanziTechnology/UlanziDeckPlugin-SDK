@@ -14,13 +14,13 @@ class UlanziStreamDeck  {
     this.localPathPrefix = '../../';
     this.on = EventEmitter.on;
     this.emit = EventEmitter.emit;
+    this.isMain = false;
   }
   
 
 
 
   connect(uuid) {
-    Utils.log('[ULANZIDECK] CLIENT WEBSOCKET CONNECT:',uuid)
 
     this.port = Utils.getQueryParams('port') || 3906;
     this.address = Utils.getQueryParams('address') || '127.0.0.1';
@@ -37,11 +37,14 @@ class UlanziStreamDeck  {
 
     //判断是否为主服务,约定主服务 uuid 为4位，action应大于4位
     const isMain = this.uuid.split('.').length == 4;
+    this.isMain = isMain;
 
+    
+    Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET CONNECT:',uuid)
     this.websocket = new WebSocket(`ws://${this.address}:${this.port}`);
 
     this.websocket.onopen = () => {
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET OPEN:', uuid);
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET OPEN:', uuid);
       const json = {
         code: 0,
         cmd: Events.CONNECTED,
@@ -61,23 +64,23 @@ class UlanziStreamDeck  {
     };
 
     this.websocket.onerror = (evt) => {
-      const error = `[ULANZIDECK] CLIENT WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
+      const error = `[ULANZIDECK] ${this.isMain?'MAIN':'CLIENT'} WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
       Utils.warn(error);
       this.emit(Events.ERROR, error);
     };
 
     this.websocket.onclose = (evt) => {
-      Utils.warn('[ULANZIDECK] CLIENT WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
+      Utils.warn('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
       this.emit(Events.CLOSE);
     };
 
     this.websocket.onmessage = (evt) => {
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE ');
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET MESSGE ');
 
       const data = evt && evt.data ? JSON.parse(evt.data) : null;
 
 
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE DATA:', JSON.stringify(data));
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET MESSGE DATA:', JSON.stringify(data));
 
 
       //没有数据或者有data.code属性,且cmdType不等于REQUEST，则返回
@@ -85,7 +88,7 @@ class UlanziStreamDeck  {
 
 
 
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE IN');
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET MESSGE IN');
 
       //没有key时，保存key
       if (!this.key && data.uuid == this.uuid && data.key) {
