@@ -14,19 +14,20 @@ class UlanziStreamDeck  {
     this.localPathPrefix = '../../';
     this.on = EventEmitter.on;
     this.emit = EventEmitter.emit;
+    this.isMain = false;
   }
   
 
 
 
   connect(uuid) {
-    Utils.log('[ULANZIDECK] CLIENT WEBSOCKET CONNECT:',uuid)
 
     this.port = Utils.getQueryParams('port') || 3906;
     this.address = Utils.getQueryParams('address') || '127.0.0.1';
     this.actionid = Utils.getQueryParams('actionId') || ''; 
     this.key = Utils.getQueryParams('key') || ''; 
-    this.language = Utils.getQueryParams('language') || 'en';
+    this.language = Utils.getQueryParams('language') || Utils.getLanguage() || 'en';
+    this.language = Utils.adaptLanguage(this.language) ; 
     this.uuid = uuid;
 
     if (this.websocket) {
@@ -36,11 +37,14 @@ class UlanziStreamDeck  {
 
     //判断是否为主服务,约定主服务 uuid 为4位，action应大于4位
     const isMain = this.uuid.split('.').length == 4;
+    this.isMain = isMain;
 
+    
+    Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET CONNECT:',uuid)
     this.websocket = new WebSocket(`ws://${this.address}:${this.port}`);
 
     this.websocket.onopen = () => {
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET OPEN:', uuid);
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET OPEN:', uuid);
       const json = {
         code: 0,
         cmd: Events.CONNECTED,
@@ -60,23 +64,23 @@ class UlanziStreamDeck  {
     };
 
     this.websocket.onerror = (evt) => {
-      const error = `[ULANZIDECK] CLIENT WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
+      const error = `[ULANZIDECK] ${this.isMain?'MAIN':'CLIENT'} WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
       Utils.warn(error);
       this.emit(Events.ERROR, error);
     };
 
     this.websocket.onclose = (evt) => {
-      Utils.warn('[ULANZIDECK] CLIENT WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
+      Utils.warn('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
       this.emit(Events.CLOSE);
     };
 
     this.websocket.onmessage = (evt) => {
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE ');
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET MESSGE ');
 
       const data = evt && evt.data ? JSON.parse(evt.data) : null;
 
 
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE DATA:', JSON.stringify(data));
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET MESSGE DATA:', JSON.stringify(data));
 
 
       //没有数据或者有data.code属性,且cmdType不等于REQUEST，则返回
@@ -84,7 +88,7 @@ class UlanziStreamDeck  {
 
 
 
-      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE IN');
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET MESSGE IN');
 
       //没有key时，保存key
       if (!this.key && data.uuid == this.uuid && data.key) {
@@ -144,21 +148,24 @@ class UlanziStreamDeck  {
 
     const selectorsList = '[data-localize]';
     el.querySelectorAll(selectorsList).forEach(e => {
+
       const s = e.innerText.trim();
+      let dl = e.dataset.localize;
+      
       if(s){
-        e.innerText = this.localization[s] || e.innerText;
+        e.innerText = this.localization[dl ? dl : s] || e.innerText;
       }
       if (e.placeholder && e.placeholder.length) {
-        e.placeholder = this.localization[e.placeholder] || e.placeholder;
+        e.placeholder = this.localization[ dl ? dl : e.placeholder] || e.placeholder;
       }
       if (e.title && e.title.length) {
-        e.title = this.localization[e.title] || e.title;
+        e.title = this.localization[dl ? dl : e.title] || e.title;
       }
       if(e.label){
-          e.label = this.localization[e.label] || e.label;
+          e.label = this.localization[dl ? dl : e.label] || e.label;
       }
       if(e.textContent){
-          e.textContent = this.localization[e.textContent] || e.textContent;
+          e.textContent = this.localization[dl ? dl : e.textContent] || e.textContent;
       }
     });
   };
@@ -218,25 +225,29 @@ class UlanziStreamDeck  {
 
   /**
    * 请求上位机使⽤浏览器打开url
-   * @param {string} url 必传 | 直接远程地址和本地地址，⽀持打开插件根⽬录下的url链接（以/ ./ 起始的链接）
+   * @param {string} url 必传 | 直接远程地址和本地地址，⽀持打开插件根⽬录下的url链接（以/ ./ 起始的链接）。
+   *                            只能是基本路径，不能带参数，需要带参数请设置在param值里面
    * @param {local} boolean 可选 | 若为本地地址为true
+   * @param {object} param 可选 | 路径的参数值
   */
-  openUrl(url, local) {
+  openUrl(url, local, param) {
     this.send(Events.OPENURL, {
       url,
-      local: local ? true : false
+      local: local ? true : false,
+      param: param ? param : null
     })
   }
 
   /**
    * 请求上位机机显⽰弹窗；弹窗后，test.html需要主动关闭，测试到window.close()可以通知弹窗关闭
-   *  @param {string} url 必传 | 本地html路径 
+   *  @param {string} url 必传 | 本地html路径，只能是基本路径，不能带参数，需要带参数请设置在param值里面
    * @param {string} width 可选 | 窗口宽度，默认200
    * @param {string} height 可选 | 窗口高度，默认200
    * @param {string} x 可选 | 窗口x坐标，不传值默认居中
    * @param {string} y 可选 | 窗口y坐标，不传值默认居中
+   * @param {object} param 可选 | 路径的参数值
   */
-  openView(url, width = 200, height = 200, x, y) {
+  openView(url, width = 200, height = 200, x, y, param) {
     const params = {
       url,
       width,
@@ -247,6 +258,9 @@ class UlanziStreamDeck  {
     }
     if(y){
       params.y = y
+    }
+    if(param){
+      params.param = param
     }
     this.send(Events.OPENVIEW, params)
   }
@@ -391,7 +405,7 @@ class UlanziStreamDeck  {
           uuid,
           key,
           actionid,
-          type: 3,
+          type: 4,
           gifpath,
           textData: text || '',
           showtext: text ? true : false

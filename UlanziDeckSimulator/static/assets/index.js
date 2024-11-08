@@ -79,6 +79,12 @@ function setStateIcon(iconData) {
   } else if ( type === 3) {
     //gif base64
     src = data.gifdata
+  } else if ( type === 2) {
+    //本地绝对路径
+    src = getRelativePath(data.path)
+  } else if ( type === 4) {
+    //本地gif绝对路径
+    src = getRelativePath(data.gifpath)
   }
   if(!ukImg){
     uk.innerHTML = `<img src="${src}">`
@@ -86,6 +92,20 @@ function setStateIcon(iconData) {
     ukImg.src = src
   }
 
+}
+
+
+//获取相对路径，适配上位机绝对路径
+function getRelativePath(path){
+  let rPath = path;
+  const sStr = 'UlanziDeckSimulator/static/';
+
+  if(rPath.indexOf(sStr) >= 0){
+    rPath = rPath.split(sStr)[1]
+  }
+
+
+  return rPath
 }
 
 
