@@ -119,9 +119,9 @@ function listUpdated(data) {
     let liBuffer = []
     for (let i = 0; i < renderDate.Actions.length; i++) {
       const action = renderDate.Actions[i]
-      liBuffer.push(`<li class="draggable" draggable="true" data-action="${k + '___' + i}">
+      liBuffer.push(`<li class="draggable" draggable="true" data-action="${k + '___' + i}" title="${action.Tooltip}">
               <div class="icon-name action-icon">
-                <img src="./plugins/${k}/${v.Actions[i].Icon}">
+                <img src="./plugins/${k}/${v.Actions[i]?.Icon}">
                 <span>${action.Name}</span>
               </div>
             </li>`)
@@ -130,7 +130,7 @@ function listUpdated(data) {
 
     listBuffer.push(`
         <div class="ulanzi-slider-item">
-          <div class="slider-item-title">
+          <div class="slider-item-title"  title="${renderDate.Description}">
 
             <div class="icon-name category-icon">
               <img src="./plugins/${k}/${v.Icon}">
