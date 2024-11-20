@@ -39,6 +39,25 @@ class UlanziUtils {
       actionid: de_ctx[2]
     }
   }
+
+  /**
+	   * JSON.parse优化
+	 * parse json
+	 * @param {string} jsonString
+	 * @returns {object} json
+	*/
+	parseJson(jsonString) {
+		if (typeof jsonString === 'object') return jsonString;
+		try {
+			const o = JSON.parse(jsonString);
+			if (o && typeof o === 'object') {
+				return o;
+			}
+		} catch (e) { }
+
+		return false;
+	}
+
 }
 
 
