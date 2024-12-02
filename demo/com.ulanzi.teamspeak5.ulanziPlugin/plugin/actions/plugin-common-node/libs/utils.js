@@ -114,92 +114,6 @@ class UlanziUtils {
   }
 
 
-
-	/**
-   * 获取接口数据
-   * @param {string} url 接口地址
-	 * @param {object} param 接口参数
-	 * @param {string} method 请求方式：GET/POST/PUT/DELETE
-	 * @param {object} headers 请求头
-   */
-	fetchData = function(url, param, method = 'GET', headers = {}){
-
-		if (method.toUpperCase() === 'GET') {
-			param = Object.assign(param || {}, Utils.joinTimestamp());
-
-			//若参数有数组，进行特殊拼接
-			url =  url + '?' + Object.keys(param).map(e => {
-				let str = ''
-				//判断数组拼接
-				if(param[e] instanceof Array){
-					str = param[e].map((item)=>{
-						return `${e}=${item}`
-					}).join('&')
-				}else{
-					str = `${e}=${param[e]}`
-				}
-				return str
-			}).join('&');
-		}
-	
-		const opts = {
-			cache: 'no-cache',
-			headers,
-			method: method,
-			body: ['GET', 'HEAD'].includes(method)
-				? undefined
-				: param,
-		};
-		return new Promise(function (resolve, reject) {
-			Utils.fetchWithTimeout(url, opts)
-				.then(async (resp) => {
-					console.log('===resp',resp)
-					if (!resp) {
-						reject(new Error('No Resp'));
-					}
-					if (!resp.ok) {
-						const errData = await resp.json();
-						console.log('===resp.data',errData)
-						if(errData){
-							reject(errData) ;
-						}else{
-							reject(new Error(`{${resp.status}: ${await resp.text()}}`)) ;
-						}
-	
-					}else{
-						resolve(await resp.json());
-					}
-				})
-				.catch((err) => {
-					reject(err); 
-				})
-		});
-	}
-
-	/**
-   * 封装fetch请求，设置超时时间
-   */
-	fetchWithTimeout = (url, options = {}) => {
-		const { timeout = 8000 } = options; // 设置默认超时时间为8000ms
-	 
-		const controller = new AbortController();
-		const id = setTimeout(() => controller.abort(), timeout);
-	 
-		const response = fetch(url, {
-			...options,
-			signal: controller.signal
-		}).then((response) => {
-			clearTimeout(id);
-			return response;
-		}).catch((error) => {
-			clearTimeout(id);
-			throw error;
-		});
-	 
-		return response;
-	
-	}
-
 	/**
    * 获取随机时间戳
    */
@@ -209,7 +123,23 @@ class UlanziUtils {
 	}
 
 	/**
-   * 获取插件根目录
+	  * 适配语言环境
+   */
+	adaptLanguage(ln) {
+		let userLanguage = ln;
+		if (ln.indexOf('zh') == 0) {
+			userLanguage = 'zh_CN'
+		} else if (ln.indexOf('en') == 0) {
+			userLanguage = 'en'
+		} else if (userLanguage.indexOf('-') !== -1) {
+			userLanguage = userLanguage.split('-')[0];
+		}
+
+		return userLanguage
+	}
+
+	/**
+   * 获取插件根目录路径
    */
 	getPluginPath(){
 		const currentFilePath = process.argv[1];

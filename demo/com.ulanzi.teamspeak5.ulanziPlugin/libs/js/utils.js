@@ -315,8 +315,10 @@ class UlanziUtils {
 		if (method.toUpperCase() === 'GET') {
 			param = Object.assign(param || {}, Utils.joinTimestamp());
 
+			const tag = url.indexOf('?') >= 0 ? '&':'?'
+
 			//若参数有数组，进行特殊拼接
-			url = url + '?' + Object.keys(param).map(e => {
+			url = url + tag + Object.keys(param).map(e => {
 				let str = ''
 				//判断数组拼接
 				if (param[e] instanceof Array) {
@@ -491,6 +493,23 @@ class UlanziUtils {
 		const arr = str.split(sep);
 		return arr.reduce((obj, key) => (obj && obj.hasOwnProperty(key) ? obj[key] : defaultValue), jsn);
 	};
+
+	/**
+   * 获取插件根目录路径
+   */
+	getPluginPath(){
+		const currentFilePath = location.pathname;
+		let split_tag = '/'
+		if(currentFilePath.indexOf('\\') > -1){
+			split_tag = '\\'
+		}
+		const pathArr = currentFilePath.split(split_tag);
+		const idx = pathArr.findIndex(f => f.endsWith('ulanziPlugin'));
+		const __folderpath = `${pathArr.slice(0, idx + 1).join("/")}`;
+	
+		return __folderpath;
+	
+	}
 
 	/**
 	 * Logs a message 

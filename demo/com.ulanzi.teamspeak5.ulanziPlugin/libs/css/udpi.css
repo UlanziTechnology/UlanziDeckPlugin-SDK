@@ -1,7 +1,7 @@
 
 @font-face {
   font-family: 'Source Han Sans';
-  src: url('https://www.ulanzistudio.com/font/SourceHanSansSC-Regular-2.otf') format('opentype');
+  src: url('//cdn.ulanzistudio.com/font/SourceHanSansSC-Regular-2.otf') format('opentype');
 }
 :root {
   --udpi-bgcolor: #282828;
@@ -104,9 +104,7 @@ button {
   font-weight: var(--udpi-fontweight);
   letter-spacing: var(--udpi-letterspacing);
 }
-span.udpi-item-value{
-  line-height: 26px;
-}
+
 
 
 .win .udpi-item-value,
@@ -1315,7 +1313,6 @@ border-bottom: 8px solid #000;
 
 a {
   color: #7397d2;
-  cursor: pointer;
 }
 
 .testcontainer {

@@ -11,7 +11,6 @@ class UlanziStreamDeck  {
     this.websocket = null;
     this.language = 'en';
     this.localization = null;
-    this.localPathPrefix = '../../';
     this.on = EventEmitter.on;
     this.emit = EventEmitter.emit;
     this.isMain = false;
@@ -137,10 +136,10 @@ class UlanziStreamDeck  {
     // this.language = Utils.getLanguage() || 'en';
     if (!this.localization) {
       try {
-        const localJson = await Utils.readJson(`${this.localPathPrefix}${this.language}.json`)
+        const localJson = await Utils.readJson(`${Utils.getPluginPath()}/${this.language}.json`)
         this.localization = localJson['Localization'] ? localJson['Localization'] : null
       } catch (e) {
-        Utils.log(`${this.localPathPrefix}${this.language}.json`)
+        Utils.log(`${Utils.getPluginPath()}/${this.language}.json`)
         Utils.warn("No FILE found to localize " + this.language);
       }
     }
@@ -152,21 +151,28 @@ class UlanziStreamDeck  {
       const s = e.innerText.trim();
       let dl = e.dataset.localize;
       
-      if(s){
-        e.innerText = this.localization[dl ? dl : s] || e.innerText;
-      }
       if (e.placeholder && e.placeholder.length) {
+        // console.log('e.placeholder:',e.placeholder)
         e.placeholder = this.localization[ dl ? dl : e.placeholder] || e.placeholder;
       }
       if (e.title && e.title.length) {
+        // console.log('e.title:',e.title)
         e.title = this.localization[dl ? dl : e.title] || e.title;
       }
       if(e.label){
+        // console.log('e.label:',e.label)
           e.label = this.localization[dl ? dl : e.label] || e.label;
       }
       if(e.textContent){
+        // console.log('e.textContent:',e.textContent)
           e.textContent = this.localization[dl ? dl : e.textContent] || e.textContent;
       }
+      
+      if(s){
+        // console.log('s:',s)
+        e.innerHTML = this.localization[dl ? dl : s] || e.innerHTML;
+      }
+
     });
   };
 
@@ -405,7 +411,7 @@ class UlanziStreamDeck  {
           uuid,
           key,
           actionid,
-          type: 3,
+          type: 4,
           gifpath,
           textData: text || '',
           showtext: text ? true : false

@@ -1,7 +1,7 @@
 
 @font-face {
   font-family: 'Source Han Sans';
-  src: url('https://www.ulanzistudio.com/font/SourceHanSansSC-Regular-2.otf') format('opentype');
+  src: url('//cdn.ulanzistudio.com/font/SourceHanSansSC-Regular-2.otf') format('opentype');
 }
 :root {
   --udpi-bgcolor: #282828;
@@ -247,6 +247,7 @@ input[type=number]::-webkit-outer-spin-button {
 input[type="file"] {
   border-radius: var(--udpi-borderradius);
   max-width: 220px;
+  height: 23px !important;
 }
 
 option {
@@ -262,6 +263,7 @@ option {
 }
 
 .udpi-item {
+  position: relative;
   display: flex;
   flex-direction: row;
   min-height: 32px;
@@ -279,6 +281,10 @@ option {
   margin-bottom: 0px;
 }
 
+.udpi-item-label{
+  line-height: 26px;
+}
+
 .udpi-item>*:not(.udpi-item-label):not(meter):not(details):not(canvas) {
   min-height: 26px;
   padding: 0px 4px 0px 4px;
@@ -287,7 +293,6 @@ option {
 .udpi-item>*:not(.udpi-item-label.empty):not(meter) {
   min-height: 26px;
   padding: 0px 4px 0px 4px;
-  line-height: 26px;
 }
 
 
@@ -521,6 +526,7 @@ td:last-child {
 .udpi-item-value>select {
   margin-right: 13px;
   margin-left: 4px;
+  min-width: 220px;
 }
 
 .udpi-item-child,
@@ -703,6 +709,7 @@ textarea {
   margin-top: 2px;
   margin-bottom: 2px;
   min-width: 219px;
+  box-sizing: border-box;
 }
 
 textarea+label {
@@ -864,7 +871,7 @@ input[type="radio"]:checked+label span {
 }
 
 input[type="range"] {
-  width: var(--udpi-width);
+  width: 220px;
   height: 30px;
   overflow: hidden;
   cursor: pointer;
@@ -1188,13 +1195,15 @@ label.udpi-file-label {
   cursor: pointer;
   user-select: none;
   display: inline-block;
-  min-height: 21px !important;
-  height: 21px !important;
+  min-height: 24px !important;
+  height: 24px !important;
   line-height: 20px;
   padding: 0px 4px;
   margin: auto;
   margin-right: 0px;
-  float: right;
+  position: absolute;
+  right: 0;
+  box-sizing: border-box;
 }
 
 .udpi-file-label>label:active,
@@ -1273,15 +1282,18 @@ border-bottom: 8px solid #000;
   word-wrap: break-word;
   hyphens: auto;
 
-  min-width: 132px;
-  max-width: 144px;
+  width: 200px;
+  /* max-width: 144px; */
   max-height: 32px;
   margin-top: 0px;
-  margin-left: 5px;
+  /* margin-left: 5px; */
   display: inline-block;
   overflow: hidden;
-  padding: 6px 4px;
+  padding: 0px 4px;
   background-color: var(--udpi-background);
+  height: 24px !important;
+  line-height: 24px !important;
+  box-sizing: border-box;
 }
 
 
@@ -1613,4 +1625,36 @@ input[type="range"].colortemperature::-webkit-slider-thumb {
   position: absolute;
   opacity: 1;
   transition: opacity 0.25s ease-out;
+}
+form{
+  position: relative;
+}
+.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.loading {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(0, 0, 0, 0.2);  /*  设置整体边框背景颜色*/
+  border-top-color: #d8d8d8;  /* 单独设置顶部边框颜色来表示动态部分 */
+  border-radius: 50%;
+  animation: loading 1s linear infinite;  /* 设置循环动画参数 */
+}
+
+@keyframes loading {
+  to {
+    transform: rotate(360deg);  /* 设置旋转360度 */
+  }
+}
+.none{
+  display: none;
 }
