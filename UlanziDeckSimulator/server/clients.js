@@ -187,12 +187,15 @@ export default class Clients extends EventEmitter {
       const param = this.contextDatas[context] || null;
       if(this.activeKeys[key] && this.activeKeys[key].uuid === uuid && this.activeKeys[key].actionid === actionid){
         
-        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送paramfromapp事件。${param?'以下是重载数据':''}`
+        this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面和主服务再次发送paramfromapp事件。${param?'以下是重载数据':''}`
           ,param?JSON.stringify(param):null
         )
         this.send('paramfromapp',{
           uuid,key,actionid,param
         })
+        this.send('paramfromapp',{
+          uuid,key,actionid,param
+        },true)
       }else{
         this.log(`配置项 ${uuid} 已连接！键值为${key}，actionid为${actionid}。上位机模拟器向该action页面发送add和paramfromapp事件。${param?'以下是重载数据':''}`
           ,param?param:null
