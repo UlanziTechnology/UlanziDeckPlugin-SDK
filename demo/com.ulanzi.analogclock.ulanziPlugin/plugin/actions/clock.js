@@ -61,7 +61,7 @@
       const sTime = date.toLocaleTimeString();
       const fSize = sTime.length > 8 ? 30 - sTime.length / 2 : 32;
       ctx.fillStyle = colors.stroke;
-      ctx.font = `${fSize}px arial`;
+      ctx.font = `${fSize}px 'Source Han Sans SC'`;
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'center';
       ctx.fillText(sTime, ctx.canvas.width / 2, (ctx.canvas.height + fSize / 3) / 2);
