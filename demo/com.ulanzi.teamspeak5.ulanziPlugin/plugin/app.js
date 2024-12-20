@@ -90,7 +90,7 @@ $UD.onRun(jsn =>{
   const context = jsn.context
   const instance = ACTION_CACHES[context];
   if (!instance){
-    $UD.onAdd(jsn);
+    $UD.emit('add',jsn);
   }else {
     console.warn('===instance onRun tun====',typeof instance.run)
     if (typeof instance.run === 'function') instance.run(jsn)

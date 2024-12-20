@@ -1,7 +1,7 @@
 
 @font-face {
-  font-family: 'Source Han Sans';
-  src: url('../plugins/SourceHanSansSC-Regular-2.otf') format('opentype');
+  font-family: 'Source Han Sans SC';
+  src: url('./SourceHanSansSC-Regular-2.otf') format('opentype');
 }
 
 :root {
@@ -16,7 +16,7 @@
 
 html,
 body {
-  font-family: 'Source Han Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Source Han Sans SC', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 14px;
 }
 

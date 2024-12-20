@@ -114,7 +114,7 @@ function listUpdated(data) {
   let listBuffer = []
   for (const k in data) {
     const v = data[k]
-    const renderDate = config.language === 'zh_CN' ? v.zhData : v
+    const renderDate = config.language === 'zh_CN' && v.zhData ? v.zhData : v
 
     let liBuffer = []
     for (let i = 0; i < renderDate.Actions.length; i++) {

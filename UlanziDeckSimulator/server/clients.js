@@ -228,7 +228,7 @@ export default class Clients extends EventEmitter {
     let connectedMain = []
     for (const k in this.plugins) {
       const v = this.plugins[k]
-      const renderDate = this.config.language === 'zh_CN' ? v.zhData : v
+      const renderDate = this.config.language === 'zh_CN' && v.zhData ? v.zhData : v
   
       if (this.clientList[v.UUID] && this.clientList[v.UUID].readyState == 1) { //存在并且还是连接状态
           if(!onlyCheck)this.log(renderDate.Name + ' 主服务 '+ v.UUID +' 已连接！')
