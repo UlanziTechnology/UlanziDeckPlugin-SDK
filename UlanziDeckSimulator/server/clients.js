@@ -283,6 +283,7 @@ export default class Clients extends EventEmitter {
 
 
   getMainUuid(uuid){
+    if(!uuid) return console.error('[UlanziDeck Tips]: uuid not found!');
     const parts = uuid.split('.'); // 将字符串按 . 分割成数组
     return parts.slice(0, 4).join('.');
   }

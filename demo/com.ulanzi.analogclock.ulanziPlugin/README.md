@@ -1,80 +1,84 @@
-# com.ulanzi.analogclock.ulanziPlugin （html版式示例）
+# com.ulanzi.analogclock.ulanziPlugin (HTML Version Example)
 
-## 简介
-为了更直观的演示通用库 html 版本的使用，我们用analogclock来做插件例子
+<p align="start">
+   <strong>English</strong> | <a href="./README.zh.md">简体中文</a>
+</p>
+
+## Introduction
+To demonstrate the use of the general library HTML version more intuitively, we use analogclock as a plugin example.
 
 ```bash
-当前版本根据 Ulanzi JS 插件开发协议-V1.2.2 来编写
+The current version is written according to the Ulanzi JS Plugin Development Protocol-V1.2.2
 ```
 
 
-## 文件介绍
+## File Description
 ```bash
 com.ulanzi.analogclock.ulanziPlugin
-├── assets         //主要用于存放上位机icon的展示和action状态的切换
+├── assets         //Mainly used to store the display of UlanziDeck icons and action state switching
 │   └── icons      
 │       └── icon.png
-├── libs    //插件html通用库（action页面引用），此处不做具体介绍，可前往 UlanziTechnology/plugin-common-html 目录查看。libs更新版本请以 UlanziTechnology/plugin-common-html 目录为准。
-├── plugin  //js主要功能模块,包括action的处理
-│   ├── actions   //处理具体action逻辑
-│   ├── app.html  //主服务html，作为入口
-│   └── app.js    //主服务js
-├── property-inspector // 配置项html和form表单的读写
-│   └── clock      //action的名称
-│       ├── inspector.html  //配置项html
-│       └── inspector.js  //配置项js，用于做socket连接和form表单的处理
-├── manifest.json         //具体配置项的编写可查看插件协议
-├── zh_CN.json      //中文翻译文件
-├── en.json         //英文翻译文件
+├── libs    //Plugin HTML common library (referenced by action pages). This is not described in detail here, please refer to the UlanziTechnology/plugin-common-html directory. For updated versions of libs, please refer to the UlanziTechnology/plugin-common-html directory.
+├── plugin  //Main JS functional modules, including action handling
+│   ├── actions   //Handle specific action logic
+│   ├── app.html  //Main service HTML, serves as the entry point
+│   └── app.js    //Main service JS
+├── property-inspector // Configuration HTML and form reading/writing
+│   └── clock      //Action name
+│       ├── inspector.html  //Configuration HTML
+│       └── inspector.js  //Configuration JS, used for socket connection and form handling
+├── manifest.json         //For specific configuration items, please refer to the plugin protocol
+├── zh_CN.json      //Chinese translation file
+├── en.json         //English translation file
 ```
 
 
-## 使用
+## Usage
 
-### 一些说明和约定
+### Some Explanations and Conventions
 ```bash
-1. 插件库的主服务（例app.html）会一直与上位机连接，用于做主要功能，包括上位机icon的更新等。
+1. The main service of the plugin library (e.g., app.html) will always be connected to the UlanziDeck for main functionality, including updating the UlanziDeck icon.
 
-2. 插件库的配置项（例inspector.html），配置项我们后续称为action。切换功能按键之后就会被销毁，不宜做功能处理。主要用于发送配置项到上位机和同步上位机数据。
+2. The configuration item of the plugin library (e.g., inspector.html), which we later refer to as action, will be destroyed after switching function buttons and is not suitable for functional processing. It is mainly used to send configuration items to the UlanziDeck and synchronize UlanziDeck data.
 
-3. 为了统一管理，我们的插件包的名称为 com.ulanzi.插件名.ulanziPlugin
+3. For unified management, our plugin package name is com.ulanzi.pluginName.ulanziPlugin
 
-3. 为了通用库的正常使用，主服务连接的uuid我们约定长度是4。例：com.ulanzi.ulanzideck.插件名
+4. For the normal use of the common library, we stipulate that the UUID of the main service connection is 4 in length. Example: com.ulanzi.ulanzideck.pluginName
 
-4. 配置项连接的uuid要大于4用于区分。例：com.ulanzi.ulanzideck.插件名.插件action
+5. The UUID of the configuration item connection should be greater than 4 to distinguish it. Example: com.ulanzi.ulanzideck.pluginName.pluginAction
 
-5. 本地化文件放在插件根目录下，即与libs插件通用库同级。例：zh_CN.json en.json
+6. Localization files are placed in the plugin root directory, at the same level as the libs plugin common library. Example: zh_CN.json en.json
 
-6. 为了UI字体的统一，我们已经在udpi.css设置了开源字体思源黑体（Source Han Sans），在app.html也同样需要引用字体库。请大家在绘制icon时，统一使用'Source Han Sans'。
+7. For UI font consistency, we have already set the open-source font Source Han Sans SC in udpi.css, and app.html also needs to reference the font library. Please use 'Source Han Sans SC' uniformly when drawing icons.
 
-7. 上位机的背景颜色为 '#282828'，通用css（udpi.css）已经设定了'--udpi-bgcolor: #282828;'。若要自定义action的背景颜色应与上位机背景色相同，避免插件背景颜色过于突兀。
+8. The background color of the UlanziDeck is '#282828', and the common CSS (udpi.css) has already set '--udpi-bgcolor: #282828;'. If you want to customize the background color of an action, it should be the same as the UlanziDeck's background color to avoid the plugin's background color being too jarring.
 
 ```
 
-## 本地化翻译文件编写规则
+## Localization Translation File Writing Rules
 
-### 参数介绍
+### Parameter Introduction
 ```bash
-以zh_CN.json为例
+Taking zh_CN.json as an example
 
-name:插件名称
-description:插件描述
-actions:插件action列表，数组形式。每个action需要填写name(action名称)和tooltip(悬浮提示)
+name: Plugin name
+description: Plugin description
+actions: Plugin action list, in array form. Each action needs to fill in name (action name) and tooltip (hover tip)
 
-localization: 插件内容本地化
-本地化有两种方式
+localization: Plugin content localization
+There are two ways of localization:
 
-1. 根据英文内容翻译
-使用规则：在action的html页面，将需要翻译的节点加上data-localize的属性。html的sdk会自动读取节点的英文内容进行对应翻译。
-注意：此时data-localize不需要赋予值，但是编写页面时请使用英文。之后在根目录下添加语言环境对应的json，例如zh_CN.json
+1. Translation based on English content
+Usage rule: In the action's HTML page, add the data-localize attribute to nodes that need translation. The HTML SDK will automatically read the node's English content for corresponding translation.
+Note: In this case, data-localize does not need to be assigned a value, but please use English when writing the page. Then add the corresponding language environment JSON in the root directory, such as zh_CN.json
 
-2. 根据data-localize的值翻译
-使用规则：在action的html页面，将需要翻译的节点加上data-localize="Blue"的属性。
-注意：与第一种不同，此时的sdk会根据data-localize的值（例：Blue）来进行对应翻译。
+2. Translation based on the value of data-localize
+Usage rule: In the action's HTML page, add the attribute data-localize="Blue" to nodes that need translation.
+Note: Unlike the first method, the SDK will translate according to the value of data-localize (e.g., Blue).
 
 ```
 
-### zh_ CN.json 的示例
+### Example of zh_CN.json
 ```json
 {
   "Name" : "时钟模拟",
@@ -98,6 +102,4 @@ localization: 插件内容本地化
   }
 }
 
-```
-
-
+``` 

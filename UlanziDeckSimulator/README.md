@@ -1,31 +1,34 @@
-# 上位机模拟器
-
-## 介绍
-上位机模拟器，用于模拟上位机与插件之间的通信，开发者可以在此模拟器上测试插件功能。本模拟器主要用于方便开发调试，具体运行效果请以桌面软件运行结果为准。
+# UlanziDeck Simulator
 
 
-## 运行
+<p align="start">
+   <strong>English</strong> | <a href="./README.zh.md">简体中文</a>
+</p>
+
+
+## Introduction
+The Host Simulator is used to simulate communication between the host application and plugins. Developers can test plugin functionality on this simulator. This simulator is mainly used for development and debugging convenience. Please refer to the desktop software running results for specific operational effects.
+
+## Running
 
 ```
 npm install
 npm start
 ```
 
-
-## 说明
- <ol >
-  <li>开始编写插件前，请前往 <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK
-    " target="_blank">插件开发SDK</a> 和 <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">从零开始：UlanziDeck插件开发之旅</a> 了解一些开发说明和介绍</li>
-  <li>测试插件请按照协议要求填写manifest.json，然后放在 UlanziDeckSimulator/static/plugins 目录中。模拟器会自动解析插件，并展示在模拟器左侧列表当中。插件更新需要点击 <strong>刷新插件列表</strong> 按钮，让模拟器重载插件。</li>
-  <li>当前版本，主服务需要开发者自行启动，请按照提示启动主服务再进行操作。</li>
-  <li>调试顺序：启动上位机模拟器 -> 确认插件主服务已连接 -> 拖入键盘，调试action</li>
-  <li>模拟器不支持上位机的特殊事件：openview， selectdialog。若有打开弹窗和选择文件/文件夹功能，请在上位机中测试。</li>
-  <li>模拟器暂时没有页面切换，不主动发送setactive事件，请开发者右键自行发送事件来测试功能。</li>
-  <li>默认不加载action，我们的目的是让开发者自己运行action页面已达到开发调试的效果。打开加载action可能会导致与开发者打开的action页面有websocket冲突，影响测试结果。</li>
+## Instructions
+ <ol>
+  <li>Before starting plugin development, please visit <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK" target="_blank">Plugin Development SDK</a> and <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">Starting from Zero: Journey of UlanziDeck Plugin Development</a> to understand some development instructions and introductions</li>
+  <li>To test plugins, please fill in manifest.json according to protocol requirements, then place it in the UlanziDeckSimulator/static/plugins directory. The simulator will automatically parse the plugin and display it in the simulator's left-side list. Plugin updates require clicking the <strong>Refresh Plugin List</strong> button to reload the plugin.</li>
+  <li>In the current version, developers need to start the main service themselves. Please follow the prompts to start the main service before proceeding with operations.</li>
+  <li>Debugging sequence: Start host simulator -> Confirm plugin main service is connected -> Drag in keyboard, debug action</li>
+  <li>The simulator does not support special host events: openview, selectdialog. If you have open dialog and select file/folder functionality, please test in the UlanziDeck application.</li>
+  <li>The simulator currently does not have page switching and does not actively send setactive events. Developers should right-click to send events manually to test functionality.</li>
+  <li>Actions are not loaded by default. Our goal is for developers to run the action page themselves to achieve development and debugging effects. Enabling action loading may cause websocket conflicts with developer-opened action pages, affecting test results.</li>
 </ol>
 
-## 功能
+## Features
 
-1. 上位机模拟器，默认端口39069
-2. 启动成功，浏览器打开http://127.0.0.1:39069
-3. 按照模拟器提示，进行测试
+1. UlanziDeck simulator, default port 39069
+2. After successful startup, open http://127.0.0.1:39069 in browser
+3. Follow simulator prompts for testing 
