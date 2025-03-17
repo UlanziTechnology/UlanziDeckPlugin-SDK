@@ -15,6 +15,7 @@ const server = http.createServer(app);
 
 //设置静态文件目录
 app.use(express.static(utils.getRootPath()+'/static'));
+app.use(express.static(utils.getRootPath()+'/plugins'));
 
 const wsServer = new WebSocketServer({server:server});
 

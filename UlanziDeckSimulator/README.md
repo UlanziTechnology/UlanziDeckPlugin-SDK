@@ -19,7 +19,7 @@ npm start
 ## Instructions
  <ol>
   <li>Before starting plugin development, please visit <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK" target="_blank">Plugin Development SDK</a> and <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">Starting from Zero: Journey of UlanziDeck Plugin Development</a> to understand some development instructions and introductions</li>
-  <li>To test plugins, please fill in manifest.json according to protocol requirements, then place it in the <strong>UlanziDeckSimulator/static/plugins</strong> directory. The simulator will automatically parse the plugin and display it in the simulator's left-side list. Plugin updates require clicking the <strong>Refresh Plugin List</strong> button to reload the plugin.</li>
+  <li>To test plugins, please fill in manifest.json according to protocol requirements, then place it in the <strong>UlanziDeckSimulator/plugins</strong> directory. The simulator will automatically parse the plugin and display it in the simulator's left-side list. Plugin updates require clicking the <strong>Refresh Plugin List</strong> button to reload the plugin.</li>
   <li>In the current version, developers need to start the main service themselves. Please follow the prompts to start the main service before proceeding with operations.</li>
   <li>Debugging sequence: Start <strong>UlanziDeck simulator</strong> -> <strong>Confirm plugin main service is connected</strong> -> <strong>Drag in keyboard, debug action</strong></li>
   <li>The simulator does not support special UlanziDeck events: openview, selectdialog. If you have open dialog and select file/folder functionality, please test in the UlanziDeck application.</li>

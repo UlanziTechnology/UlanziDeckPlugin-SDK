@@ -241,7 +241,7 @@ export default class Clients extends EventEmitter {
               code = `node ${v.CodePath} 127.0.0.1 ${this.config.serverPort} ${this.config.language}`
           } else {
               msg = renderDate.Name + ' 主服务 '+ v.UUID +' 未连接，请使用浏览器打开以下链接启动主服务'
-              code = `http://127.0.0.1:${this.config.serverPort}/plugins/${k}/${v.CodePath}?address=127.0.0.1&port=${this.config.serverPort}&language=${this.config.language}&uuid=${v.UUID}`
+              code = `http://127.0.0.1:${this.config.serverPort}/${k}/${v.CodePath}?address=127.0.0.1&port=${this.config.serverPort}&language=${this.config.language}&uuid=${v.UUID}`
           }
           if(!onlyCheck)this.log(msg, code)
       }

@@ -17,7 +17,7 @@ class PluginMenu extends EventEmitter {
 
         this.plugins = {}
         // 定义plugins文件夹的路径
-        const pluginsDir = utils.getRootPath()+'/static/plugins';
+        const pluginsDir = utils.getRootPath()+'/plugins';
 
         // 同步读取plugins文件夹下的所有子文件夹
         const files = fs.readdirSync(pluginsDir);

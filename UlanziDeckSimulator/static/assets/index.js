@@ -72,7 +72,7 @@ function setStateIcon(iconData) {
 
   if (type === 0) {
     //本地文件,状态列表
-    src = `./plugins/${plugin}/${actionData.States[data.state].Image}`
+    src = `./${plugin}/${actionData.States[data.state].Image}`
   } else if ( type === 1) {
     //base64
     src = data.data
@@ -98,7 +98,7 @@ function setStateIcon(iconData) {
 //获取相对路径，适配上位机绝对路径
 function getRelativePath(path){
   let rPath = path;
-  const sStr = 'UlanziDeckSimulator/static/';
+  const sStr = 'UlanziDeckSimulator/plugins/';
 
   if(rPath.indexOf(sStr) >= 0){
     rPath = rPath.split(sStr)[1]
@@ -121,7 +121,7 @@ function listUpdated(data) {
       const action = renderDate.Actions[i]
       liBuffer.push(`<li class="draggable" draggable="true" data-action="${k + '___' + i}" title="${action.Tooltip}">
               <div class="icon-name action-icon">
-                <img src="./plugins/${k}/${v.Actions[i]?.Icon}">
+                <img src="./${k}/${v.Actions[i]?.Icon}">
                 <span>${action.Name}</span>
               </div>
             </li>`)
@@ -133,7 +133,7 @@ function listUpdated(data) {
           <div class="slider-item-title"  title="${renderDate.Description}">
 
             <div class="icon-name category-icon">
-              <img src="./plugins/${k}/${v.Icon}">
+              <img src="./${k}/${v.Icon}">
               <span>${renderDate.Name}</span>
             </div>
           </div>
@@ -330,12 +330,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const plugin = plugin_action[0];
       const action = plugin_action[1];
       const actionData = plugins[plugin].Actions[action];
-      this.innerHTML = `<img src="./plugins/${plugin}/${actionData.Icon}">`; // 将数据放入目标区域
+      this.innerHTML = `<img src="./${plugin}/${actionData.Icon}">`; // 将数据放入目标区域
 
       log({
         time: time(),
         msg: `${actionData.UUID}拖入键盘，键值是${keyValue.key}，actionid是${keyValue.actionid}。上位机向主服务发送add和paramfromapp事件。请使用浏览器打开以下路径，调试该action。`,
-        code: `http://127.0.0.1:${config.serverPort}/plugins/${plugin}/${actionData.PropertyInspectorPath}?address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${actionData.UUID}&actionId=${keyValue.actionid}&key=${keyValue.key}`
+        code: `http://127.0.0.1:${config.serverPort}/${plugin}/${actionData.PropertyInspectorPath}?address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${actionData.UUID}&actionId=${keyValue.actionid}&key=${keyValue.key}`
       })
       send('add', { uuid: actionData.UUID, key: keyValue.key, actionid: keyValue.actionid })
       activeKeys[keyValue.key] = { uuid: actionData.UUID, key: keyValue.key, actionid: keyValue.actionid, plugin, actionData }
@@ -489,7 +489,7 @@ function handleActiveCurrentKey() {
 
     if (config.loadAction === 'yes') {
       const { plugin, actionData, actionid, key, uuid } = activeKeys[currentActiveKey]
-      document.querySelector('.action-iframe').innerHTML = `<iframe src="http://127.0.0.1:${config.serverPort}/plugins/${plugin}/${actionData.PropertyInspectorPath}?address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${uuid}&actionId=${actionid}&key=${key}"></iframe>`
+      document.querySelector('.action-iframe').innerHTML = `<iframe src="http://127.0.0.1:${config.serverPort}/${plugin}/${actionData.PropertyInspectorPath}?address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${uuid}&actionId=${actionid}&key=${key}"></iframe>`
     }
   }
 

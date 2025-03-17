@@ -20,7 +20,7 @@ npm start
  <ol >
   <li>开始编写插件前，请前往 <a href="https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK
     " target="_blank">插件开发SDK</a> 和 <a href="https://cloud.tencent.com/developer/article/2461403" target="_blank">从零开始：UlanziDeck插件开发之旅</a> 了解一些开发说明和介绍</li>
-  <li>测试插件请按照协议要求填写manifest.json，然后放在 UlanziDeckSimulator/static/plugins 目录中。模拟器会自动解析插件，并展示在模拟器左侧列表当中。插件更新需要点击 <strong>刷新插件列表</strong> 按钮，让模拟器重载插件。</li>
+  <li>测试插件请按照协议要求填写manifest.json，然后放在 UlanziDeckSimulator/plugins 目录中。模拟器会自动解析插件，并展示在模拟器左侧列表当中。插件更新需要点击 <strong>刷新插件列表</strong> 按钮，让模拟器重载插件。</li>
   <li>当前版本，主服务需要开发者自行启动，请按照提示启动主服务再进行操作。</li>
   <li>调试顺序：启动上位机模拟器 -> 确认插件主服务已连接 -> 拖入键盘，调试action</li>
   <li>模拟器不支持上位机的特殊事件：openview， selectdialog。若有打开弹窗和选择文件/文件夹功能，请在上位机中测试。</li>
