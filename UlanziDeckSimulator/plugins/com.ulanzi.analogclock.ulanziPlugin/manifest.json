@@ -1,44 +1,44 @@
 {
-    "Actions": [
-      {
-        "Name": "clock",
-        "Icon": "assets/icons/actionIcon.png",
-        "PropertyInspectorPath": "property-inspector/clock/inspector.html",
-        "state": 0,
-        "States": [
-          {
-            "Name": "clock",
-            "Image": "assets/icons/icon.png"
-          }
-        ],
-        "Tooltip": "how a nice analog clock",
-        "UUID": "com.ulanzi.ulanzideck.analogclock.clock",
-        "SupportedInMultiActions": false
-      }
-    ],
-    "Author": "Ulanzi",
-    "Name": "Analog Clock",
-    "Description": "Always be on time.",
-    "Icon": "assets/icons/icon.png",
-    "Version": "1.0.0",
-    "Category": "Analog Clock",
-    "CategoryIcon": "assets/icons/categoryIcon.png",
-    "CodePath": "plugin/app.html",
-    "Type": "JavaScript",
-    "SupportedInMultiActions": false,
-    "PrivateAPI": true,
-    "UUID": "com.ulanzi.ulanzideck.analogclock",
-    "OS": [
-      {
-        "Platform": "mac",
-        "MinimumVersion": "10.11"
-      },
-      {
-        "Platform": "windows",
-        "MinimumVersion": "10"
-      }
-    ],
-    "Software": {
-      "MinimumVersion": "6.1"
+  "Actions": [
+    {
+      "Name": "clock",
+      "Icon": "assets/icons/actionIcon.png",
+      "PropertyInspectorPath": "property-inspector/clock/inspector.html",
+      "state": 0,
+      "States": [
+        {
+          "Name": "clock",
+          "Image": "assets/icons/icon.png"
+        }
+      ],
+      "Tooltip": "how a nice analog clock",
+      "UUID": "com.ulanzi.ulanzideck.analogclock.clock",
+      "SupportedInMultiActions": false
     }
+  ],
+  "Author": "Ulanzi",
+  "Name": "Analog Clock",
+  "Description": "Always be on time.",
+  "Icon": "assets/icons/icon.png",
+  "Version": "1.0.0",
+  "Category": "Analog Clock",
+  "CategoryIcon": "assets/icons/categoryIcon.png",
+  "CodePath": "plugin/app.html",
+  "Type": "JavaScript",
+  "SupportedInMultiActions": false,
+  "PrivateAPI": true,
+  "UUID": "com.ulanzi.ulanzideck.analogclock",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "6.1"
   }
+}
