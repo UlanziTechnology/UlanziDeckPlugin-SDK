@@ -445,13 +445,13 @@ class UlanziUtils {
 	
 		const fSize = text.length > 8 ? 30 - text.length / 2 : 40;
 		ctx.fillStyle = stroke;
-		ctx.font = `${fSize}px "Source Han Sans"`;
+		ctx.font = `${fSize}px "Source Han Sans SC"`;
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 		ctx.fillText(text, ctx.canvas.width / 2, ctx.canvas.height / 2);
 	
 		if(textLabel){
-			ctx.font = `24px "Source Han Sans"`;
+			ctx.font = `24px "Source Han Sans SC"`;
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'left';
 			ctx.fillText(textLabel, 10, 20);
