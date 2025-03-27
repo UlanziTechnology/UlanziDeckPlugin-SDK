@@ -52,7 +52,7 @@ The code provided by this project is for learning and reference purposes only an
 
 If you have any questions about the project interpretation rights or other related issues, please feel free to contact us:
 
-**Email:** [Mr.Zhang frank1@ulanzi.cn] [Mr.Chen chenxudong@ulanzi.cn]
+**Email:** [ustudioservice@ulanzi.com] 
 
 
 We hope to build a prosperous and healthy plugin ecosystem with community developers through open-source methods. Thank you for your understanding and support!
