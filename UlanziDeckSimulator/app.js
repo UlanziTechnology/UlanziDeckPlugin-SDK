@@ -65,7 +65,7 @@ wsServer.on('connection', (ws,msg) => {
 
 
 server.listen(serverPort,()=>{
-    console.log(`server started and run http://localhost:${serverPort}`);
+    console.log(`server started and run http://127.0.0.1:${serverPort}`);
 });
 
 

@@ -67,8 +67,8 @@ com.ulanzi.teamspeak5.ulanziPlugin
     "ws": "^8.18.0"
 
     # common-node 推荐绘制icon工具包
-    "@svgdotjs/svg.js": "^3.2.4",
-    "svgdom": "^0.1.19",
+    "@svgdotjs/svg.js": "3.2.4",
+    "svgdom": "0.1.19",
 
     #devDependencies目录下的是webpack打包依赖包，可根据自身项目打包自己添加
     "@babel/core": "^7.24.9",

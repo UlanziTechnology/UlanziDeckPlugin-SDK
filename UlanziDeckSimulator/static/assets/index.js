@@ -109,12 +109,15 @@ function getRelativePath(path){
 }
 
 
-function listUpdated(data) {
+async function listUpdated(data) {
   plugins = data
   let listBuffer = []
   for (const k in data) {
     const v = data[k]
-    const renderDate = config.language === 'zh_CN' && v.zhData ? v.zhData : v
+
+    // console.log('===k',k)
+    // console.log('===v',v)
+    let renderDate = v[config.language +'_DATA'] ? v[config.language +'_DATA'] : v
 
     let liBuffer = []
     for (let i = 0; i < renderDate.Actions.length; i++) {
@@ -506,3 +509,4 @@ function handleActiveCurrentKey() {
 
 
 }
+

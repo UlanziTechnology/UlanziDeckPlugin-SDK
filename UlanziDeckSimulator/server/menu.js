@@ -40,9 +40,13 @@ class PluginMenu extends EventEmitter {
                 const manifest = JSON.parse(data);
 
                 try{
-                  const zhPath = path.join(filePath, 'zh_CN.json');
-                  const zhData = fs.readFileSync(zhPath, 'utf8');
-                  manifest.zhData = JSON.parse(zhData);
+
+                  const languages = ['en', 'zh_CN', 'ja_JP', 'de_DE']
+                  languages.forEach(language => {
+                    const data = this.getLocalization(filePath, language);
+                    if(data) manifest[language+'_DATA'] = data;
+                  })
+                  
                 }catch(err){
                   console.log('===get zh err',err)
                 }
@@ -55,6 +59,19 @@ class PluginMenu extends EventEmitter {
       } catch (err) {
         console.error('An error occurred:', err);
       }
+  }
+
+
+  getLocalization(filePath,language){
+    try{
+      const trPath = path.join(filePath, language + '.json');
+      const trData = fs.readFileSync(trPath, 'utf8');
+      return JSON.parse(trData);
+      
+    }catch(err){ 
+      console.log(`===get ${language} err:${err}`)
+      return null
+    }
   }
 
 
