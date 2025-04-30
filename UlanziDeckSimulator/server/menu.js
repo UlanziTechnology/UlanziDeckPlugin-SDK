@@ -41,7 +41,7 @@ class PluginMenu extends EventEmitter {
 
                 try{
 
-                  const languages = ['en', 'zh_CN', 'ja_JP', 'de_DE']
+                  const languages = ['en', 'zh_CN', 'ja_JP', 'de_DE','zh_HK']
                   languages.forEach(language => {
                     const data = this.getLocalization(filePath, language);
                     if(data) manifest[language+'_DATA'] = data;
