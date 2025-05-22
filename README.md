@@ -26,7 +26,7 @@
 
 ## II. Participating in Plugin Development
 
-Developers interested in participating in plugin development can contact frank1@ulanzi.cn or chenxudong@ulanzi.cn to obtain the specific development agreement.
+Developers interested in participating in plugin development can contact ustudioservice@ulanzi.com to obtain the specific development agreement.
 
 
 
