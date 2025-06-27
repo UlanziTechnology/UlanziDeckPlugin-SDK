@@ -120,8 +120,8 @@ async function listUpdated(data) {
     let renderDate = v[config.language +'_DATA'] ? v[config.language +'_DATA'] : v
 
     let liBuffer = []
-    for (let i = 0; i < renderDate.Actions.length; i++) {
-      const action = renderDate.Actions[i]
+    for (let i = 0; i < v.Actions.length; i++) {
+      const action = renderDate.Actions[i] ? renderDate.Actions[i] : v.Actions[i]
       liBuffer.push(`<li class="draggable" draggable="true" data-action="${k + '___' + i}" title="${action.Tooltip}">
               <div class="icon-name action-icon">
                 <img src="./${k}/${v.Actions[i]?.Icon}">
