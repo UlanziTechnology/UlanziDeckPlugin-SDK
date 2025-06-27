@@ -27,7 +27,7 @@ class UlanziStreamDeck  {
     this.key = Utils.getQueryParams('key') || ''; 
     this.language = Utils.getQueryParams('language') || Utils.getLanguage() || 'en';
     this.language = Utils.adaptLanguage(this.language) ; 
-    this.uuid = uuid;
+    this.uuid =  Utils.getQueryParams('uuid') || uuid;
 
     if (this.websocket) {
       this.websocket.close();
@@ -39,17 +39,17 @@ class UlanziStreamDeck  {
     this.isMain = isMain;
 
     
-    Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET CONNECT:',uuid)
+    Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET CONNECT:',this.uuid)
     this.websocket = new WebSocket(`ws://${this.address}:${this.port}`);
 
     this.websocket.onopen = () => {
-      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET OPEN:', uuid);
+      Utils.log('[ULANZIDECK] '+this.isMain?'MAIN':'CLIENT'+' WEBSOCKET OPEN:', this.uuid);
       const json = {
         code: 0,
         cmd: Events.CONNECTED,
         actionid:this.actionid,
         key:this.key,
-        uuid
+        uuid:this.uuid
       };
 
       this.websocket.send(JSON.stringify(json));

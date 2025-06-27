@@ -111,7 +111,7 @@ class UlanziUtils {
 		} else if (userLanguage.indexOf('zh-') >= 0) {
 			userLanguage = userLanguage.split('-').join('_')
 		} else if (userLanguage.indexOf('-') !== -1) {
-			userLanguage = userLanguage.split('-')[0];
+			userLanguage = userLanguage.replace(/-/g, '_');
 		}
 		return this.adaptLanguage(userLanguage);
 	}
@@ -122,11 +122,15 @@ class UlanziUtils {
 	adaptLanguage(ln) {
 		let userLanguage = ln;
 		if (ln.indexOf('zh') == 0) {
-			userLanguage = 'zh_CN'
+			if(ln.indexOf('CN') > -1){
+				userLanguage = 'zh_CN'
+			}else{
+				userLanguage = 'zh_HK'
+			}
 		} else if (ln.indexOf('en') == 0) {
 			userLanguage = 'en'
 		} else if (userLanguage.indexOf('-') !== -1) {
-			userLanguage = userLanguage.split('-')[0];
+			userLanguage = userLanguage.replace(/-/g, '_');
 		}
 
 		return userLanguage
@@ -272,7 +276,7 @@ class UlanziUtils {
 			}
 			return str
 		}).join('&');
-		console.warn('=====getData url:', url)
+		// console.warn('=====getData url:', url)
 		return new Promise(function (resolve, reject) {
 			var req = new XMLHttpRequest();
 
@@ -283,18 +287,18 @@ class UlanziUtils {
 			};
 
 			req.onload = function () {
-				console.warn('=====getData onload:')
+				// console.warn('=====getData onload:')
 				if (req.status === 200) {
-					console.warn('=====getData success:')
+					// console.warn('=====getData success:')
 					resolve(req.response);
 				} else {
-					console.warn('=====getData not 200:')
+					// console.warn('=====getData not 200:')
 					reject(Error(req.statusText));
 				}
 			};
 
 			req.onerror = function () {
-				console.warn('=====getData error:')
+				// console.warn('=====getData error:')
 				reject(Error('Network Error'));
 			};
 
@@ -343,7 +347,7 @@ class UlanziUtils {
 		return new Promise(function (resolve, reject) {
 			Utils.fetchWithTimeout(url, opts)
 				.then(async (resp) => {
-					console.warn('==fetch success:', url)
+					// console.warn('==fetch success:', url)
 					if (!resp) {
 						reject(new Error('No Resp'));
 					}
@@ -360,7 +364,7 @@ class UlanziUtils {
 					}
 				})
 				.catch((err) => {
-					console.warn('==fetch error:', JSON.stringify(err))
+					// console.warn('==fetch error:', JSON.stringify(err))	
 					reject(err);
 				})
 		});
@@ -371,22 +375,22 @@ class UlanziUtils {
    */
 	fetchWithTimeout(url, options = {}) {
 		const { timeout = 15000 } = options; // 设置默认超时时间为8000ms
-		console.warn('====fetchWithTimeout timeout:', timeout)
+		// console.warn('====fetchWithTimeout timeout:', timeout)
 
 		const controller = new AbortController();
 		const id = setTimeout(() => controller.abort(), timeout);
 
 
-		console.warn('==fetchWithTimeout:', url, JSON.stringify(options))
+		// console.warn('==fetchWithTimeout:', url, JSON.stringify(options))
 		const response = fetch(url, {
 			...options,
 			signal: controller.signal
 		}).then((response) => {
-			console.warn('==fetchWithTimeout success:', JSON.stringify(response))
+			// console.warn('==fetchWithTimeout success:', JSON.stringify(response))
 			clearTimeout(id);
 			return response;
 		}).catch((error) => {
-			console.warn('==fetchWithTimeout error:', JSON.stringify(error))
+			// console.warn('==fetchWithTimeout error:', JSON.stringify(error))
 			clearTimeout(id);
 			throw error;
 		});
@@ -425,7 +429,7 @@ class UlanziUtils {
 	}
 
 	drawText(text, stroke = "#fff", background = "#000", wh = 196, textLabel, inCanvas) {
-		console.log('==drawText:', text, textLabel)
+		// console.log('==drawText:', text, textLabel)
 		const canvas = inCanvas ? inCanvas : document.createElement('canvas');
 		const ctx = canvas.getContext('2d');
 		
@@ -444,14 +448,21 @@ class UlanziUtils {
 		
 	
 		const fSize = text.length > 8 ? 30 - text.length / 2 : 40;
+
+
+		ctx.strokeStyle = "#000";
+		ctx.lineWidth = 4;
+		
 		ctx.fillStyle = stroke;
-		ctx.font = `${fSize}px "Source Han Sans SC"`;
+		ctx.font = `bold ${fSize}px "Source Han Sans SC"`;
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
-		ctx.fillText(text, ctx.canvas.width / 2, ctx.canvas.height / 2);
+
+		ctx.strokeText(text, ctx.canvas.width / 2, ctx.canvas.height / 2);
+		ctx.fillText(text, ctx.canvas.width / 2, ctx.canvas.height / 2 );
 	
 		if(textLabel){
-			ctx.font = `24px "Source Han Sans SC"`;
+			ctx.font = `bold 24px "Source Han Sans SC"`;
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'left';
 			ctx.fillText(textLabel, 10, 20);
