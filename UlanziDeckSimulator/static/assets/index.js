@@ -462,6 +462,8 @@ function handleMenuItemClick(itemId) {
         currentActiveKey = ''
         handleActiveCurrentKey()
       }
+      delete activeKeys[key]
+      send('activeKeys',{activeKeys: activeKeys})
       break;
     case 'menu-setactive':
       send('setactive', { uuid, key, actionid, active: true })

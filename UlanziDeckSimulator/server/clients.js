@@ -90,6 +90,8 @@ export default class Clients extends EventEmitter {
         this.send('setactive',data,true)
       })
       this.deckClient.on('clear', (data) => {
+        const context = utils.encodeContext(data.param[0])
+        delete this.contextDatas[context]
         this.send('clear',data,true)
       })
 
@@ -141,7 +143,8 @@ export default class Clients extends EventEmitter {
   paramfromplugin(data,client){
     const { uuid,param } = data;
     const context = utils.encodeContext(data)
-    this.contextDatas[context] = param
+    const oldParam = this.contextDatas[context]
+    this.contextDatas[context] = param || oldParam
 
     const mainUuid = this.getMainUuid(uuid)
 
