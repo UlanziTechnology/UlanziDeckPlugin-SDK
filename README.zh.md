@@ -24,7 +24,7 @@
 
 ## 二、参与插件开发
 
-有意向参与到插件开发的开发者，与**frank1@ulanzi.cn**或**chenxudong@ulanzi.cn**联系后，获取具体的开发协议。
+有意向参与到插件开发的开发者，与**ustudioservice@ulanzi.com**联系后，获取具体的开发协议。
 
 
 ## 三、声明
@@ -51,7 +51,7 @@
 
 如果您对项目解释权或其他相关问题有任何疑问，欢迎通过以下方式联系我们：
 
-**邮箱：** [张先生 frank1@ulanzi.cn] [陈先生 chenxudong@ulanzi.cn]
+**邮箱：** [ustudioservice@ulanzi.com]
 
 
 我们希望通过开源的方式，与社区开发者共同打造一个繁荣、健康的插件生态系统。感谢您的理解与支持！
