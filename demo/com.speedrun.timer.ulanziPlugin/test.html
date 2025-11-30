@@ -70,6 +70,10 @@
       animation: none;
     }
 
+    .status-indicator.mock {
+      background: #ff9800;
+    }
+
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
@@ -207,13 +211,14 @@
 
     <div class="api-info">
       <strong>ℹ️ API Info:</strong> <code>POST http://localhost:5010/api/timer</code><br>
-      <small>모의 서버 실행: <code>node mock-server.js</code></small>
+      <small id="modeInfo">서버 확인 중...</small>
     </div>
   </div>
 
   <script>
     const API_URL = 'http://localhost:5010/api/timer';
     let logEntries = [];
+    let useMockMode = false;
 
     // Check server status on load
     checkServerStatus();
@@ -227,26 +232,65 @@
         });
 
         if (response.ok) {
-          updateStatus(true);
+          useMockMode = false;
+          updateStatus('connected');
         } else {
-          updateStatus(false);
+          useMockMode = true;
+          updateStatus('mock');
         }
       } catch (error) {
-        updateStatus(false);
+        useMockMode = true;
+        updateStatus('mock');
       }
     }
 
-    function updateStatus(connected) {
+    function updateStatus(mode) {
       const indicator = document.getElementById('statusIndicator');
       const text = document.getElementById('statusText');
+      const modeInfo = document.getElementById('modeInfo');
 
-      if (connected) {
+      if (mode === 'connected') {
         indicator.className = 'status-indicator connected';
-        text.textContent = '서버 연결됨 (localhost:5010)';
-      } else {
-        indicator.className = 'status-indicator disconnected';
-        text.textContent = '서버 연결 안 됨 - mock-server.js를 실행하세요';
+        text.textContent = '실제 서버 연결됨 (localhost:5010)';
+        modeInfo.textContent = '✓ 실제 타이머 서버와 통신 중';
+      } else if (mode === 'mock') {
+        indicator.className = 'status-indicator mock';
+        text.textContent = '모의 모드 (Mock Mode)';
+        modeInfo.textContent = '⚠️ 로컬 시뮬레이션 - 실제 서버에 연결되지 않음';
       }
+    }
+
+    function mockAPIResponse(timerId, commandType) {
+      const commandNames = {
+        0: 'Resume',
+        1: 'Pause',
+        2: 'Reset',
+        3: 'StartBoth'
+      };
+
+      // Validate
+      if (timerId < 1 || timerId > 2) {
+        return {
+          ok: false,
+          data: { error: 'Id must be between 1 and 2' }
+        };
+      }
+
+      if (commandType < 0 || commandType > 3) {
+        return {
+          ok: false,
+          data: { error: 'Invalid PacketStatus type' }
+        };
+      }
+
+      // Success response
+      return {
+        ok: true,
+        data: {
+          success: true,
+          message: `Timer ${timerId} updated with status ${commandNames[commandType]}`
+        }
+      };
     }
 
     async function sendCommand(timerId, commandType) {
@@ -262,6 +306,22 @@
 
       addLog(`전송: ${playerName} - ${commandName} (Type: ${commandType})`, 'info');
 
+      // Use mock mode if server is not available
+      if (useMockMode) {
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const mockResponse = mockAPIResponse(timerId, commandType);
+
+        if (mockResponse.ok) {
+          addLog(`✓ [MOCK] 성공: ${mockResponse.data.message}`, 'success');
+        } else {
+          addLog(`✗ [MOCK] 오류: ${mockResponse.data.error}`, 'error');
+        }
+        return;
+      }
+
+      // Try real API call
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
@@ -278,13 +338,15 @@
 
         if (response.ok) {
           addLog(`✓ 성공: ${data.message}`, 'success');
-          updateStatus(true);
+          updateStatus('connected');
         } else {
           addLog(`✗ 오류: ${data.error}`, 'error');
         }
       } catch (error) {
         addLog(`✗ 네트워크 오류: ${error.message}`, 'error');
-        updateStatus(false);
+        // Switch to mock mode if server fails
+        useMockMode = true;
+        updateStatus('mock');
       }
     }
 

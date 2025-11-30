@@ -82,35 +82,25 @@ The following icon files are required in the `assets/icons/` directory:
 
 ## Testing
 
-To test the plugin without a real timer server, you can create a simple mock server:
+To test the plugin API functionality, open `test.html` in your browser:
 
-```javascript
-// mock-server.js
-const http = require('http');
-
-const server = http.createServer((req, res) => {
-  if (req.method === 'POST' && req.url === '/api/timer') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', () => {
-      const data = JSON.parse(body);
-      console.log('Received:', data);
-
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        success: true,
-        message: `Timer ${data.Id} updated with type ${data.Type}`
-      }));
-    });
-  }
-});
-
-server.listen(5010, () => {
-  console.log('Mock timer server running on http://localhost:5010');
-});
+```bash
+# Simply open the file in your browser
+open test.html
+# or
+firefox test.html
+# or double-click the file
 ```
 
-Run with: `node mock-server.js`
+The test interface will:
+- **Auto-detect** if the real timer server is running on localhost:5010
+- **Switch to mock mode** automatically if the server is not available
+- Display all API calls and responses in real-time
+- Show connection status with visual indicators
+
+**Test Modes:**
+- 🟢 **Connected Mode**: Real API calls to localhost:5010
+- 🟠 **Mock Mode**: Local simulation without server (for UI testing)
 
 ## Troubleshooting
 
@@ -137,7 +127,9 @@ com.speedrun.timer.ulanziPlugin/
 ├── manifest.json                 # Plugin configuration
 ├── en.json                       # English localization
 ├── ko.json                       # Korean localization
-├── README.md                     # This file
+├── README.md                     # This file (English)
+├── README.ko.md                  # Korean documentation
+├── test.html                     # Browser-based test interface
 ├── assets/
 │   └── icons/                    # Icon images
 ├── libs/

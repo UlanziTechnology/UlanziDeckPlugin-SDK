@@ -82,35 +82,25 @@ HTTP API를 통해 스피드런 이벤트 타이머를 제어하는 UlanziDeck �
 
 ## 테스트
 
-실제 타이머 서버 없이 플러그인을 테스트하려면 간단한 모의 서버를 만들 수 있습니다:
+플러그인 API 기능을 테스트하려면 브라우저에서 `test.html`을 여세요:
 
-```javascript
-// mock-server.js
-const http = require('http');
-
-const server = http.createServer((req, res) => {
-  if (req.method === 'POST' && req.url === '/api/timer') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', () => {
-      const data = JSON.parse(body);
-      console.log('수신:', data);
-
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        success: true,
-        message: `타이머 ${data.Id}가 타입 ${data.Type}으로 업데이트됨`
-      }));
-    });
-  }
-});
-
-server.listen(5010, () => {
-  console.log('모의 타이머 서버가 http://localhost:5010 에서 실행 중');
-});
+```bash
+# 브라우저에서 파일 열기
+open test.html
+# 또는
+firefox test.html
+# 또는 파일을 더블클릭
 ```
 
-실행: `node mock-server.js`
+테스트 인터페이스는:
+- localhost:5010에서 실제 타이머 서버가 실행 중인지 **자동 감지**
+- 서버를 사용할 수 없는 경우 **모의 모드로 자동 전환**
+- 모든 API 호출 및 응답을 실시간으로 표시
+- 시각적 표시기로 연결 상태 표시
+
+**테스트 모드:**
+- 🟢 **연결 모드**: localhost:5010으로 실제 API 호출
+- 🟠 **모의 모드**: 서버 없이 로컬 시뮬레이션 (UI 테스트용)
 
 ## 문제 해결
 
@@ -138,7 +128,8 @@ com.speedrun.timer.ulanziPlugin/
 ├── en.json                       # 영어 지역화
 ├── ko.json                       # 한국어 지역화
 ├── README.md                     # 영문 문서
-├── README.ko.md                  # 이 파일
+├── README.ko.md                  # 이 파일 (한국어 문서)
+├── test.html                     # 브라우저 기반 테스트 인터페이스
 ├── assets/
 │   └── icons/                    # 아이콘 이미지
 ├── libs/
