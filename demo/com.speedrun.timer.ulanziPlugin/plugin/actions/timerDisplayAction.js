@@ -80,8 +80,9 @@ class TimerDisplayAction {
 
     console.log('[TimerDisplayAction] Updating display:', timeString);
 
-    // Update button title with time
-    $UD.setTitle(this.context, timeString);
+    // Update button with icon path and time text
+    const iconPath = this.timerId === 1 ? 'assets/icons/display1p.png' : 'assets/icons/display2p.png';
+    $UD.setPathIcon(this.context, iconPath, timeString);
   }
 
   /**
