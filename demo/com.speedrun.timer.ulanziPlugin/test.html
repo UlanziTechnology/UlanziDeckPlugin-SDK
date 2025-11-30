@@ -237,10 +237,21 @@
         } else {
           useMockMode = true;
           updateStatus('mock');
+          console.warn('Server responded but not OK:', response.status, response.statusText);
         }
       } catch (error) {
         useMockMode = true;
         updateStatus('mock');
+        console.error('Failed to connect to server:', error.message);
+        console.error('Error details:', error);
+
+        // Show detailed error to user
+        addLog(`⚠️ 연결 실패: ${error.message}`, 'error');
+
+        // Check if it's a certificate error
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          addLog('💡 HTTPS 인증서 문제일 수 있습니다. 새 탭에서 https://localhost:5010을 열어 인증서를 수락하세요.', 'info');
+        }
       }
     }
 
