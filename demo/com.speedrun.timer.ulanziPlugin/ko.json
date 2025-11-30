@@ -6,6 +6,8 @@
     "Start": "타이머 시작",
     "Pause1P": "1P 중단",
     "Pause2P": "2P 중단",
-    "Reset": "타이머 초기화"
+    "Reset": "타이머 초기화",
+    "Display1P": "1P 타이머 표시",
+    "Display2P": "2P 타이머 표시"
   }
 }

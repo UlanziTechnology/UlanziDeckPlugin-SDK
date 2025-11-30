@@ -6,6 +6,8 @@
     "Start": "Start Timers",
     "Pause1P": "Pause 1P",
     "Pause2P": "Pause 2P",
-    "Reset": "Reset Timers"
+    "Reset": "Reset Timers",
+    "Display1P": "Timer 1P Display",
+    "Display2P": "Timer 2P Display"
   }
 }
