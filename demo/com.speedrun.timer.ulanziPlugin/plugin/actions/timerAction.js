@@ -66,17 +66,17 @@ class TimerAction {
    * Show success feedback on the button
    */
   showSuccess(message) {
-    // Show OK state temporarily
-    $UD.showOk(this.context);
-    console.log(message);
+    // Success feedback - just log it
+    // UlanziDeck API doesn't have showOk function
+    console.log('[SUCCESS]', message);
   }
 
   /**
    * Show error feedback on the button
    */
   showError(message) {
-    // Show alert state temporarily
-    $UD.showAlert(this.context);
-    console.error(message);
+    // Error feedback - just log it
+    // UlanziDeck API doesn't have showAlert function
+    console.error('[ERROR]', message);
   }
 }
