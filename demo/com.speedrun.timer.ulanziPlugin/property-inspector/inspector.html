@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .settings-container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .setting-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #666;
+      margin-top: 6px;
+    }
+
+    .example {
+      background: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #555;
+      margin-top: 8px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: none;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-container">
+    <div class="setting-group">
+      <label for="serverUrl">Timer Server URL (Global Setting)</label>
+      <input
+        type="text"
+        id="serverUrl"
+        placeholder="https://localhost:5010"
+      />
+      <div class="helper-text">
+        This URL is shared across all timer buttons. Leave empty to use default (https://localhost:5010)
+      </div>
+      <div class="example">
+        Examples:<br>
+        • https://localhost:5010<br>
+        • https://192.168.1.100:5010<br>
+        • https://timer.example.com
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+  </div>
+
+  <script src="../libs/js/constants.js"></script>
+  <script src="../libs/js/eventEmitter.js"></script>
+  <script src="../libs/js/timers.js"></script>
+  <script src="../libs/js/utils.js"></script>
+  <script src="../libs/js/ulanzideckApi.js"></script>
+
+  <script>
+    const STORAGE_KEY = 'speedrun-timer-server-url';
+
+    // Connect to UlanziDeck (works for all timer actions)
+    $UD.connect('com.speedrun.timer.inspector');
+
+    // Get input element
+    const urlInput = document.getElementById('serverUrl');
+    const statusDiv = document.getElementById('status');
+
+    // Load saved URL from localStorage on initialization
+    $UD.onConnected(() => {
+      const savedUrl = localStorage.getItem(STORAGE_KEY) || '';
+      urlInput.value = savedUrl;
+      console.log('[PI] Loaded URL from localStorage:', savedUrl || 'default');
+    });
+
+    // Handle input changes with debouncing
+    urlInput.addEventListener('input', Utils.debounce(() => {
+      const newUrl = urlInput.value.trim();
+
+      // Validate URL if not empty
+      if (newUrl && !isValidUrl(newUrl)) {
+        showStatus('Invalid URL format', 'error');
+        return;
+      }
+
+      // Save to localStorage for global sharing
+      if (newUrl) {
+        localStorage.setItem(STORAGE_KEY, newUrl);
+        showStatus(`Saved: ${newUrl}`, 'success');
+        console.log('[PI] URL saved to localStorage:', newUrl);
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+        showStatus('Using default: https://localhost:5010', 'success');
+        console.log('[PI] URL cleared, using default');
+      }
+
+      // Notify plugin to reload URL
+      $UD.sendParamFromPlugin({ serverUrl: newUrl, timestamp: Date.now() });
+    }, 300));
+
+    function isValidUrl(string) {
+      try {
+        const url = new URL(string);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function showStatus(message, type) {
+      statusDiv.textContent = message;
+      statusDiv.className = `status ${type}`;
+
+      // Auto-hide success messages
+      if (type === 'success') {
+        setTimeout(() => {
+          statusDiv.className = 'status';
+        }, 3000);
+      }
+    }
+
+    console.log('[PI] Property Inspector Initialized');
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{
+  "Actions": [
+    {
+      "Name": "Start",
+      "Icon": "assets/icons/start.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "State": 0,
+      "States": [
+        {
+          "Name": "Start",
+          "Image": "assets/icons/start.png"
+        },
+        {
+          "Name": "Start (Success)",
+          "Image": "assets/icons/start@1.png"
+        }
+      ],
+      "Tooltip": "Start both timers",
+      "UUID": "com.speedrun.timer.start",
+      "SupportedInMultiActions": true
+    },
+    {
+      "Name": "Pause 1P",
+      "Icon": "assets/icons/pause1p.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "State": 0,
+      "States": [
+        {
+          "Name": "Pause 1P",
+          "Image": "assets/icons/pause1p.png"
+        },
+        {
+          "Name": "Pause 1P (Success)",
+          "Image": "assets/icons/pause1p@1.png"
+        }
+      ],
+      "Tooltip": "Pause Player 1 timer",
+      "UUID": "com.speedrun.timer.pause1p",
+      "SupportedInMultiActions": true
+    },
+    {
+      "Name": "Pause 2P",
+      "Icon": "assets/icons/pause2p.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "State": 0,
+      "States": [
+        {
+          "Name": "Pause 2P",
+          "Image": "assets/icons/pause2p.png"
+        },
+        {
+          "Name": "Pause 2P (Success)",
+          "Image": "assets/icons/pause2p@1.png"
+        }
+      ],
+      "Tooltip": "Pause Player 2 timer",
+      "UUID": "com.speedrun.timer.pause2p",
+      "SupportedInMultiActions": true
+    },
+    {
+      "Name": "Reset",
+      "Icon": "assets/icons/reset.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "State": 0,
+      "States": [
+        {
+          "Name": "Reset",
+          "Image": "assets/icons/reset.png"
+        }
+      ],
+      "Tooltip": "Reset both timers",
+      "UUID": "com.speedrun.timer.reset",
+      "SupportedInMultiActions": true
+    }
+  ],
+  "Author": "Speedrun Timer",
+  "Name": "Speedrun Timer",
+  "Description": "Control speedrun event timers via localhost:5010 API",
+  "Icon": "assets/icons/plugin.png",
+  "Version": "1.0.0",
+  "Category": "Speedrun",
+  "CategoryIcon": "assets/icons/category.png",
+  "CodePath": "plugin/app.html",
+  "Type": "JavaScript",
+  "UUID": "com.speedrun.timer",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "6.1"
+  }
+}

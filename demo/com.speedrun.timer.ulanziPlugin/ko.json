@@ -1,0 +1,11 @@
+{
+  "Name": "스피드런 타이머",
+  "Description": "스피드런 이벤트 타이머 제어",
+  "Category": "스피드런",
+  "Actions": {
+    "Start": "타이머 시작",
+    "Pause1P": "1P 중단",
+    "Pause2P": "2P 중단",
+    "Reset": "타이머 초기화"
+  }
+}

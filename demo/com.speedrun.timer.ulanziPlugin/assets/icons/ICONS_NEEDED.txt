@@ -1,0 +1,61 @@
+Required Icon Files (72x72px PNG with transparency)
+======================================================
+
+Please create the following icon files:
+
+1. start.png
+   - Green play/triangle symbol ▶
+   - Suggested color: #4caf50
+   - Symbol: Play triangle pointing right
+
+2. pause1p.png
+   - Orange/yellow pause symbol with "1P" text
+   - Suggested color: #ff9800
+   - Symbol: Two vertical bars (pause) with "1P" below
+
+3. pause2p.png
+   - Orange/red pause symbol with "2P" text
+   - Suggested color: #ff5722
+   - Symbol: Two vertical bars (pause) with "2P" below
+
+4. reset.png
+   - Blue circular arrow (reset/refresh symbol)
+   - Suggested color: #2196f3
+   - Symbol: Circular arrow going counterclockwise
+
+5. plugin.png
+   - Stopwatch or timer icon
+   - Suggested color: #667eea
+   - Symbol: Stopwatch/timer
+
+6. category.png
+   - Same as plugin.png or a folder icon with timer
+   - Suggested color: #667eea
+   - Symbol: Category folder with timer
+
+Icon Requirements:
+------------------
+- Size: 72x72 pixels
+- Format: PNG
+- Background: Transparent
+- Style: Flat design, modern
+- Safe area: Keep important elements within 60x60px center
+
+Tools you can use:
+------------------
+- Figma (free)
+- Adobe Illustrator
+- Canva (free)
+- Online icon generators
+- Font Awesome icons exported as PNG
+
+Example workflow:
+-----------------
+1. Create 72x72px canvas
+2. Add background circle (60px diameter, centered)
+3. Add icon symbol (40px, centered, white color)
+4. Export as PNG with transparency
+5. Save in this directory with the correct filename
+
+Once icons are created, remove this file.
+Settings icon (72x72 PNG): Use a gear/cog icon

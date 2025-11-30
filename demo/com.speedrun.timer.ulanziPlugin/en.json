@@ -1,0 +1,11 @@
+{
+  "Name": "Speedrun Timer",
+  "Description": "Control speedrun event timers",
+  "Category": "Speedrun",
+  "Actions": {
+    "Start": "Start Timers",
+    "Pause1P": "Pause 1P",
+    "Pause2P": "Pause 2P",
+    "Reset": "Reset Timers"
+  }
+}
