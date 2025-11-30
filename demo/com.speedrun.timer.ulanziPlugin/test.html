@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speedrun Timer API Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 0.9em;
+    }
+
+    .server-status {
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: pulse 2s infinite;
+    }
+
+    .status-indicator.connected {
+      background: #4caf50;
+    }
+
+    .status-indicator.disconnected {
+      background: #f44336;
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .button-grid button {
+      padding: 20px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-grid button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .button-grid button:active {
+      transform: translateY(0);
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      grid-column: 1 / -1;
+    }
+
+    .btn-pause1p {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+    }
+
+    .btn-pause2p {
+      background: linear-gradient(135deg, #ff5722, #e64a19);
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #2196f3, #1976d2);
+      grid-column: 1 / -1;
+    }
+
+    .log {
+      background: #f5f5f5;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+    }
+
+    .log-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .log-entry {
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      background: white;
+      border-left: 4px solid #ddd;
+    }
+
+    .log-entry.success {
+      border-left-color: #4caf50;
+    }
+
+    .log-entry.error {
+      border-left-color: #f44336;
+      color: #f44336;
+    }
+
+    .log-entry .timestamp {
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    .api-info {
+      background: #e3f2fd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 0.85em;
+    }
+
+    .api-info code {
+      background: #fff;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⏱️ Speedrun Timer</h1>
+    <p class="subtitle">API Test Interface</p>
+
+    <div class="server-status">
+      <span class="status-indicator disconnected" id="statusIndicator"></span>
+      <span id="statusText">서버 연결 확인 중...</span>
+    </div>
+
+    <div class="button-grid">
+      <button class="btn-start" onclick="sendCommand(1, 3)">
+        ▶️ 시작 (Start Both)
+      </button>
+      <button class="btn-pause1p" onclick="sendCommand(1, 1)">
+        ⏸️ 1P 중단 (Pause)
+      </button>
+      <button class="btn-pause2p" onclick="sendCommand(2, 1)">
+        ⏸️ 2P 중단 (Pause)
+      </button>
+      <button class="btn-reset" onclick="resetBoth()">
+        ↺ 초기화 (Reset Both)
+      </button>
+    </div>
+
+    <div class="log">
+      <div class="log-title">📋 Activity Log</div>
+      <div id="logContainer"></div>
+    </div>
+
+    <div class="api-info">
+      <strong>ℹ️ API Info:</strong> <code>POST http://localhost:5010/api/timer</code><br>
+      <small>모의 서버 실행: <code>node mock-server.js</code></small>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:5010/api/timer';
+    let logEntries = [];
+
+    // Check server status on load
+    checkServerStatus();
+
+    async function checkServerStatus() {
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Id: 1, Type: 0 })
+        });
+
+        if (response.ok) {
+          updateStatus(true);
+        } else {
+          updateStatus(false);
+        }
+      } catch (error) {
+        updateStatus(false);
+      }
+    }
+
+    function updateStatus(connected) {
+      const indicator = document.getElementById('statusIndicator');
+      const text = document.getElementById('statusText');
+
+      if (connected) {
+        indicator.className = 'status-indicator connected';
+        text.textContent = '서버 연결됨 (localhost:5010)';
+      } else {
+        indicator.className = 'status-indicator disconnected';
+        text.textContent = '서버 연결 안 됨 - mock-server.js를 실행하세요';
+      }
+    }
+
+    async function sendCommand(timerId, commandType) {
+      const commandNames = {
+        0: 'Resume',
+        1: 'Pause',
+        2: 'Reset',
+        3: 'StartBoth'
+      };
+
+      const commandName = commandNames[commandType];
+      const playerName = timerId === 1 ? '1P' : '2P';
+
+      addLog(`전송: ${playerName} - ${commandName} (Type: ${commandType})`, 'info');
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Id: timerId,
+            Type: commandType
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          addLog(`✓ 성공: ${data.message}`, 'success');
+          updateStatus(true);
+        } else {
+          addLog(`✗ 오류: ${data.error}`, 'error');
+        }
+      } catch (error) {
+        addLog(`✗ 네트워크 오류: ${error.message}`, 'error');
+        updateStatus(false);
+      }
+    }
+
+    async function resetBoth() {
+      addLog('양쪽 타이머 초기화 시작...', 'info');
+
+      try {
+        // Reset 1P
+        await sendCommand(1, 2);
+        // Small delay
+        await new Promise(resolve => setTimeout(resolve, 100));
+        // Reset 2P
+        await sendCommand(2, 2);
+
+        addLog('✓ 양쪽 타이머 초기화 완료', 'success');
+      } catch (error) {
+        addLog(`✗ 초기화 실패: ${error.message}`, 'error');
+      }
+    }
+
+    function addLog(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString('ko-KR');
+      const entry = {
+        timestamp,
+        message,
+        type
+      };
+
+      logEntries.unshift(entry);
+
+      // Keep only last 20 entries
+      if (logEntries.length > 20) {
+        logEntries = logEntries.slice(0, 20);
+      }
+
+      renderLog();
+    }
+
+    function renderLog() {
+      const container = document.getElementById('logContainer');
+      container.innerHTML = logEntries.map(entry => `
+        <div class="log-entry ${entry.type}">
+          <span class="timestamp">[${entry.timestamp}]</span>
+          ${entry.message}
+        </div>
+      `).join('');
+    }
+
+    // Initial log entry
+    addLog('테스트 페이지 로드됨', 'info');
+  </script>
+</body>
+</html>
