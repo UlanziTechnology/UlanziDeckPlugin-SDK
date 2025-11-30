@@ -9,6 +9,10 @@
         {
           "Name": "Start",
           "Image": "assets/icons/start.png"
+        },
+        {
+          "Name": "Start (Success)",
+          "Image": "assets/icons/start@1.png"
         }
       ],
       "Tooltip": "Start both timers",
@@ -24,6 +28,10 @@
         {
           "Name": "Pause 1P",
           "Image": "assets/icons/pause1p.png"
+        },
+        {
+          "Name": "Pause 1P (Success)",
+          "Image": "assets/icons/pause1p@1.png"
         }
       ],
       "Tooltip": "Pause Player 1 timer",
@@ -39,6 +47,10 @@
         {
           "Name": "Pause 2P",
           "Image": "assets/icons/pause2p.png"
+        },
+        {
+          "Name": "Pause 2P (Success)",
+          "Image": "assets/icons/pause2p@1.png"
         }
       ],
       "Tooltip": "Pause Player 2 timer",

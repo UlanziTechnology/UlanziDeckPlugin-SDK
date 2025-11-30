@@ -66,17 +66,28 @@ class TimerAction {
    * Show success feedback on the button
    */
   showSuccess(message) {
-    // Success feedback - just log it
-    // UlanziDeck API doesn't have showOk function
     console.log('[SUCCESS]', message);
+
+    // Change button to success state (state 1) for Start and Pause buttons
+    if (this.actionUUID !== 'com.speedrun.timer.reset') {
+      $UD.setStateIcon(this.context, 1);
+
+      // Reset to normal state after 1 second
+      setTimeout(() => {
+        $UD.setStateIcon(this.context, 0);
+      }, 1000);
+    }
   }
 
   /**
    * Show error feedback on the button
    */
   showError(message) {
-    // Error feedback - just log it
-    // UlanziDeck API doesn't have showAlert function
     console.error('[ERROR]', message);
+
+    // Keep button in normal state (state 0) on error
+    if (this.actionUUID !== 'com.speedrun.timer.reset') {
+      $UD.setStateIcon(this.context, 0);
+    }
   }
 }
