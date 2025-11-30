@@ -4,8 +4,9 @@
  */
 
 class TimerAPIClient {
-  constructor(baseUrl = 'http://localhost:5010') {
+  constructor(baseUrl = 'https://localhost:5010') {
     this.baseUrl = baseUrl;
+    console.log('[TimerAPIClient] Initialized with baseUrl:', this.baseUrl);
   }
 
   /**
@@ -14,26 +15,41 @@ class TimerAPIClient {
    * @param {number} commandType - Command type (0: Resume, 1: Pause, 2: Reset, 3: StartBoth)
    */
   async sendCommand(timerId, commandType) {
+    const url = `${this.baseUrl}/api/timer`;
+    const payload = {
+      Id: timerId,
+      Type: commandType
+    };
+
+    console.log('[TimerAPIClient] Sending command to:', url);
+    console.log('[TimerAPIClient] Payload:', payload);
+
     try {
-      const response = await fetch(`${this.baseUrl}/api/timer`, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          Id: timerId,
-          Type: commandType
-        })
+        body: JSON.stringify(payload)
       });
+
+      console.log('[TimerAPIClient] Response status:', response.status);
+      console.log('[TimerAPIClient] Response ok:', response.ok);
 
       if (!response.ok) {
         const error = await response.json();
+        console.error('[TimerAPIClient] Server error:', error);
         throw new Error(error.error || 'Unknown error');
       }
 
-      return await response.json();
+      const result = await response.json();
+      console.log('[TimerAPIClient] Success response:', result);
+      return result;
     } catch (error) {
-      console.error('Timer API Error:', error);
+      console.error('[TimerAPIClient] Fetch error:', error);
+      console.error('[TimerAPIClient] Error type:', error.name);
+      console.error('[TimerAPIClient] Error message:', error.message);
+      console.error('[TimerAPIClient] Error stack:', error.stack);
       throw error;
     }
   }

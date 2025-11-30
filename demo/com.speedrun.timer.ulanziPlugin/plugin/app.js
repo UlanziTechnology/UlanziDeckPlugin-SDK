@@ -35,17 +35,25 @@ $UD.onAdd(jsn => {
  * When a button is pressed
  */
 $UD.onRun(jsn => {
+  console.log('[App] Button pressed:', jsn);
   const context = jsn.context;
   const actionUUID = jsn.action;
+
+  console.log('[App] Action UUID:', actionUUID);
+  console.log('[App] Context:', context);
 
   // Get or create action instance
   let instance = ACTION_CACHES[context];
   if (!instance) {
+    console.log('[App] Creating new TimerAction instance');
     instance = new TimerAction(context, actionUUID, timerAPI);
     ACTION_CACHES[context] = instance;
+  } else {
+    console.log('[App] Using existing TimerAction instance');
   }
 
   // Execute the action
+  console.log('[App] Executing action...');
   instance.execute();
 });
 
