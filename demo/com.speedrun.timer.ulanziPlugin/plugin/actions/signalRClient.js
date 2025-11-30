@@ -30,8 +30,8 @@ class SignalRClient {
     }
 
     try {
-      // Use port 5173 for SignalR client connection as specified in the documentation
-      const signalRUrl = this.baseUrl.replace(':5010', ':5173') + '/runtimer';
+      // Use the same base URL from global settings
+      const signalRUrl = this.baseUrl + '/runtimer';
       console.log('[SignalRClient] Connecting to:', signalRUrl);
 
       this.connection = new signalR.HubConnectionBuilder()
