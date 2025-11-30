@@ -3,8 +3,17 @@
  * Controls speedrun event timers via localhost:5010 API
  */
 
-// Initialize the Timer API Client
-const timerAPI = new TimerAPIClient('https://localhost:5010');
+const STORAGE_KEY = 'speedrun-timer-server-url';
+const DEFAULT_URL = 'https://localhost:5010';
+
+// Load server URL from localStorage (global setting)
+function loadServerUrl() {
+  const savedUrl = localStorage.getItem(STORAGE_KEY);
+  return savedUrl || DEFAULT_URL;
+}
+
+// Initialize the Timer API Client with saved URL
+const timerAPI = new TimerAPIClient(loadServerUrl());
 
 // Cache for action instances
 const ACTION_CACHES = {};
@@ -14,6 +23,7 @@ $UD.connect('com.speedrun.timer');
 
 $UD.onConnected(conn => {
   console.log('Speedrun Timer Plugin Connected');
+  console.log('[App] Server URL:', timerAPI.baseUrl);
 });
 
 /**
@@ -22,16 +32,8 @@ $UD.onConnected(conn => {
 $UD.onAdd(jsn => {
   const context = jsn.context;
   const actionUUID = jsn.uuid;  // Use uuid instead of action
-  const settings = jsn.param || {};
 
   console.log('[App] Action added:', actionUUID, 'Context:', context);
-  console.log('[App] Settings:', settings);
-
-  // Update API base URL if custom URL is set
-  if (settings.serverUrl) {
-    timerAPI.baseUrl = settings.serverUrl;
-    console.log('[App] Using custom server URL:', settings.serverUrl);
-  }
 
   // Create new action instance if it doesn't exist
   if (!ACTION_CACHES[context]) {
@@ -81,32 +83,21 @@ $UD.onClear(jsn => {
 });
 
 /**
- * Handle settings updates from the property inspector
+ * Handle settings updates from the Settings button
+ * This is triggered when user changes URL in Settings Property Inspector
  */
 $UD.onParamFromPlugin(jsn => {
-  const context = jsn.context;
   const settings = jsn.param || {};
 
-  console.log('[App] Settings received from PI:', context, settings);
+  console.log('[App] Settings notification received:', settings);
 
-  // Update server URL dynamically
-  if (settings.serverUrl) {
-    timerAPI.baseUrl = settings.serverUrl;
-    console.log('[App] Server URL updated to:', settings.serverUrl);
-  } else {
-    timerAPI.baseUrl = 'https://localhost:5010';
-    console.log('[App] Server URL reset to default');
-  }
+  // Reload server URL from localStorage (global setting)
+  const newUrl = loadServerUrl();
+  timerAPI.baseUrl = newUrl;
 
-  // Update the action instance's API client if it exists
-  if (ACTION_CACHES[context]) {
-    ACTION_CACHES[context].apiClient = timerAPI;
-    console.log('[App] Action instance API client updated');
-  }
+  console.log('[App] Server URL updated to:', timerAPI.baseUrl);
 
-  // Save settings to persist them
-  $UD.setParam(context, settings);
-  console.log('[App] Settings saved');
+  // All action instances share the same timerAPI object, so they're automatically updated
 });
 
 console.log('Speedrun Timer Plugin Initialized');

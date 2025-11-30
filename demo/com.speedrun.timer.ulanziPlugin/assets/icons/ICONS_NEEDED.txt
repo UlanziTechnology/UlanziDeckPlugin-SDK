@@ -58,3 +58,4 @@ Example workflow:
 5. Save in this directory with the correct filename
 
 Once icons are created, remove this file.
+Settings icon (72x72 PNG): Use a gear/cog icon

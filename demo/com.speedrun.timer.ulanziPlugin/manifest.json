@@ -3,7 +3,6 @@
     {
       "Name": "Start",
       "Icon": "assets/icons/start.png",
-      "PropertyInspectorPath": "property-inspector/inspector.html",
       "State": 0,
       "States": [
         {
@@ -18,7 +17,6 @@
     {
       "Name": "Pause 1P",
       "Icon": "assets/icons/pause1p.png",
-      "PropertyInspectorPath": "property-inspector/inspector.html",
       "State": 0,
       "States": [
         {
@@ -33,7 +31,6 @@
     {
       "Name": "Pause 2P",
       "Icon": "assets/icons/pause2p.png",
-      "PropertyInspectorPath": "property-inspector/inspector.html",
       "State": 0,
       "States": [
         {
@@ -48,7 +45,6 @@
     {
       "Name": "Reset",
       "Icon": "assets/icons/reset.png",
-      "PropertyInspectorPath": "property-inspector/inspector.html",
       "State": 0,
       "States": [
         {
@@ -59,6 +55,21 @@
       "Tooltip": "Reset both timers",
       "UUID": "com.speedrun.timer.reset",
       "SupportedInMultiActions": true
+    },
+    {
+      "Name": "Settings",
+      "Icon": "assets/icons/settings.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "State": 0,
+      "States": [
+        {
+          "Name": "Settings",
+          "Image": "assets/icons/settings.png"
+        }
+      ],
+      "Tooltip": "Configure timer server URL",
+      "UUID": "com.speedrun.timer.settings",
+      "SupportedInMultiActions": false
     }
   ],
   "Author": "Speedrun Timer",

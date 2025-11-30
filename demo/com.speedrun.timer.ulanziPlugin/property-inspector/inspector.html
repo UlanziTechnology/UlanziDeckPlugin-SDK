@@ -116,37 +116,20 @@
   <script src="../libs/js/ulanzideckApi.js"></script>
 
   <script>
-    let globalSettings = {};
+    const STORAGE_KEY = 'speedrun-timer-server-url';
 
     // Connect to UlanziDeck
-    $UD.connect('com.speedrun.timer.inspector');
+    $UD.connect('com.speedrun.timer.settings');
 
     // Get input element
     const urlInput = document.getElementById('serverUrl');
     const statusDiv = document.getElementById('status');
 
-    // Load initial settings from plugin (called when PI opens)
-    $UD.onParamFromApp(jsn => {
-      console.log('[PI] Received settings from app:', jsn);
-      if (jsn && jsn.param) {
-        globalSettings = jsn.param;
-
-        // Load saved URL or use empty (to show placeholder)
-        const savedUrl = globalSettings.serverUrl || '';
-        urlInput.value = savedUrl;
-
-        console.log('[PI] Loaded settings:', globalSettings);
-      }
-    });
-
-    // Also handle onAdd event to catch initial load
-    $UD.onAdd(jsn => {
-      console.log('[PI] onAdd event:', jsn);
-      if (jsn && jsn.param) {
-        globalSettings = jsn.param;
-        const savedUrl = globalSettings.serverUrl || '';
-        urlInput.value = savedUrl;
-      }
+    // Load saved URL from localStorage on initialization
+    $UD.onConnected(() => {
+      const savedUrl = localStorage.getItem(STORAGE_KEY) || '';
+      urlInput.value = savedUrl;
+      console.log('[PI] Loaded URL from localStorage:', savedUrl || 'default');
     });
 
     // Handle input changes with debouncing
@@ -159,19 +142,19 @@
         return;
       }
 
-      // Save to settings (empty string if no value)
-      globalSettings.serverUrl = newUrl;
-
-      // Send to plugin using sendParamFromPlugin
-      $UD.sendParamFromPlugin(globalSettings);
-
+      // Save to localStorage for global sharing
       if (newUrl) {
+        localStorage.setItem(STORAGE_KEY, newUrl);
         showStatus(`Saved: ${newUrl}`, 'success');
+        console.log('[PI] URL saved to localStorage:', newUrl);
       } else {
+        localStorage.removeItem(STORAGE_KEY);
         showStatus('Using default: https://localhost:5010', 'success');
+        console.log('[PI] URL cleared, using default');
       }
 
-      console.log('[PI] Settings updated:', globalSettings);
+      // Notify plugin to reload URL
+      $UD.sendParamFromPlugin({ serverUrl: newUrl, timestamp: Date.now() });
     }, 300));
 
     function isValidUrl(string) {
