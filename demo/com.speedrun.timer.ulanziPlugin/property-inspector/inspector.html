@@ -117,7 +117,6 @@
 
   <script>
     let globalSettings = {};
-    let currentContext = null;
 
     // Connect to UlanziDeck
     $UD.connect('com.speedrun.timer.inspector');
@@ -126,21 +125,32 @@
     const urlInput = document.getElementById('serverUrl');
     const statusDiv = document.getElementById('status');
 
-    // When property inspector appears
-    $UD.onShowPropertyInspector(jsn => {
-      console.log('[PI] Show Property Inspector:', jsn);
-      currentContext = jsn.context;
-      globalSettings = jsn.param || {};
+    // Load initial settings from plugin (called when PI opens)
+    $UD.onParamFromApp(jsn => {
+      console.log('[PI] Received settings from app:', jsn);
+      if (jsn && jsn.param) {
+        globalSettings = jsn.param;
 
-      // Load saved URL or use empty (to show placeholder)
-      const savedUrl = globalSettings.serverUrl || '';
-      urlInput.value = savedUrl;
+        // Load saved URL or use empty (to show placeholder)
+        const savedUrl = globalSettings.serverUrl || '';
+        urlInput.value = savedUrl;
 
-      console.log('[PI] Loaded settings:', globalSettings);
+        console.log('[PI] Loaded settings:', globalSettings);
+      }
     });
 
-    // Handle input changes
-    urlInput.addEventListener('input', () => {
+    // Also handle onAdd event to catch initial load
+    $UD.onAdd(jsn => {
+      console.log('[PI] onAdd event:', jsn);
+      if (jsn && jsn.param) {
+        globalSettings = jsn.param;
+        const savedUrl = globalSettings.serverUrl || '';
+        urlInput.value = savedUrl;
+      }
+    });
+
+    // Handle input changes with debouncing
+    urlInput.addEventListener('input', Utils.debounce(() => {
       const newUrl = urlInput.value.trim();
 
       // Validate URL if not empty
@@ -152,8 +162,8 @@
       // Save to settings (empty string if no value)
       globalSettings.serverUrl = newUrl;
 
-      // Send to plugin
-      $UD.setParam(currentContext, globalSettings);
+      // Send to plugin using sendParamFromPlugin
+      $UD.sendParamFromPlugin(globalSettings);
 
       if (newUrl) {
         showStatus(`Saved: ${newUrl}`, 'success');
@@ -162,7 +172,7 @@
       }
 
       console.log('[PI] Settings updated:', globalSettings);
-    });
+    }, 300));
 
     function isValidUrl(string) {
       try {

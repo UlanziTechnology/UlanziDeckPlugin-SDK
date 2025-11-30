@@ -87,7 +87,7 @@ $UD.onParamFromPlugin(jsn => {
   const context = jsn.context;
   const settings = jsn.param || {};
 
-  console.log('[App] Settings updated:', context, settings);
+  console.log('[App] Settings received from PI:', context, settings);
 
   // Update server URL dynamically
   if (settings.serverUrl) {
@@ -103,6 +103,10 @@ $UD.onParamFromPlugin(jsn => {
     ACTION_CACHES[context].apiClient = timerAPI;
     console.log('[App] Action instance API client updated');
   }
+
+  // Save settings to persist them
+  $UD.setParam(context, settings);
+  console.log('[App] Settings saved');
 });
 
 console.log('Speedrun Timer Plugin Initialized');
