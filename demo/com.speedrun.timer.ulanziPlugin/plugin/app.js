@@ -22,8 +22,16 @@ $UD.onConnected(conn => {
 $UD.onAdd(jsn => {
   const context = jsn.context;
   const actionUUID = jsn.uuid;  // Use uuid instead of action
+  const settings = jsn.param || {};
 
   console.log('[App] Action added:', actionUUID, 'Context:', context);
+  console.log('[App] Settings:', settings);
+
+  // Update API base URL if custom URL is set
+  if (settings.serverUrl) {
+    timerAPI.baseUrl = settings.serverUrl;
+    console.log('[App] Using custom server URL:', settings.serverUrl);
+  }
 
   // Create new action instance if it doesn't exist
   if (!ACTION_CACHES[context]) {
@@ -79,7 +87,22 @@ $UD.onParamFromPlugin(jsn => {
   const context = jsn.context;
   const settings = jsn.param || {};
 
-  console.log('Settings updated:', context, settings);
+  console.log('[App] Settings updated:', context, settings);
+
+  // Update server URL dynamically
+  if (settings.serverUrl) {
+    timerAPI.baseUrl = settings.serverUrl;
+    console.log('[App] Server URL updated to:', settings.serverUrl);
+  } else {
+    timerAPI.baseUrl = 'https://localhost:5010';
+    console.log('[App] Server URL reset to default');
+  }
+
+  // Update the action instance's API client if it exists
+  if (ACTION_CACHES[context]) {
+    ACTION_CACHES[context].apiClient = timerAPI;
+    console.log('[App] Action instance API client updated');
+  }
 });
 
 console.log('Speedrun Timer Plugin Initialized');
