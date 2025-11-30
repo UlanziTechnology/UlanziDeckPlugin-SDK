@@ -21,14 +21,17 @@ $UD.onConnected(conn => {
  */
 $UD.onAdd(jsn => {
   const context = jsn.context;
-  const actionUUID = jsn.action;
+  const actionUUID = jsn.uuid;  // Use uuid instead of action
+
+  console.log('[App] Action added:', actionUUID, 'Context:', context);
 
   // Create new action instance if it doesn't exist
   if (!ACTION_CACHES[context]) {
     ACTION_CACHES[context] = new TimerAction(context, actionUUID, timerAPI);
+    console.log('[App] Created new TimerAction instance');
+  } else {
+    console.log('[App] TimerAction instance already exists');
   }
-
-  console.log('Action added:', actionUUID, 'Context:', context);
 });
 
 /**
