@@ -90,14 +90,14 @@
 <body>
   <div class="settings-container">
     <div class="setting-group">
-      <label for="serverUrl">Timer Server URL</label>
+      <label for="serverUrl">Timer Server URL (Global Setting)</label>
       <input
         type="text"
         id="serverUrl"
         placeholder="https://localhost:5010"
       />
       <div class="helper-text">
-        Enter the timer server URL. Leave empty to use default (https://localhost:5010)
+        This URL is shared across all timer buttons. Leave empty to use default (https://localhost:5010)
       </div>
       <div class="example">
         Examples:<br>
@@ -118,8 +118,8 @@
   <script>
     const STORAGE_KEY = 'speedrun-timer-server-url';
 
-    // Connect to UlanziDeck
-    $UD.connect('com.speedrun.timer.settings');
+    // Connect to UlanziDeck (works for all timer actions)
+    $UD.connect('com.speedrun.timer.inspector');
 
     // Get input element
     const urlInput = document.getElementById('serverUrl');
