@@ -14,14 +14,14 @@ This plugin provides 4 button actions to control speedrun timers:
 ## Requirements
 
 - UlanziDeck software version 6.1 or higher
-- Timer server running on `http://localhost:5010`
+- Timer server running on `https://localhost:5010`
 - Timer server must implement the `/api/timer` endpoint
 
 ## API Specification
 
 The plugin communicates with a timer server using the following API:
 
-**Endpoint:** `POST http://localhost:5010/api/timer`
+**Endpoint:** `POST https://localhost:5010/api/timer`
 
 **Request Body:**
 ```json
@@ -110,7 +110,7 @@ The test interface will:
 - Restart UlanziDeck
 
 ### Buttons show error (red alert)
-- Ensure the timer server is running on `http://localhost:5010`
+- Ensure the timer server is running on `https://localhost:5010`
 - Check server console for errors
 - Verify the API endpoint is `/api/timer`
 

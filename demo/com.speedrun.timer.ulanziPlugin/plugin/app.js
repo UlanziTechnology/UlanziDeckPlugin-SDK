@@ -4,7 +4,7 @@
  */
 
 // Initialize the Timer API Client
-const timerAPI = new TimerAPIClient('http://localhost:5010');
+const timerAPI = new TimerAPIClient('https://localhost:5010');
 
 // Cache for action instances
 const ACTION_CACHES = {};
