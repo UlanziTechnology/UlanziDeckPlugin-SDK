@@ -35,7 +35,10 @@ class SignalRClient {
       console.log('[SignalRClient] Connecting to:', signalRUrl);
 
       this.connection = new signalR.HubConnectionBuilder()
-        .withUrl(signalRUrl)
+        .withUrl(signalRUrl, {
+          skipNegotiation: true,
+          transport: signalR.HttpTransportType.WebSockets
+        })
         .withAutomaticReconnect({
           nextRetryDelayInMilliseconds: () => 2000  // Retry every 2 seconds
         })
