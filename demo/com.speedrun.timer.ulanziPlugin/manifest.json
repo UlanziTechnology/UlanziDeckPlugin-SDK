@@ -76,7 +76,7 @@
       "Name": "TimerDisplay1",
       "Icon": "assets/icons/display1p.png",
       "PropertyInspectorPath": "property-inspector/inspector.html",
-      "state": 0,
+      "State": 0,
       "States": [
         {
           "Name": "TimerDisplay1",
@@ -91,7 +91,7 @@
       "Name": "TimerDisplay2",
       "Icon": "assets/icons/display2p.png",
       "PropertyInspectorPath": "property-inspector/inspector.html",
-      "state": 0,
+      "State": 0,
       "States": [
         {
           "Name": "TimerDisplay2",
