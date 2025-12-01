@@ -12,11 +12,27 @@ class TimerAction {
     this.unsubscribe = null;
     this.updateInterval = null;
     this.currentStopwatch = null;
+    this.backgroundImage = null;
 
     // Start 버튼인 경우 타이머 1 데이터 구독
     if (this.actionUUID === 'com.speedrun.timer.start') {
+      this.preloadBackgroundImage();
       this.subscribeToTimer();
     }
+  }
+
+  /**
+   * Preload background image for canvas rendering
+   */
+  preloadBackgroundImage() {
+    this.backgroundImage = new Image();
+    this.backgroundImage.onload = () => {
+      console.log('[TimerAction] Background image loaded successfully');
+    };
+    this.backgroundImage.onerror = (err) => {
+      console.error('[TimerAction] Failed to load background image:', err);
+    };
+    this.backgroundImage.src = 'assets/icons/start.png';
   }
 
   /**
@@ -57,11 +73,19 @@ class TimerAction {
    */
   updateDisplay() {
     if (!this.currentStopwatch) {
+      console.log('[TimerAction] No stopwatch data');
+      return;
+    }
+
+    if (!this.backgroundImage || !this.backgroundImage.complete) {
+      console.log('[TimerAction] Background image not loaded yet');
       return;
     }
 
     const elapsed = this.signalRClient.calculateElapsedTime(this.currentStopwatch);
     const timeString = this.signalRClient.formatTime(elapsed);
+
+    console.log('[TimerAction] Rendering timer:', timeString);
 
     // Create canvas to render timer text as image
     const canvas = document.createElement('canvas');
@@ -69,33 +93,30 @@ class TimerAction {
     canvas.height = 72;
     const ctx = canvas.getContext('2d');
 
-    // Draw background icon (load start icon)
-    const img = new Image();
-    img.onload = () => {
-      // Draw the icon
-      ctx.drawImage(img, 0, 0, 72, 72);
+    // Draw the preloaded background icon
+    ctx.drawImage(this.backgroundImage, 0, 0, 72, 72);
 
-      // Draw timer text
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 11px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
+    // Draw timer text
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 11px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
 
-      // Add text shadow for better visibility
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-      ctx.shadowBlur = 3;
-      ctx.shadowOffsetX = 1;
-      ctx.shadowOffsetY = 1;
+    // Add text shadow for better visibility
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
 
-      ctx.fillText(timeString, 36, 68);
+    ctx.fillText(timeString, 36, 68);
 
-      // Convert canvas to base64
-      const imageData = canvas.toDataURL('image/png').split(',')[1];
+    // Convert canvas to base64
+    const imageData = canvas.toDataURL('image/png').split(',')[1];
 
-      // Update button with rendered image
-      $UD.setBaseDataIcon(this.context, imageData);
-    };
-    img.src = 'assets/icons/start.png';
+    console.log('[TimerAction] Image data length:', imageData.length);
+
+    // Update button with rendered image
+    $UD.setBaseDataIcon(this.context, imageData);
   }
 
   /**
