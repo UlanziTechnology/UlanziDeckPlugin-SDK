@@ -32,6 +32,7 @@ class TimerAction {
    * Handle timer update
    */
   handleTimerUpdate(stopwatch) {
+    console.log('[TimerAction] Timer update received:', stopwatch);
     this.currentStopwatch = stopwatch;
 
     // Clear existing interval
@@ -40,14 +41,16 @@ class TimerAction {
       this.updateInterval = null;
     }
 
-    if (stopwatch.Status === 0) {
+    if (stopwatch.status === 0) {
       // Running - update display every 100ms
+      console.log('[TimerAction] Timer is running, starting interval');
       this.updateDisplay();
       this.updateInterval = setInterval(() => {
         this.updateDisplay();
       }, 100);
     } else {
       // Paused or Reset - update once
+      console.log('[TimerAction] Timer is paused/reset, updating once');
       this.updateDisplay();
     }
   }

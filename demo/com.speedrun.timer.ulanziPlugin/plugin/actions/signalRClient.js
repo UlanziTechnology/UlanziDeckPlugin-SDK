@@ -119,11 +119,12 @@ class SignalRClient {
   handleTimerUpdate(stopwatch) {
     console.log('[SignalRClient] Timer update received:', stopwatch);
 
-    const timerId = stopwatch.Id;
+    const timerId = stopwatch.id;  // lowercase
     this.timerData[timerId] = stopwatch;
 
     // Notify all listeners for this timer
     if (this.listeners[timerId]) {
+      console.log('[SignalRClient] Notifying', this.listeners[timerId].length, 'listeners for timer', timerId);
       this.listeners[timerId].forEach(callback => {
         try {
           callback(stopwatch);
@@ -169,17 +170,17 @@ class SignalRClient {
    * @returns {number} Elapsed time in milliseconds
    */
   calculateElapsedTime(stopwatch) {
-    if (stopwatch.Status === 2) {
+    if (stopwatch.status === 2) {
       // Reset - return zero
       return 0;
-    } else if (stopwatch.Status === 1) {
+    } else if (stopwatch.status === 1) {
       // Paused - return time difference between finish and start
-      const start = new Date(stopwatch.StartTime);
-      const finish = new Date(stopwatch.FinishTime);
+      const start = new Date(stopwatch.startTime);
+      const finish = new Date(stopwatch.finishTime);
       return finish - start;
-    } else if (stopwatch.Status === 0) {
+    } else if (stopwatch.status === 0) {
       // Running - return time difference between now and start
-      const start = new Date(stopwatch.StartTime);
+      const start = new Date(stopwatch.startTime);
       const now = new Date();
       return now - start;
     }
