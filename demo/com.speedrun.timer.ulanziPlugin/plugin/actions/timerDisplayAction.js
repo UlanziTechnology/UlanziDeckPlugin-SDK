@@ -95,6 +95,22 @@ class TimerDisplayAction {
     const mainTime = timeParts[0];  // HH:MM:SS
     const millis = timeParts[1];    // mmm
 
+    // Determine color based on timer status
+    let mainColor, millisColor;
+    if (this.currentStopwatch.status === 2) {
+      // Reset - Yellow
+      mainColor = '#FFFF00';
+      millisColor = '#CCCC00';
+    } else if (this.currentStopwatch.status === 0) {
+      // Running - White
+      mainColor = '#FFFFFF';
+      millisColor = '#CCCCCC';
+    } else if (this.currentStopwatch.status === 1) {
+      // Paused - Red
+      mainColor = '#FF0000';
+      millisColor = '#CC0000';
+    }
+
     // Draw main time with outline for better visibility
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -104,7 +120,7 @@ class TimerDisplayAction {
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 3;
     ctx.strokeText(mainTime, 36, 30);
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = mainColor;
     ctx.fillText(mainTime, 36, 30);
 
     // Milliseconds - smaller
@@ -112,7 +128,7 @@ class TimerDisplayAction {
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2;
     ctx.strokeText('.' + millis, 36, 48);
-    ctx.fillStyle = '#CCCCCC';
+    ctx.fillStyle = millisColor;
     ctx.fillText('.' + millis, 36, 48);
 
     // Convert canvas to base64
