@@ -4,10 +4,67 @@
  */
 
 class TimerAction {
-  constructor(context, actionUUID, apiClient) {
+  constructor(context, actionUUID, apiClient, signalRClient) {
     this.context = context;
     this.actionUUID = actionUUID;
     this.apiClient = apiClient;
+    this.signalRClient = signalRClient;
+    this.unsubscribe = null;
+    this.updateInterval = null;
+    this.currentStopwatch = null;
+
+    // Start 버튼인 경우 타이머 1 데이터 구독
+    if (this.actionUUID === 'com.speedrun.timer.start') {
+      this.subscribeToTimer();
+    }
+  }
+
+  /**
+   * Subscribe to timer 1 updates
+   */
+  subscribeToTimer() {
+    this.unsubscribe = this.signalRClient.subscribe(1, (stopwatch) => {
+      this.handleTimerUpdate(stopwatch);
+    });
+  }
+
+  /**
+   * Handle timer update
+   */
+  handleTimerUpdate(stopwatch) {
+    this.currentStopwatch = stopwatch;
+
+    // Clear existing interval
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+      this.updateInterval = null;
+    }
+
+    if (stopwatch.Status === 0) {
+      // Running - update display every 100ms
+      this.updateDisplay();
+      this.updateInterval = setInterval(() => {
+        this.updateDisplay();
+      }, 100);
+    } else {
+      // Paused or Reset - update once
+      this.updateDisplay();
+    }
+  }
+
+  /**
+   * Update button display with current time
+   */
+  updateDisplay() {
+    if (!this.currentStopwatch) {
+      return;
+    }
+
+    const elapsed = this.signalRClient.calculateElapsedTime(this.currentStopwatch);
+    const timeString = this.signalRClient.formatTime(elapsed);
+
+    // Update button with icon and time text
+    $UD.setPathIcon(this.context, 'assets/icons/start.png', timeString);
   }
 
   /**
