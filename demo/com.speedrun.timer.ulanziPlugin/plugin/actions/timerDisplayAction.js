@@ -25,9 +25,9 @@ class TimerDisplayAction {
    * Get timer ID from action UUID
    */
   getTimerId(actionUUID) {
-    if (actionUUID.includes('timer1p')) {
+    if (actionUUID.includes('display1')) {
       return 1;
-    } else if (actionUUID.includes('timer2p')) {
+    } else if (actionUUID.includes('display2')) {
       return 2;
     }
     return 1; // Default to timer 1

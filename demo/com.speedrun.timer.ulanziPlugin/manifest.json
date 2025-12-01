@@ -83,7 +83,7 @@
         }
       ],
       "Tooltip": "Display Player 1 timer via WebSocket",
-      "UUID": "com.speedrun.timer.display.timer1p",
+      "UUID": "com.speedrun.timer.timerdisplay1",
       "SupportedInMultiActions": false
     },
     {
@@ -97,7 +97,7 @@
         }
       ],
       "Tooltip": "Display Player 2 timer via WebSocket",
-      "UUID": "com.speedrun.timer.display.timer2p",
+      "UUID": "com.speedrun.timer.timerdisplay2",
       "SupportedInMultiActions": false
     }
   ],
@@ -105,7 +105,7 @@
   "Name": "Speedrun Timer",
   "Description": "Control speedrun event timers via localhost:5010 API",
   "Icon": "assets/icons/plugin.png",
-  "Version": "1.1.1",
+  "Version": "1.1.2",
   "Category": "Speedrun",
   "CategoryIcon": "assets/icons/category.png",
   "CodePath": "plugin/app.html",
