@@ -63,8 +63,39 @@ class TimerAction {
     const elapsed = this.signalRClient.calculateElapsedTime(this.currentStopwatch);
     const timeString = this.signalRClient.formatTime(elapsed);
 
-    // Update button with icon and time text
-    $UD.setPathIcon(this.context, 'assets/icons/start.png', timeString);
+    // Create canvas to render timer text as image
+    const canvas = document.createElement('canvas');
+    canvas.width = 72;
+    canvas.height = 72;
+    const ctx = canvas.getContext('2d');
+
+    // Draw background icon (load start icon)
+    const img = new Image();
+    img.onload = () => {
+      // Draw the icon
+      ctx.drawImage(img, 0, 0, 72, 72);
+
+      // Draw timer text
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 11px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+
+      // Add text shadow for better visibility
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      ctx.shadowBlur = 3;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 1;
+
+      ctx.fillText(timeString, 36, 68);
+
+      // Convert canvas to base64
+      const imageData = canvas.toDataURL('image/png').split(',')[1];
+
+      // Update button with rendered image
+      $UD.setBaseDataIcon(this.context, imageData);
+    };
+    img.src = 'assets/icons/start.png';
   }
 
   /**
