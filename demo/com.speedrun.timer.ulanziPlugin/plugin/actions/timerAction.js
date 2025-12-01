@@ -12,27 +12,11 @@ class TimerAction {
     this.unsubscribe = null;
     this.updateInterval = null;
     this.currentStopwatch = null;
-    this.backgroundImage = null;
 
     // Start 버튼인 경우 타이머 1 데이터 구독
     if (this.actionUUID === 'com.speedrun.timer.start') {
-      this.preloadBackgroundImage();
       this.subscribeToTimer();
     }
-  }
-
-  /**
-   * Preload background image for canvas rendering
-   */
-  preloadBackgroundImage() {
-    this.backgroundImage = new Image();
-    this.backgroundImage.onload = () => {
-      console.log('[TimerAction] Background image loaded successfully');
-    };
-    this.backgroundImage.onerror = (err) => {
-      console.error('[TimerAction] Failed to load background image:', err);
-    };
-    this.backgroundImage.src = 'assets/icons/start.png';
   }
 
   /**
@@ -77,11 +61,6 @@ class TimerAction {
       return;
     }
 
-    if (!this.backgroundImage || !this.backgroundImage.complete) {
-      console.log('[TimerAction] Background image not loaded yet');
-      return;
-    }
-
     const elapsed = this.signalRClient.calculateElapsedTime(this.currentStopwatch);
     const timeString = this.signalRClient.formatTime(elapsed);
 
@@ -93,22 +72,30 @@ class TimerAction {
     canvas.height = 72;
     const ctx = canvas.getContext('2d');
 
-    // Draw the preloaded background icon
-    ctx.drawImage(this.backgroundImage, 0, 0, 72, 72);
+    // Draw background (dark gradient)
+    const gradient = ctx.createLinearGradient(0, 0, 0, 72);
+    gradient.addColorStop(0, '#2a2a2a');
+    gradient.addColorStop(1, '#1a1a1a');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 72, 72);
 
     // Draw timer text
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 11px Arial';
+    ctx.fillStyle = '#00FF00';  // Green for running timer
+    ctx.font = 'bold 10px monospace';
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
+    ctx.textBaseline = 'middle';
 
-    // Add text shadow for better visibility
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-    ctx.shadowBlur = 3;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 1;
+    // Split time string to fit on button
+    const timeParts = timeString.split('.');
+    const mainTime = timeParts[0];  // HH:MM:SS
+    const millis = timeParts[1];    // mmm
 
-    ctx.fillText(timeString, 36, 68);
+    // Draw main time
+    ctx.fillText(mainTime, 36, 32);
+
+    // Draw milliseconds smaller
+    ctx.font = 'bold 8px monospace';
+    ctx.fillText('.' + millis, 36, 48);
 
     // Convert canvas to base64
     const imageData = canvas.toDataURL('image/png').split(',')[1];
