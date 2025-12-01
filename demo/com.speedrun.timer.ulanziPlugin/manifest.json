@@ -73,13 +73,13 @@
       "SupportedInMultiActions": true
     },
     {
-      "Name": "Timer 1P Display",
+      "Name": "TimerDisplay1",
       "Icon": "assets/icons/display1p.png",
       "PropertyInspectorPath": "property-inspector/inspector.html",
-      "State": 0,
+      "state": 0,
       "States": [
         {
-          "Name": "Timer 1P Display",
+          "Name": "TimerDisplay1",
           "Image": "assets/icons/display1p.png"
         }
       ],
@@ -88,13 +88,13 @@
       "SupportedInMultiActions": false
     },
     {
-      "Name": "Timer 2P Display",
+      "Name": "TimerDisplay2",
       "Icon": "assets/icons/display2p.png",
       "PropertyInspectorPath": "property-inspector/inspector.html",
-      "State": 0,
+      "state": 0,
       "States": [
         {
-          "Name": "Timer 2P Display",
+          "Name": "TimerDisplay2",
           "Image": "assets/icons/display2p.png"
         }
       ],
