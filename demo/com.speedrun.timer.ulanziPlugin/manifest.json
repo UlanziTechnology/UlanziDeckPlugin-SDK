@@ -107,7 +107,7 @@
   "Name": "Speedrun Timer",
   "Description": "Control speedrun event timers via localhost:5010 API",
   "Icon": "assets/icons/plugin.png",
-  "Version": "1.0.0",
+  "Version": "1.1.0",
   "Category": "Speedrun",
   "CategoryIcon": "assets/icons/category.png",
   "CodePath": "plugin/app.html",
