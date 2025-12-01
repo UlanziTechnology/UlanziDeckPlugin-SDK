@@ -48,8 +48,14 @@ $UD.onAdd(jsn => {
 
   // Create new action instance if it doesn't exist
   if (!ACTION_CACHES[context]) {
-    ACTION_CACHES[context] = new TimerAction(context, actionUUID, timerAPI, signalRClient);
-    console.log('[App] Created new TimerAction instance');
+    // Check if this is a display action (shows timer) or control action (starts/pauses/resets timer)
+    if (actionUUID.includes('display')) {
+      ACTION_CACHES[context] = new TimerDisplayAction(context, actionUUID, signalRClient);
+      console.log('[App] Created new TimerDisplayAction instance');
+    } else {
+      ACTION_CACHES[context] = new TimerAction(context, actionUUID, timerAPI);
+      console.log('[App] Created new TimerAction instance');
+    }
   } else {
     console.log('[App] Action instance already exists');
   }
@@ -61,6 +67,7 @@ $UD.onAdd(jsn => {
 $UD.onRun(jsn => {
   console.log('[App] Button pressed:', jsn);
   const context = jsn.context;
+  const actionUUID = jsn.uuid;
 
   console.log('[App] Context:', context);
 
@@ -70,6 +77,12 @@ $UD.onRun(jsn => {
   if (!instance) {
     console.error('[App] No action instance found for context:', context);
     console.error('[App] Available contexts:', Object.keys(ACTION_CACHES));
+    return;
+  }
+
+  // Display actions don't need to execute on button press (they auto-update)
+  if (actionUUID.includes('display')) {
+    console.log('[App] Display action pressed - no action needed');
     return;
   }
 
@@ -89,12 +102,9 @@ $UD.onClear(jsn => {
       const context = jsn.param[i].context;
       const instance = ACTION_CACHES[context];
 
-      // Clean up action instances
-      if (instance && instance.unsubscribe) {
-        instance.unsubscribe();
-      }
-      if (instance && instance.updateInterval) {
-        clearInterval(instance.updateInterval);
+      // Clean up TimerDisplayAction instances
+      if (instance && instance.destroy) {
+        instance.destroy();
       }
 
       delete ACTION_CACHES[context];

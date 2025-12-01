@@ -71,6 +71,36 @@
       "Tooltip": "Reset both timers",
       "UUID": "com.speedrun.timer.reset",
       "SupportedInMultiActions": true
+    },
+    {
+      "Name": "Timer 1P Display",
+      "Icon": "assets/icons/display1p.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "State": 0,
+      "States": [
+        {
+          "Name": "Timer 1P Display",
+          "Image": "assets/icons/display1p.png"
+        }
+      ],
+      "Tooltip": "Display Player 1 timer via WebSocket",
+      "UUID": "com.speedrun.timer.display.timer1p",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Timer 2P Display",
+      "Icon": "assets/icons/display2p.png",
+      "PropertyInspectorPath": "property-inspector/inspector.html",
+      "State": 0,
+      "States": [
+        {
+          "Name": "Timer 2P Display",
+          "Image": "assets/icons/display2p.png"
+        }
+      ],
+      "Tooltip": "Display Player 2 timer via WebSocket",
+      "UUID": "com.speedrun.timer.display.timer2p",
+      "SupportedInMultiActions": false
     }
   ],
   "Author": "Speedrun Timer",

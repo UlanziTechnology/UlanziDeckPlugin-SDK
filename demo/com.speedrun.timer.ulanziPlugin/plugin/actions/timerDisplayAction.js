@@ -55,7 +55,7 @@ class TimerDisplayAction {
       this.updateInterval = null;
     }
 
-    if (stopwatch.Status === 0) {
+    if (stopwatch.status === 0) {
       // Running - update display every 100ms
       this.updateDisplay();
       this.updateInterval = setInterval(() => {
@@ -80,9 +80,42 @@ class TimerDisplayAction {
 
     console.log('[TimerDisplayAction] Updating display:', timeString);
 
-    // Update button with icon path and time text
-    const iconPath = this.timerId === 1 ? 'assets/icons/display1p.png' : 'assets/icons/display2p.png';
-    $UD.setPathIcon(this.context, iconPath, timeString);
+    // Create canvas to render timer text as image
+    const canvas = document.createElement('canvas');
+    canvas.width = 72;
+    canvas.height = 72;
+    const ctx = canvas.getContext('2d');
+
+    // Draw background (dark gradient)
+    const gradient = ctx.createLinearGradient(0, 0, 0, 72);
+    gradient.addColorStop(0, '#2a2a2a');
+    gradient.addColorStop(1, '#1a1a1a');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 72, 72);
+
+    // Draw timer text
+    ctx.fillStyle = '#00FF00';  // Green for running timer
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Split time string to fit on button
+    const timeParts = timeString.split('.');
+    const mainTime = timeParts[0];  // HH:MM:SS
+    const millis = timeParts[1];    // mmm
+
+    // Draw main time
+    ctx.fillText(mainTime, 36, 32);
+
+    // Draw milliseconds smaller
+    ctx.font = 'bold 8px monospace';
+    ctx.fillText('.' + millis, 36, 48);
+
+    // Convert canvas to base64
+    const imageData = canvas.toDataURL('image/png').split(',')[1];
+
+    // Update button with rendered image
+    $UD.setBaseDataIcon(this.context, imageData);
   }
 
   /**
