@@ -86,29 +86,33 @@ class TimerDisplayAction {
     canvas.height = 72;
     const ctx = canvas.getContext('2d');
 
-    // Draw background (dark gradient)
-    const gradient = ctx.createLinearGradient(0, 0, 0, 72);
-    gradient.addColorStop(0, '#2a2a2a');
-    gradient.addColorStop(1, '#1a1a1a');
-    ctx.fillStyle = gradient;
+    // Draw background (solid black for better contrast)
+    ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, 72, 72);
-
-    // Draw timer text
-    ctx.fillStyle = '#00FF00';  // Green for running timer
-    ctx.font = 'bold 10px monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
 
     // Split time string to fit on button
     const timeParts = timeString.split('.');
     const mainTime = timeParts[0];  // HH:MM:SS
     const millis = timeParts[1];    // mmm
 
-    // Draw main time
-    ctx.fillText(mainTime, 36, 32);
+    // Draw main time with outline for better visibility
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
 
-    // Draw milliseconds smaller
-    ctx.font = 'bold 8px monospace';
+    // Main time - larger and with stroke
+    ctx.font = 'bold 13px monospace';
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 3;
+    ctx.strokeText(mainTime, 36, 30);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(mainTime, 36, 30);
+
+    // Milliseconds - smaller
+    ctx.font = 'bold 10px monospace';
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.strokeText('.' + millis, 36, 48);
+    ctx.fillStyle = '#CCCCCC';
     ctx.fillText('.' + millis, 36, 48);
 
     // Convert canvas to base64
