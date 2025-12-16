@@ -333,12 +333,13 @@ document.addEventListener('DOMContentLoaded', function () {
       const plugin = plugin_action[0];
       const action = plugin_action[1];
       const actionData = plugins[plugin].Actions[action];
-      this.innerHTML = `<img src="./${plugin}/${actionData.Icon}">`; // 将数据放入目标区域
+      const src = actionData.States[0].Image ?? actionData.Icon
+      this.innerHTML = `<img src="./${plugin}/${src}">`; // 将数据放入目标区域
 
       log({
         time: time(),
         msg: `${actionData.UUID}拖入键盘，键值是${keyValue.key}，actionid是${keyValue.actionid}。上位机向主服务发送add和paramfromapp事件。请使用浏览器打开以下路径，调试该action。`,
-        code: `http://127.0.0.1:${config.serverPort}/${plugin}/${actionData.PropertyInspectorPath}?address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${actionData.UUID}&actionId=${keyValue.actionid}&key=${keyValue.key}`
+        code: `http://127.0.0.1:${config.serverPort}/${plugin}/${actionData.PropertyInspectorPath}?mode=simulate&address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${actionData.UUID}&actionid=${keyValue.actionid}&key=${keyValue.key}`
       })
       send('add', { uuid: actionData.UUID, key: keyValue.key, actionid: keyValue.actionid })
       activeKeys[keyValue.key] = { uuid: actionData.UUID, key: keyValue.key, actionid: keyValue.actionid, plugin, actionData }
@@ -494,7 +495,7 @@ function handleActiveCurrentKey() {
 
     if (config.loadAction === 'yes') {
       const { plugin, actionData, actionid, key, uuid } = activeKeys[currentActiveKey]
-      document.querySelector('.action-iframe').innerHTML = `<iframe src="http://127.0.0.1:${config.serverPort}/${plugin}/${actionData.PropertyInspectorPath}?address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${uuid}&actionId=${actionid}&key=${key}"></iframe>`
+      document.querySelector('.action-iframe').innerHTML = `<iframe src="http://127.0.0.1:${config.serverPort}/${plugin}/${actionData.PropertyInspectorPath}?mode=simulate&address=127.0.0.1&port=${config.serverPort}&language=${config.language}&uuid=${uuid}&actionid=${actionid}&key=${key}"></iframe>`
     }
   }
 

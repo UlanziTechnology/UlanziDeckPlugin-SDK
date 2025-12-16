@@ -120,10 +120,20 @@ export default class Clients extends EventEmitter {
           this.replay(client,data)
         }
         if(data.cmd === 'paramfromplugin') {
-          this.paramfromplugin(data, client)
+          this.forwardMsg(data, client)
         }
         if(data.cmd === 'openurl') {
           this.deckClient.send('openurl',data)
+        }
+        if(data.cmd === 'sendToPlugin') {
+          this.forwardMsg(data, client)
+        }
+        if(data.cmd === 'sendToPropertyInspector') {
+          this.forwardMsg(data, client)
+        }
+        if(data.cmd === 'setSettings') {
+          data.cmd = 'didReceiveSettings'
+          this.forwardMsg(data, client)
         }
       });
       client.on('close', (msg)=>{
@@ -140,36 +150,34 @@ export default class Clients extends EventEmitter {
     // this.clients.push(client);
   }
 
-  paramfromplugin(data,client){
-    const { uuid,param } = data;
+  forwardMsg(data,client){
+    const { uuid,param, cmd } = data;
     const context = utils.encodeContext(data)
     const oldParam = this.contextDatas[context]
-    this.contextDatas[context] = param || oldParam
+    const saveTag = (cmd === 'paramfromplugin' || cmd === 'didReceiveSettings') ? true : false
+    if(saveTag) this.contextDatas[context] = param || oldParam
 
     const mainUuid = this.getMainUuid(uuid)
 
     //回复
     this.replay(client,{
-      cmd: 'paramfromplugin',
       ...data,
     })
 
     const isMainSend = this.clientList[mainUuid] == client  // 判断是不是主服务发送的
 
 
-    this.log(`${isMainSend?'插件主服务':context} 发送paramfromplugin事件。上位机将转发给 ${isMainSend?context:'插件主服务'} ，转发的数据上位机会保存下来，再次连接action页面会通过paramfromapp接收到之前的配置数据。以下是转发的数据：`,JSON.stringify(data))
+    this.log(`${isMainSend?'插件主服务':context} 发送${data.cmd}事件。上位机将转发给 ${isMainSend?context:'插件主服务'} ${saveTag?'，转发的数据上位机会保存下来，再次连接action页面会通过paramfromapp接收到之前的配置数据':''}。以下是转发的数据：`,JSON.stringify(data))
     //转发
     if(isMainSend){
       if (this.clientList[context] && this.clientList[context].readyState == 1){
         this.clientList[context].send(JSON.stringify({
-          cmd: 'paramfromplugin',
           ...data
         }))
       }
     }else{
       if (this.clientList[mainUuid] && this.clientList[mainUuid].readyState == 1){
         this.clientList[mainUuid].send(JSON.stringify({
-          cmd: 'paramfromplugin',
           ...data
         }))
       }

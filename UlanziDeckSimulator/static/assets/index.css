@@ -5,7 +5,7 @@
 }
 
 :root {
-  --ud-bgcolor: #282828;
+  --ud-bgcolor: #1e1f22;
   --ud-bordercolor: #1e1e1e;
   --ud-activecolor: #0078ff;
 }
@@ -114,7 +114,7 @@ ul{
 }
 .action-iframe{
   width: 480px;
-  height: 200px;
+  height: 240px;
   background: #000;
   margin: 30px auto;
 }
