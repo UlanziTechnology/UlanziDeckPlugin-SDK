@@ -14,6 +14,8 @@ let currentActiveKey = ''; // 当前激活的插件
 
 let contextmenuKey = ''; // 右键菜单的key
 
+let currentDialogData = null; // 当前dialog关联的数据
+
 
 const websocket = new WebSocket(`ws://127.0.0.1:${config.serverPort}/deckClient`)
 websocket.onopen = function (evt) {
@@ -43,10 +45,65 @@ websocket.onmessage = function (evt) {
     connectedMain(jsonObj.connectedMain)
   }
   if (jsonObj.cmd === 'openurl') {
-    window.open(jsonObj.url)
+    let url = getRelativePath(jsonObj.url)
+    url = buildUrlParams(url, jsonObj.param)
+    console.log('===openurl:', url)
+    safeOpenWindow(url)
+    log({
+      time: time(),
+      msg: `上位机收到openurl事件，新标签页打开一个新的窗口。由于浏览器限制，本地路径会打开失败，自查数据正确即可。以下是接收到的数据：`,
+      code:JSON.stringify(jsonObj)
+    })
+  }
+  if(jsonObj.cmd === 'selectdialog'){
+    currentDialogData = jsonObj
+    const dialog = document.querySelector('.select-dialog')
+    dialog.style.display = 'flex'
+
+    log({
+      time: time(),
+      msg: `上位机收到selectdialog事件，模拟打开一个选择文件/文件夹事件。请填写完整路径并确认，上位机会发送填写数据回请求端。以下是接收到的数据：`,
+      code:JSON.stringify(jsonObj)
+    })
+  }
+  if (jsonObj.cmd === 'openview') {
+    let option = {
+      width: jsonObj.width ,
+      height: jsonObj.height 
+    }
+    if(jsonObj.x){
+      option.position = {
+        x: jsonObj.x,
+        y: jsonObj.y || 0
+      }
+    }
+
+    
+    let url = getRelativePath(jsonObj.url)
+    url = buildUrlParams(url, jsonObj.param)
+    console.log('===openview:', url)
+    
+    openPopup(url,option)
+
+    log({
+      time: time(),
+      msg: `上位机收到openview事件，弹出一个新的窗口。由于浏览器限制，本地路径会打开失败，自查数据正确即可。以下是接收到的数据：`,
+      code:JSON.stringify(jsonObj)
+    })
   }
   
 }
+
+function buildUrlParams(baseUrl, params = {}) {
+  const queryString = Object.entries(params)
+    .filter(([, value]) => value !== null && value !== undefined)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+  
+  return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+}
+
+
 
 function initRender(){
   setFormValue(config,form)
@@ -93,6 +150,105 @@ function setStateIcon(iconData) {
   }
 
 }
+
+function safeOpenWindow(url) {
+  let win;
+  try {
+    win = window.open(url, '_blank');
+  } catch (error) {
+    console.warn('弹窗被浏览器拦截，请检查弹窗权限。');
+  }
+
+  if (!win || win.closed) {
+    alert('由于浏览器限制，不在项目下的本地绝对路径无法打开。可自行复制路径打开，以下是完整路径：file:///' + url);
+    return null;
+  }
+
+  win.focus();
+  return win;
+
+}
+
+
+function openPopup(url, options = {}) {
+  const {
+    // 窗口尺寸
+    width      = 800,
+    height     = 600,
+
+    // 相对位置：'center'|'top'|'bottom'|'left'|'right'|
+    //           'top-left'|'top-right'|'bottom-left'|'bottom-right'
+    // 或传入 { x, y } 使用绝对坐标
+    position   = 'center',
+
+    // 偏移量（在相对定位基础上微调）
+    offsetX    = 0,
+    offsetY    = 0,
+
+    // 窗口名称（相同名称复用同一窗口）
+    name       = 'popup_'+Date.now(),
+
+    // 窗口特性
+    scrollbars = 'yes',
+    resizable  = 'yes',
+    toolbar    = 'no',
+    menubar    = 'no',
+    status     = 'no',
+  } = options;
+
+  // console.log('===openPopup options:',url, options)
+
+  // 屏幕可用区域（兼容多显示器）
+  const screenW = window.screen.availWidth;
+  const screenH = window.screen.availHeight;
+  const screenX = window.screen.availLeft ?? 0;
+  const screenY = window.screen.availTop  ?? 0;
+
+  // 解析位置
+  let left, top;
+
+  if (typeof position === 'object' && position !== null) {
+    // 绝对坐标模式
+    left = position.x ?? 0;
+    top  = position.y ?? 0;
+  } else {
+    // 相对定位模式
+    const presets = {
+      'center':       [screenX + (screenW - width)  / 2, screenY + (screenH - height) / 2],
+      'top':          [screenX + (screenW - width)  / 2, screenY],
+      'bottom':       [screenX + (screenW - width)  / 2, screenY + screenH - height],
+      'left':         [screenX,                            screenY + (screenH - height) / 2],
+      'right':        [screenX + screenW - width,           screenY + (screenH - height) / 2],
+      'top-left':     [screenX,                            screenY],
+      'top-right':    [screenX + screenW - width,           screenY],
+      'bottom-left':  [screenX,                            screenY + screenH - height],
+      'bottom-right': [screenX + screenW - width,           screenY + screenH - height],
+    };
+    [left, top] = presets[position] ?? presets['center'];
+  }
+
+  // 应用偏移
+  left += offsetX;
+  top  += offsetY;
+
+  const features = [
+    `width=${width}`,
+    `height=${height}`,
+    `left=${Math.round(left)}`,
+    `top=${Math.round(top)}`,
+    `scrollbars=${scrollbars}`,
+    `resizable=${resizable}`,
+    `toolbar=${toolbar}`,
+    `menubar=${menubar}`,
+    `status=${status}`,
+  ].join(',');
+
+  // console.log('===openPopup features:', features)
+
+  safeOpenWindow(url, name, features);
+
+}
+
 
 
 //获取相对路径，适配上位机绝对路径
@@ -447,7 +603,70 @@ function handleMenuItemClick(itemId) {
       send('run', { uuid, key, actionid })
       log({
         time: time(),
-        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送run事件。`
+        msg: `运行 ${uuid}___${key}___${actionid}。模拟按钮短按，上位机向主服务依次发送以下事件：keydown -> run -> keyup`
+      })
+      break;
+    // case 'menu-longPress':
+    //   send('run', { uuid, key, actionid, longPress: true, longPressTime: 1000 })
+    //   log({
+    //     time: time(),
+    //     msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[按钮长按]事件。`
+    //   })
+    //   break;
+    case 'menu-keyDown':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'keydown' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[按钮按下]事件：keydown。`
+      })
+      break;
+    case 'menu-keyUp':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'keyup' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[按钮松开]事件：keyup。`
+      })
+      break;
+    case 'menu-dailDown':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'daildown' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[旋钮按下]事件：daildown。`
+      })
+      break;
+    case 'menu-dailUp':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'dailup' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[旋钮松开]事件：dailup。`
+      })
+      break;
+    case 'menu-dailLeft':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'dialrotate', rotateEvent:'left' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[旋钮向左旋转]事件：dialrotate|left。`
+      })
+      break;
+    case 'menu-dailRight':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'dialrotate', rotateEvent:'right' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[旋钮向右旋转]事件：dialrotate|right。`
+      })
+      break;
+    case 'menu-dailHoldLeft':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'dialrotate', rotateEvent:'hold-left' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[旋钮按压向左旋转]事件：dialrotate|hold-left。`
+      })
+      break;
+    case 'menu-dailHoldRight':
+      send('ulanzi-cmd', { uuid, key, actionid, cmd:'dialrotate', rotateEvent:'hold-right' })
+      log({
+        time: time(),
+        msg: `运行 ${uuid}___${key}___${actionid}。上位机向主服务发送[旋钮按压向右旋转]事件：dialrotate|hold-right。`
       })
       break;
     case 'menu-clear':
@@ -511,5 +730,20 @@ function handleActiveCurrentKey() {
   });
 
 
+}
+
+function onDialogClose(){
+  const dialog = document.querySelector('.dialog')
+  dialog.style.display = 'none'
+}
+
+function onDialogOK(){
+  console.log('---currentDialogData',currentDialogData)
+  const dialog = document.querySelector('.dialog')
+  const textarea = dialog.querySelector('textarea')
+  const value = textarea.value
+  send('selectdialog', { path: value.trim().replace(/\\/g, '/'), ...currentDialogData  })
+  dialog.style.display = 'none'
+  textarea.value = ''
 }
 

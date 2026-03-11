@@ -23,9 +23,12 @@ npm start
   <li>测试插件请按照协议要求填写manifest.json，然后放在 UlanziDeckSimulator/plugins 目录中。模拟器会自动解析插件，并展示在模拟器左侧列表当中。插件更新需要点击 <strong>刷新插件列表</strong> 按钮，让模拟器重载插件。</li>
   <li>当前版本，主服务需要开发者自行启动，请按照提示启动主服务再进行操作。</li>
   <li>调试顺序：启动上位机模拟器 -> 确认插件主服务已连接 -> 拖入键盘，调试action</li>
-  <li>模拟器不支持上位机的特殊事件：openview， selectdialog。若有打开弹窗和选择文件/文件夹功能，请在上位机中测试。</li>
+  <li>openview, openurl 事件因为浏览器限制不支持打开本地文件，可将收到的路径结果，自行复制打开。</li>
+  <li>selectdialog 事件因为浏览器限制不支持打开文件夹路径，可将完整的文件路径填写到弹窗中，可以收到完整的事件流程。</li>
   <li>模拟器暂时没有页面切换，不主动发送setactive事件，请开发者右键自行发送事件来测试功能。</li>
   <li>默认不加载action，我们的目的是让开发者自己运行action页面已达到开发调试的效果。打开加载action可能会导致与开发者打开的action页面有websocket冲突，影响测试结果。</li>
+  <li>模拟器目前已支持事件："run" | "add" | "clear" | "paramfromapp" | "paramfromplugin" | "setactive" | "state" | "openurl" | "openview" | "selectdialog" | "sendToPropertyInspector" | "sendToPlugin" | "getSettings" | "setSettings" | "didReceiveSettings" | "setGlobalSettings" | "didReceiveGlobalSettings" | "getGlobalSettings" | "keydown" | "keyup" | "dialdown" | "dialup" | "dialrotate"</li>
+  <li>模拟器的运行结果仅供参考，具体以桌面软件运行结果为准。</li>
 </ol>
 
 ## 功能

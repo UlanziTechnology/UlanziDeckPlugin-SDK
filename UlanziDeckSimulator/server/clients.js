@@ -81,9 +81,24 @@ export default class Clients extends EventEmitter {
         const { uuid,key,actionid } = data;
         const context = utils.encodeContext(data)
         const param = this.contextDatas[context] || null
+        this.send('keydown',{
+          uuid,key,actionid,param
+        },true)
         this.send('run',{
           uuid,key,actionid,param
         },true)
+
+        if(data.longPress){
+          setTimeout(()=>{
+            this.send('keyup',{
+              uuid,key,actionid,param
+            },true)
+          },data.longPressTime || 600)
+        }else{
+          this.send('keyup',{
+            uuid,key,actionid,param
+          },true)
+        }
       })
 
       this.deckClient.on('setactive', (data) => {
@@ -102,6 +117,26 @@ export default class Clients extends EventEmitter {
           this.log('正在切换插件语言环境...')
           menu.getList()
         }
+      })
+
+
+      //实体按键事件
+      this.deckClient.on('ulanzi-cmd',(data) => {
+        const context = utils.encodeContext(data)
+        const param = this.contextDatas[context] || null
+        this.send(data.cmd,{
+          ...data,
+          param
+        },true)
+      })
+
+      //发送选择文件/文件夹回调
+      this.deckClient.on('selectdialog',(data) => {
+        this.send('selectdialog',{
+          code:0,
+          "cmdType": "REQUEST",
+          ...data
+        })
       })
 
     }else{
@@ -125,16 +160,100 @@ export default class Clients extends EventEmitter {
         if(data.cmd === 'openurl') {
           this.deckClient.send('openurl',data)
         }
+        if(data.cmd === 'openview') {
+          this.deckClient.send('openview',data)
+        }
         if(data.cmd === 'sendToPlugin') {
           this.forwardMsg(data, client)
         }
         if(data.cmd === 'sendToPropertyInspector') {
           this.forwardMsg(data, client)
         }
-        if(data.cmd === 'setSettings') {
-          data.cmd = 'didReceiveSettings'
-          this.forwardMsg(data, client)
+        if(data.cmd === 'selectdialog') {
+          this.deckClient.send('selectdialog',data)
         }
+        if(data.cmd === 'setSettings') {
+          const forwardCmd = 'didReceiveSettings'
+          this.forwardMsg(data, client,forwardCmd)
+        }
+        if(data.cmd === 'getSettings') {
+          const { uuid, actionid, key } = data;
+          const context = utils.encodeContext(data)
+          const oldParam = this.contextDatas[context]
+          client.send(JSON.stringify({
+            "cmd": "didReceiveSettings",
+            uuid,
+            actionid,
+            key,
+            "settings":oldParam
+          }))
+
+          this.log(`${isMainSend?'插件主服务':context} 发送 [getSettings]获取参数 事件。上位机将通过 ${forwardCmd} 事件发送参数到请求端。以下是发送的数据：`,JSON.stringify({
+            "cmd": forwardCmd,
+            uuid,
+            actionid,
+            key,
+            "settings":oldParam
+          }))
+        }
+        if(data.cmd === 'setGlobalSettings'){
+          const forwardCmd = 'didReceiveGlobalSettings'
+          const mainUuid = this.getMainUuid(data.uuid)
+          this.contextDatas[mainUuid] = data.settings
+
+          const isMainSend = this.clientList[mainUuid] == client  // 判断是不是主服务发送的
+          if(isMainSend){
+            //全局参数向同一插件的所有action转发
+            for(const k in this.clientList){
+              if(k.indexOf(mainUuid) != -1 && this.clientList[k].readyState == 1){
+                const { uuid, actionid, key } = utils.decodeContext(k)
+                this.clientList[k].send(JSON.stringify({
+                  "cmd": forwardCmd,
+                  uuid,
+                  actionid,
+                  key,
+                  "settings":data.settings
+                }))
+              }
+            }
+          }else{
+            this.clientList[mainUuid].send(JSON.stringify({
+              "cmd": forwardCmd,
+              uuid: mainUuid,
+              actionid:'',
+              key:'',
+              "settings":data.settings
+            }))
+          }
+
+          this.log(`${isMainSend?'插件主服务':context} 发送 [setGlobalSettings] 设置全局参数 事件。上位机将通过 ${forwardCmd} 事件转发到${isMainSend?'所有同插件下的action':'插件主服务'}。以下是发送的数据：`,JSON.stringify({
+            "cmd": forwardCmd,
+            "settings":oldParam
+          }))
+
+        }
+        if(data.cmd === 'getGlobalSettings'){
+          const forwardCmd = 'didReceiveGlobalSettings'
+          const mainUuid = this.getMainUuid(data.uuid)
+          const oldParam = this.contextDatas[mainUuid]
+          client.send(JSON.stringify({
+            "cmd": forwardCmd,
+            uuid,
+            actionid,
+            key,
+            "settings":oldParam
+          }))
+
+          const isMainSend = this.clientList[mainUuid] == client  // 判断是不是主服务发送的
+          this.log(`${isMainSend?'插件主服务':context} 发送 [getGlobalSettings]获取全局参数 事件。上位机将通过 ${forwardCmd} 事件发送全局设置参数到请求端。以下是发送的数据：`,JSON.stringify({
+            "cmd": forwardCmd,
+            uuid,
+            actionid,
+            key,
+            "settings":oldParam
+          }))
+        }
+
       });
       client.on('close', (msg)=>{
         // console.log('Received close from client:');
@@ -150,12 +269,13 @@ export default class Clients extends EventEmitter {
     // this.clients.push(client);
   }
 
-  forwardMsg(data,client){
-    const { uuid,param, cmd } = data;
+  forwardMsg(data,  client, forwardCmd){
+    const { uuid,param, cmd, settings } = data;
+    forwardCmd = forwardCmd || cmd
     const context = utils.encodeContext(data)
     const oldParam = this.contextDatas[context]
-    const saveTag = (cmd === 'paramfromplugin' || cmd === 'didReceiveSettings') ? true : false
-    if(saveTag) this.contextDatas[context] = param || oldParam
+    const saveTag = (forwardCmd === 'paramfromplugin' || forwardCmd === 'didReceiveSettings') ? true : false
+    if(saveTag) this.contextDatas[context] = param || settings || oldParam
 
     const mainUuid = this.getMainUuid(uuid)
 
@@ -167,18 +287,23 @@ export default class Clients extends EventEmitter {
     const isMainSend = this.clientList[mainUuid] == client  // 判断是不是主服务发送的
 
 
-    this.log(`${isMainSend?'插件主服务':context} 发送${data.cmd}事件。上位机将转发给 ${isMainSend?context:'插件主服务'} ${saveTag?'，转发的数据上位机会保存下来，再次连接action页面会通过paramfromapp接收到之前的配置数据':''}。以下是转发的数据：`,JSON.stringify(data))
+    this.log(`${isMainSend?'插件主服务':context} 发送${data.cmd}事件。上位机将通过 ${forwardCmd} 事件转发给 ${isMainSend?context:'插件主服务'} ${saveTag?'，转发的数据上位机会保存下来，再次连接action页面会通过paramfromapp接收到之前的配置数据':''}。以下是转发的数据：`,JSON.stringify({
+          ...data,
+          cmd: forwardCmd
+        }))
     //转发
     if(isMainSend){
       if (this.clientList[context] && this.clientList[context].readyState == 1){
         this.clientList[context].send(JSON.stringify({
-          ...data
+          ...data,
+          cmd: forwardCmd
         }))
       }
     }else{
       if (this.clientList[mainUuid] && this.clientList[mainUuid].readyState == 1){
         this.clientList[mainUuid].send(JSON.stringify({
-          ...data
+          ...data,
+          cmd: forwardCmd
         }))
       }
     }
@@ -227,10 +352,11 @@ export default class Clients extends EventEmitter {
     menu.getList()
   }
 
-  replay(client, data) {
+  replay(client, data, request) {
      //回复
      client.send(JSON.stringify({
       ...data,
+      cmdType: request?"REQUEST":"NOTIFY",
       code: 0
     }))
   }

@@ -13,6 +13,9 @@ node_modules/
 */.DS_Store
 **/.DS_Store
 
+plugins/
+!plugins/com.ulanzi.analogClock.ulanziPlugin/
+
 # Executables
 *.swf
 *.air
