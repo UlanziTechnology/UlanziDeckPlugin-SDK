@@ -1,0 +1,52 @@
+{
+	"Name": "API-Anfrage",
+	"Description": "API-Anfrage-Simulator",
+	"Actions": [
+		{
+			"Name": "Antwort abgleichen",
+			"Tooltip": "Antwort abgleichen"
+		},
+		{
+			"Name": "Antwort anzeigen",
+			"Tooltip": "Antwort anzeigen"
+		}
+	],
+	"Localization": {
+		"URL": "URL",
+		"Request Parameters": "Anfrageparameter",
+		"HTTP Method": "HTTP-Methode",
+		"Content Type": "Inhaltstyp",
+		"Request Headers": "Anfrage-Header",
+		"Request Body": "Anfrageinhalt",
+		"Response": "Antwort",
+		"Advanced Settings":"Erweiterte Einstellungen",
+		"Enable green success indicator":"Grüne Erfolgsanzeige aktivieren",
+		"Set button image based on response":"Schaltflächenbild basierend auf der Antwort setzen",
+		"Expand for Response parsing instructions":"Anleitung zur Antwortanalyse öffnen",
+		"Specify the JSON path and expected value in the API response to choose which image to show on the key.":"Geben Sie den JSON-Pfad und den erwarteten Wert in der API-Antwort an, um auszuwählen, welches Bild auf der Taste angezeigt werden soll.",
+		"A missing path will search for the expected value as a string anywhere in the response body.":"Fehlt der Pfad, wird der erwartete Wert als Zeichenfolge an beliebiger Stelle im Antworttext gesucht.",
+		"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".":"Fehlt der erwartete Wert, wird das Feld am JSON-Pfad als Boolean behandelt; true gilt als \"übereinstimmt\".",
+		"JSON Path":"JSON-Pfad",
+		"Expected Value":"Erwarteter Wert",
+		"Image to display when...":"Bild, das angezeigt wird, wenn...",
+		"..matched":"Übereinstimmt",
+		"..unmatched":"Nicht übereinstimmend",
+		"No file...":"Keine Datei... Klicken Sie auf das Symbol rechts, um eine Datei auszuwählen",
+		"Choose file...":"Datei auswählen...",
+		"Periodically poll a URL for status":"Periodisch eine URL nach dem Status abfragen",
+		"Status URL":"Status-URL",
+		"Poll Frequency":"Abfrageintervall",
+		"seconds":"Sekunden",
+		"Parse different field and value from status response":"Verschiedene Felder und Werte aus der Statusantwort parsen",
+		"res-tip1":"Sie können * verwenden, um alles anzuzeigen, oder einen JSON-Pfad wie data.follower verwenden.",
+		"res-tip2":"Sie können mehrere Felder mit doppelten geschweiften Klammern umschließen. Verwenden Sie \\n für einen Zeilenumbruch. Beispiel: {{data.follower}}\\n{{info.name}}",
+		"Color":"Farbe",
+		"White":"Weiß",
+		"Green":"Grün",
+		"Yellow":"Gelb",
+		"Blue":"Blau",
+		"Red":"Rot",
+		"Black":"Schwarz",
+		"Transparent":"Transparent"
+	}
+}

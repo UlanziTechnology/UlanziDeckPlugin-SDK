@@ -1,0 +1,52 @@
+{
+	"Name": "API请求",
+	"Description": "API请求模拟器",
+	"Actions": [
+		{
+			"Name": "匹配响应",
+			"Tooltip": "匹配响应"
+		},
+		{
+			"Name": "显示响应",
+			"Tooltip": "显示响应"
+		}
+	],
+	"Localization": {
+		"URL": "网址",
+		"Request Parameters": "请求参数",
+		"HTTP Method": "请求方式",
+		"Content Type": "内容格式",
+		"Request Headers": "请求头",
+		"Request Body": "请求体",
+		"Response": "响应",
+		"Advanced Settings":"高级设置",
+		"Enable green success indicator":"启用绿色成功提示",
+		"Set button image based on response":"根据响应结果设置按钮图片",
+		"Expand for Response parsing instructions":"查看响应解析说明",
+		"Specify the JSON path and expected value in the API response to choose which image to show on the key.":"在 API 响应中指定JSON路径和预期值，以选择要在密钥上显示的图像。",
+		"A missing path will search for the expected value as a string anywhere in the response body.":"如果缺少JSON路径，将其作为字符串在响应体的任何位置搜索预期值。",
+		"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".":"如果缺少预期值，将把JSON路径中的字段视为布尔值，当为true时，显示‘匹配’图像。",
+		"JSON Path":"JSON路径",
+		"Expected Value":"预期值",
+		"Image to display when...":"根据匹配情况显示设置的图像：",
+		"..matched":"匹配",
+		"..unmatched":"未匹配",
+		"No file...":"点击右侧图标选择文件",
+		"Choose file...":"选择图片",
+		"Periodically poll a URL for status":"定期轮询 URL 的状态",
+		"Status URL":"请求的URL",
+		"Poll Frequency":"轮询频率",
+		"seconds":"秒",
+		"Parse different field and value from status response":"从状态响应中解析不同的字段和值",
+		"res-tip1":"可以用*来显示所有内容，或者使用 JSON 路径，如 data.follower 。",
+		"res-tip2":"可以用双大括号环住显示多个字段。用 \\n 进行换行。如：{{data.follower}}\\n{{info.name}}",
+		"Color":"颜色",
+		"White":"白色",
+		"Green":"绿色",
+		"Yellow":"黄色",
+		"Blue":"蓝色",
+		"Red":"红色",
+		"Black":"黑色",
+		"Transparent":"透明"
+	}
+}

@@ -1,0 +1,52 @@
+{
+	"Name": "API 요청",
+	"Description": "API 요청 시뮬레이터",
+	"Actions": [
+		{
+			"Name": "응답 매칭",
+			"Tooltip": "응답 매칭"
+		},
+		{
+			"Name": "응답 표시",
+			"Tooltip": "응답 표시"
+		}
+	],
+	"Localization": {
+		"URL": "URL",
+		"Request Parameters": "요청 매개변수",
+		"HTTP Method": "HTTP 메서드",
+		"Content Type": "콘텐츠 유형",
+		"Request Headers": "요청 헤더",
+		"Request Body": "요청 본문",
+		"Response": "응답",
+		"Advanced Settings":"고급 설정",
+		"Enable green success indicator":"녹색 성공 표시 활성화",
+		"Set button image based on response":"응답에 따라 버튼 이미지 설정",
+		"Expand for Response parsing instructions":"응답 파싱 설명 펼치기",
+		"Specify the JSON path and expected value in the API response to choose which image to show on the key.":"API 응답에서 JSON 경로와 예상 값을 지정하여 키에 표시할 이미지를 선택하세요.",
+		"A missing path will search for the expected value as a string anywhere in the response body.":"경로가 없으면 응답 본문 어디에서나 예상 값을 문자열로 검색합니다.",
+		"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".":"예상 값이 없으면 JSON 경로의 필드를 불리언으로 처리하며 true는 '일치'로 간주됩니다.",
+		"JSON Path":"JSON 경로",
+		"Expected Value":"예상 값",
+		"Image to display when...":"다음일 때 표시할 이미지:",
+		"..matched":"일치",
+		"..unmatched":"불일치",
+		"No file...":"파일이 없습니다... 오른쪽 아이콘을 클릭하여 파일을 선택하세요",
+		"Choose file...":"파일 선택...",
+		"Periodically poll a URL for status":"주기적으로 URL 상태를 폴링",
+		"Status URL":"상태 URL",
+		"Poll Frequency":"폴링 빈도",
+		"seconds":"초",
+		"Parse different field and value from status response":"상태 응답에서 다른 필드와 값을 파싱",
+		"res-tip1":"* 를 사용하여 모든 항목을 표시하거나 data.follower 같은 JSON 경로를 사용할 수 있습니다.",
+		"res-tip2":"중괄호 두 개로 여러 필드를 감쌀 수 있습니다. 줄바꿈은 \\n 를 사용하세요. 예: {{data.follower}}\\n{{info.name}}",
+		"Color":"색상",
+		"White":"흰색",
+		"Green":"초록",
+		"Yellow":"노랑",
+		"Blue":"파랑",
+		"Red":"빨강",
+		"Black":"검정",
+		"Transparent":"투명"
+	}
+}

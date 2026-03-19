@@ -1,0 +1,52 @@
+{
+	"Name": "APIリクエスト",
+	"Description": "APIリクエストシミュレータ",
+	"Actions": [
+		{
+			"Name": "レスポンス照合",
+			"Tooltip": "レスポンス照合"
+		},
+		{
+			"Name": "レスポンスを表示",
+			"Tooltip": "レスポンスを表示"
+		}
+	],
+	"Localization": {
+		"URL": "URL",
+		"Request Parameters": "リクエストパラメータ",
+		"HTTP Method": "HTTPメソッド",
+		"Content Type": "コンテンツタイプ",
+		"Request Headers": "リクエストヘッダ",
+		"Request Body": "リクエストボディ",
+		"Response": "レスポンス",
+		"Advanced Settings":"詳細設定",
+		"Enable green success indicator":"成功を緑で表示するを有効にする",
+		"Set button image based on response":"レスポンスに基づいてボタン画像を設定",
+		"Expand for Response parsing instructions":"レスポンス解析の説明を展開",
+		"Specify the JSON path and expected value in the API response to choose which image to show on the key.":"APIレスポンスでJSONパスと期待値を指定して、キーに表示する画像を選択します。",
+		"A missing path will search for the expected value as a string anywhere in the response body.":"パスがない場合、期待値をレスポンス本文のどこでも文字列として検索します。",
+		"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".":"期待値がない場合、JSONパスのフィールドはブール値として扱われ、trueは「一致」と見なされます。",
+		"JSON Path":"JSONパス",
+		"Expected Value":"期待値",
+		"Image to display when...":"場合に表示する画像：",
+		"..matched":"一致",
+		"..unmatched":"不一致",
+		"No file...":"ファイルがありません... 右側のアイコンをクリックしてファイルを選択してください",
+		"Choose file...":"ファイルを選択...",
+		"Periodically poll a URL for status":"定期的にURLのステータスをポーリングする",
+		"Status URL":"ステータスURL",
+		"Poll Frequency":"ポーリング頻度",
+		"seconds":"秒",
+		"Parse different field and value from status response":"ステータス応答から別のフィールドと値を解析する",
+		"res-tip1":"* を使ってすべてを表示することも、data.follower のような JSON パスを使用することもできます。",
+		"res-tip2":"複数のフィールドを二重中括弧で囲むことができます。改行には \\n を使用します。例: {{data.follower}}\\n{{info.name}}",
+		"Color":"色",
+		"White":"白",
+		"Green":"緑",
+		"Yellow":"黄",
+		"Blue":"青",
+		"Red":"赤",
+		"Black":"黒",
+		"Transparent":"透明"
+	}
+}

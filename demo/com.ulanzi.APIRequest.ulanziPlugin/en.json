@@ -1,0 +1,52 @@
+{
+	"Name": "API Request",
+	"Description": "API request simulator",
+	"Actions": [
+		{
+			"Name": "Match Response",
+			"Tooltip": "Match response"
+		},
+		{
+			"Name": "Show Response",
+			"Tooltip": "Show response"
+		}
+	],
+	"Localization": {
+		"URL": "URL",
+		"Request Parameters": "Request Parameters",
+		"HTTP Method": "HTTP Method",
+		"Content Type": "Content Type",
+		"Request Headers": "Request Headers",
+		"Request Body": "Request Body",
+		"Response": "Response",
+		"Advanced Settings":"Advanced Settings",
+		"Enable green success indicator":"Enable green success indicator",
+		"Set button image based on response":"Set button image based on response",
+		"Expand for Response parsing instructions":"Expand for response parsing instructions",
+		"Specify the JSON path and expected value in the API response to choose which image to show on the key.":"Specify the JSON path and expected value in the API response to choose which image to show on the key.",
+		"A missing path will search for the expected value as a string anywhere in the response body.":"A missing path will search for the expected value as a string anywhere in the response body.",
+		"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".":"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".",
+		"JSON Path":"JSON Path",
+		"Expected Value":"Expected Value",
+		"Image to display when...":"Image to display when...",
+		"..matched":"Matched",
+		"..unmatched":"Unmatched",
+		"No file...":"No file... Click the icon on the right to choose a file",
+		"Choose file...":"Choose file...",
+		"Periodically poll a URL for status":"Periodically poll a URL for status",
+		"Status URL":"Status URL",
+		"Poll Frequency":"Poll Frequency",
+		"seconds":"seconds",
+		"Parse different field and value from status response":"Parse different field and value from status response",
+		"res-tip1":"You can use * to show everything, or use a JSON path like data.follower.",
+		"res-tip2":"You can wrap multiple fields with double braces. Use \\n for a newline. For example: {{data.follower}}\\n{{info.name}}",
+		"Color":"Color",
+		"White":"White",
+		"Green":"Green",
+		"Yellow":"Yellow",
+		"Blue":"Blue",
+		"Red":"Red",
+		"Black":"Black",
+		"Transparent":"Transparent"
+	}
+}

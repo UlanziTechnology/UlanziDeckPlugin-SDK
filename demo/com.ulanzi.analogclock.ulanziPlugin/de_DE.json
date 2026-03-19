@@ -1,0 +1,21 @@
+{
+  "Name": "Uhrsimulation",
+  "Description": "Echtzeit-Uhranzeige",
+  "Actions": [
+    {
+      "Name": "Uhr einstellen",
+      "Tooltip": "Uhrstil ändern"
+    }
+  ],
+  "Localization": {
+    "Face": "Zifferblatt",
+    "Digital": "Digital",
+    "Black": "Schwarz",
+    "Blue": "Blau",
+    "Blueish": "Bläulich",
+    "Green": "Grün",
+    "Red": "Rot",
+    "White": "Weiß",
+    "Transparent": "Transparent"
+  }
+}

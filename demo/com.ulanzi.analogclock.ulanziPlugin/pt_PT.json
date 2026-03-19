@@ -1,0 +1,21 @@
+{
+  "Name": "Simulação de relógio",
+  "Description": "Mostrar a hora em tempo real",
+  "Actions": [
+    {
+      "Name": "Configurar relógio",
+      "Tooltip": "Alterar estilo do relógio"
+    }
+  ],
+  "Localization": {
+    "Face": "Mostrador",
+    "Digital": "Digital",
+    "Black": "Preto",
+    "Blue": "Azul",
+    "Blueish": "Azulado",
+    "Green": "Verde",
+    "Red": "Vermelho",
+    "White": "Branco",
+    "Transparent": "Transparente"
+  }
+}

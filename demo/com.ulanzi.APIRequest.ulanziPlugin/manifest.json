@@ -1,0 +1,58 @@
+{
+  "Version": "1.1.1",
+  "Author": "Ulanzi",
+  "Name": "API Request",
+  "Description": "REST Easily",
+  "Icon": "assets/icons/pluginIcon.png",
+  "Category": "API Request",
+  "CategoryIcon": "assets/icons/category.png",
+  "CodePath": "dist/app.js",
+  "Type": "JavaScript",
+  "Inspect":"--inspect=127.0.0.1:9201",
+  "PrivateAPI": true,
+  "SupportedInMultiActions": false,
+  "UUID": "com.ulanzi.ulanzistudio.APIRequest",
+  "Actions": [
+    {
+      "Name": "Match Result",
+      "Icon": "assets/icons/match.svg",
+      "PropertyInspectorPath": "property-inspector/matchResult/inspector.html",
+      "state": 0,
+      "States": [
+        {
+          "Image": "assets/icons/match.svg"
+        }
+      ],
+      "Tooltip": "Match Result",
+      "UUID": "com.ulanzi.ulanzistudio.APIRequest.matchResult",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name": "Get Result",
+      "Icon": "assets/icons/text.svg",
+      "PropertyInspectorPath": "property-inspector/getResult/inspector.html",
+      "state": 0,
+      "States": [
+        {
+          "Image": "assets/icons/text.svg"
+        }
+      ],
+      "Tooltip": "Get Result",
+      "UUID": "com.ulanzi.ulanzistudio.APIRequest.getResult",
+      "SupportedInMultiActions": false
+    }
+  ],
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "6.1"
+  }
+}

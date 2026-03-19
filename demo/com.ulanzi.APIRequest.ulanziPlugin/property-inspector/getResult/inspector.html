@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+  <title>action</title>
+  <link rel="stylesheet" href="../../libs/css/uspi.css">
+  <style>
+    .uspi-item-label {
+      width: 112px;
+    }
+  </style>
+  </style>
+</head>
+
+<body>
+  <div class="udpi-wrapper hidden uspi-wrapper">
+
+    <form id="property-inspector">
+
+      <div class="uspi-item">
+        <div class="uspi-item-label" data-localize>URL</div>
+        <input class="uspi-item-value" type="text" id="request_url" name="request_url" required>
+      </div>
+
+      <div class="uspi-heading" data-localize>Request Parameters</div>
+
+      <div class="uspi-item">
+        <div class="uspi-item-label" data-localize>HTTP Method</div>
+        <select class="uspi-item-value select" id="request_method" name="request_method">
+          <option value="GET" selected>GET</option>
+          <option value="POST">POST</option>
+          <option value="HEAD">HEAD</option>
+          <option value="PUT">PUT</option>
+          <option value="PATCH">PATCH</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </div>
+
+      <div class="uspi-item">
+        <div class="uspi-item-label" data-localize>Content Type</div>
+        <select class="uspi-item-value select" id="request_content_type" name="request_content_type">
+          <option value="" selected>&lt;none&gt;</option>
+          <option value="application/json">application/json</option>
+          <option value="application/xml">application/xml</option>
+          <option value="text/plain">text/plain</option>
+          <option value="text/html">text/html</option>
+        </select>
+      </div>
+
+      <div type="textarea" class="uspi-item alignTop">
+        <div class="uspi-item-label" data-localize>Request Headers</div>
+
+        <textarea type="textarea" class="uspi-item-value" id="request_headers" name="request_headers"
+          placeholder="Authorization: Bearer [token]"></textarea>
+
+      </div>
+
+      <div type="textarea" class="uspi-item alignTop">
+        <div class="uspi-item-label" data-localize>Request Body</div>
+
+        <textarea type="textarea" class="uspi-item-value" id="request_body" name="request_body"></textarea>
+
+      </div>
+
+      <div class="uspi-heading" data-localize>Advanced Settings</div>
+
+
+      <div class="uspi-item" type="checkbox">
+        <div class="uspi-item-value">
+          <div class="uspi-item-child">
+            <input id="enable_success_indicator" type="checkbox" name="enable_success_indicator" />
+            <label for="enable_success_indicator" data-localize>Enable green success indicator</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="uspi-item" style="display: none;">
+        <div class="uspi-item-value">
+          <div class="uspi-item-child">
+            <input id="response_parse" type="checkbox" name="response_parse" checked>
+            <label for="response_parse" ><span></span>
+              <ud data-localize>Set button image based on response</ud>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="response_parse_settings">
+        <details>
+          <summary data-localize>Expand for Response parsing instructions</summary>
+          <p data-localize="res-tip1">Use * to show everything, or use a JSON path such as data.follower.</p>
+          <p data-localize="res-tip2">Multiple fields can be displayed around double braces. Wrap the line with \n. For
+            example: {{data.follower}}\n{{info.name}}.</p>
+        </details>
+        <div class="uspi-item">
+          <div class="uspi-item-label" data-localize>JSON Path</div>
+          <input class="uspi-item-value" type="text" id="response_parse_field" name="response_parse_field">
+        </div>
+        <div type="select" class="uspi-item">
+          <div class="uspi-item-label" data-localize>Color</div>
+          <select class="uspi-item-value color-selector" name="response_color">
+          </select>
+        </div>
+
+
+        <div class="uspi-item" type="checkbox">
+          <div class="uspi-item-value">
+            <div class="uspi-item-child">
+              <input id="poll_status" type="checkbox" name="poll_status" />
+              <label for="poll_status" data-localize>Periodically poll a URL for status</label>
+            </div>
+          </div>
+        </div>
+        <div id="poll_status_settings" style="display:none">
+          <div class="uspi-item">
+            <div class="uspi-item-label" data-localize>Status URL</div>
+            <input class="uspi-item-value" type="text" id="poll_status_url" name="poll_status_url">
+          </div>
+          <div class="uspi-item">
+            <div class="uspi-item-label" data-localize>HTTP Method</div>
+            <select class="uspi-item-value select" id="poll_status_method" name="poll_status_method">
+              <option value="GET" selected>GET</option>
+              <option value="POST">POST</option>
+              <option value="HEAD">HEAD</option>
+              <option value="PUT">PUT</option>
+              <option value="PATCH">PATCH</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+          </div>
+          <div class="uspi-item">
+            <div class="uspi-item-label" data-localize>Poll Frequency</div>
+            <input class="uspi-item-value max10" type="text" id="poll_status_frequency" pattern="\d+" value="15"
+              name="poll_status_frequency">
+            <ud data-localize style="line-height: 26px;">seconds</ud>
+          </div>
+
+          <div class="uspi-item" type="checkbox">
+            <div class="uspi-item-value">
+              <div class="uspi-item-child">
+                <input id="poll_status_parse" type="checkbox" name="poll_status_parse" />
+                <label for="poll_status_parse" data-localize>Parse different field and value from status response</label>
+              </div>
+            </div>
+          </div>
+          <div id="poll_status_parse_settings" style="display:none">
+            <div class="uspi-item">
+              <div class="uspi-item-label" data-localize>JSON Path</div>
+              <input class="uspi-item-value" type="text" id="poll_status_parse_field" name="poll_status_parse_field">
+            </div>
+            <div type="select" class="uspi-item">
+              <div class="uspi-item-label" data-localize>Color</div>
+              <select class="uspi-item-value color-selector" name="poll_status_color">
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <script src="../../libs/js/constants.js"></script>
+  <script src="../../libs/js/eventEmitter.js"></script>
+  <script src="../../libs/js/timers.js"></script>
+  <script src="../../libs/js/utils.js"></script>
+  <script src="../../libs/js/ulanziApi.js"></script>
+
+
+  <script src="../colors.js"></script>
+  <script src="./inspector.js"></script>
+
+</body>
+
+</html>

@@ -1,96 +1,128 @@
-# com.ulanzi.analogclock.ulanziPlugin （html版式示例）
+# com.ulanzi.analogclock.ulanziPlugin（HTML 版式示例）
 
-
-<p align="start">
-   <a href="./README.md">English</a> | <strong>简体中文</strong>
-</p>
+[English](./README.md) | **简体中文**
 
 ## 简介
-为了更直观的演示通用库 html 版本的使用，我们用analogclock来做插件例子
 
-```bash
-当前版本根据 Ulanzi JS 插件开发协议-V1.2.2 来编写
-```
+为了更直观地演示通用库 HTML 版本的使用，我们使用 analogclock 作为插件示例。
 
+> 当前版本根据 **Ulanzi JS 插件开发协议 - V2.1.2** 编写。
+
+`manifest.json` 配置字段详细说明，请参阅 **[manifest.zh.md](https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK/blob/main/manifest.zh.md)**。
+
+---
 
 ## 文件介绍
-```bash
-com.ulanzi.analogclock.ulanziPlugin
-├── assets         //主要用于存放上位机icon的展示和action状态的切换
-│   └── icons      
+
+```text
+com.ulanzi.analogclock.ulanziPlugin/
+├── assets/
+│   └── icons/
 │       └── icon.png
-├── libs    //插件html通用库（action页面引用），此处不做具体介绍，可前往 UlanziTechnology/plugin-common-html 目录查看。libs更新版本请以 UlanziTechnology/plugin-common-html 目录为准。
-├── plugin  //js主要功能模块,包括action的处理
-│   ├── actions   //处理具体action逻辑
-│   ├── app.html  //主服务html，作为入口
-│   └── app.js    //主服务js
-├── property-inspector // 配置项html和form表单的读写
-│   └── clock      //action的名称
-│       ├── inspector.html  //配置项html
-│       └── inspector.js  //配置项js，用于做socket连接和form表单的处理
-├── manifest.json         //具体配置项的编写可查看插件协议
-├── zh_CN.json      //中文翻译文件
-├── en.json         //英文翻译文件
+├── libs/
+├── plugin/
+│   ├── actions/
+│   ├── app.html
+│   └── app.js
+├── property-inspector/
+│   └── clock/
+│       ├── inspector.html
+│       └── inspector.js
+├── manifest.json
+├── de_DE.json
+├── en.json
+├── es_ES.json
+├── ja_JP.json
+├── ko_KR.json
+├── pt_PT.json
+├── zh_CN.json
+└── zh_HK.json
 ```
 
+| 路径 | 说明 |
+| --- | --- |
+| `assets/` | 主要用于存放上位机 icon 的展示资源和 action 状态切换资源。 |
+| `libs/` | 插件 HTML 通用库（action 页面引用），此处不做具体介绍，可前往 **[UlanziTechnology/plugin-common-html](https://github.com/UlanziTechnology/plugin-common-html)** 目录查看；libs 更新版本请以该目录为准。 |
+| `plugin/` | JS 主要功能模块目录，包括 action 的处理。 |
+| `plugin/actions/` | 处理具体 action 逻辑。 |
+| `plugin/app.html` | 主服务 HTML，作为入口。 |
+| `plugin/app.js` | 主服务 JS。 |
+| `property-inspector/` | 配置项 HTML 和 form 表单的读写目录。 |
+| `property-inspector/clock/` | action 名称示例目录。 |
+| `property-inspector/clock/inspector.html` | 配置项 HTML。 |
+| `property-inspector/clock/inspector.js` | 配置项 JS，用于做 socket 连接和 form 表单处理。 |
+| `manifest.json` | 插件配置文件，具体配置项可前往 **[manifest.zh.md](https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK/blob/main/manifest.zh.md)** 查看。 |
+| `de_DE.json`、`en.json`、`es_ES.json`、`ja_JP.json`、`ko_KR.json`、`pt_PT.json`、`zh_CN.json`、`zh_HK.json` | 多语言翻译文件。 |
 
 ## 使用
 
 ### 一些说明和约定
-```bash
-1. 插件库的主服务（例app.html）会一直与上位机连接，用于做主要功能，包括上位机icon的更新等。
 
-2. 插件库的配置项（例inspector.html），配置项我们后续称为action。切换功能按键之后就会被销毁，不宜做功能处理。主要用于发送配置项到上位机和同步上位机数据。
+1. **主服务**（如 `app.html`）始终与上位机保持连接，负责实现插件的核心功能：接收 action 配置变更、更新 icon 状态等。
 
-3. 为了统一管理，我们的插件包的名称为 com.ulanzi.插件名.ulanziPlugin
+2. **配置项页面 / PropertyInspector**（如 `inspector.html`）在用户切换功能按键后会被销毁，不适合做功能逻辑处理，主要用于发送和同步配置参数。
 
-3. 为了通用库的正常使用，主服务连接的uuid我们约定长度是4。例：com.ulanzi.ulanzideck.插件名
+3. 插件包命名规范：`com.ulanzi.{插件名}.ulanziPlugin`
 
-4. 配置项连接的uuid要大于4用于区分。例：com.ulanzi.ulanzideck.插件名.插件action
+4. **主服务 UUID** 必须由恰好 **4** 个点分隔段组成：
+   `com.ulanzi.ulanzistudio.{插件名}`
 
-5. 本地化文件放在插件根目录下，即与libs插件通用库同级。例：zh_CN.json en.json
+5. **action UUID** 必须超过 4 段，以便与主服务区分：
+   `com.ulanzi.ulanzistudio.{插件名}.{actionName}`
 
-6. 为了UI字体的统一，我们已经在udpi.css设置了开源字体思源黑体（Source Han Sans），在app.html也同样需要引用字体库。请大家在绘制icon时，统一使用'Source Han Sans'。
+6. 本地化 JSON 文件放在**插件根目录**（与 `libs/` 同级）。支持的文件名：
+   `zh_CN.json` `zh_HK.json` `en.json` `ja_JP.json` `de_DE.json` `ko_KR.json` `pt_PT.json` `es_ES.json`
 
-7. 上位机的背景颜色为 '#282828'，通用css（udpi.css）已经设定了'--udpi-bgcolor: #282828;'。若要自定义action的背景颜色应与上位机背景色相同，避免插件背景颜色过于突兀。
+7. `uspi.css` 中已引用上位机内置的开源字体**思源黑体（Source Han Sans SC）**。在 `app.html` 中使用 Canvas 绘制 icon 时，请统一使用 `'Source Han Sans SC'`。
 
-```
+8. 上位机背景颜色为 `#1e1f22`（已在 `uspi.css` 中设为 `--uspi-bodybg`）。若自定义 action 背景色，建议与此保持一致，避免视觉突兀。
+
+9. `controller` URL 参数表示设备类型：`Keypad`（普通按键）或 `Encoder`（旋钮）。连接后可通过 `$UD.controller` 读取。
+
+10. H5 插件开发 SDK：**[UlanziTechnology/plugin-common-html](https://github.com/UlanziTechnology/plugin-common-html)**
+
+11. Node.js 插件开发 SDK：**[UlanziTechnology/plugin-common-node](https://github.com/UlanziTechnology/plugin-common-node)**
+
+---
 
 ## 本地化翻译文件编写规则
 
 ### 参数介绍
-```bash
-以zh_CN.json为例
 
-name:插件名称
-description:插件描述
-actions:插件action列表，数组形式。每个action需要填写name(action名称)和tooltip(悬浮提示)
+以 `zh_CN.json` 为例：
 
-localization: 插件内容本地化
-本地化有两种方式
+- `name`：插件名称
+- `description`：插件描述
+- `actions`：插件 action 列表，数组形式。每个 action 需要填写 `name`（action 名称）和 `tooltip`（悬浮提示）
+- `localization`：插件内容本地化
 
-1. 根据英文内容翻译
-使用规则：在action的html页面，将需要翻译的节点加上data-localize的属性。html的sdk会自动读取节点的英文内容进行对应翻译。
-注意：此时data-localize不需要赋予值，但是编写页面时请使用英文。之后在根目录下添加语言环境对应的json，例如zh_CN.json
+本地化有两种方式：
 
-2. 根据data-localize的值翻译
-使用规则：在action的html页面，将需要翻译的节点加上data-localize="Blue"的属性。
-注意：与第一种不同，此时的sdk会根据data-localize的值（例：Blue）来进行对应翻译。
+#### 1. 根据英文内容翻译
 
-```
+使用规则：在 action 的 HTML 页面，将需要翻译的节点加上 `data-localize` 属性。HTML 的 SDK 会自动读取节点的英文内容进行对应翻译。
 
-### zh_ CN.json 的示例
+注意：此时 `data-localize` 不需要赋予值，但是编写页面时请使用英文。之后在根目录下添加语言环境对应的 JSON，例如 `zh_CN.json`。
+
+#### 2. 根据 `data-localize` 的值翻译
+
+使用规则：在 action 的 HTML 页面，将需要翻译的节点加上 `data-localize="Blue"` 属性。
+
+注意：与第一种不同，此时 SDK 会根据 `data-localize` 的值（例：`Blue`）来进行对应翻译。
+
+### `zh_CN.json` 的示例
+
 ```json
 {
   "Name" : "时钟模拟",
-  "Description": "实时显示时间", 
+  "Description": "实时显示时间",
   "Actions" :[
     {
       "Name": "设置时钟",
       "Tooltip": "更改时钟样式"
     }
   ],
-  "Localization": {  
+  "Localization": {
     "Face": "钟面",
     "Digital": "数字",
     "Black" : "黑色",
@@ -102,7 +134,4 @@ localization: 插件内容本地化
     "Transparent": "透明"
   }
 }
-
 ```
-
-

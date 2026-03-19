@@ -1,18 +1,18 @@
 {
     "Actions": [
       {
-        "Name": "clock",
+        "Name": "Clock",
         "Icon": "assets/icons/actionIcon.png",
         "PropertyInspectorPath": "property-inspector/clock/inspector.html",
         "state": 0,
         "States": [
           {
-            "Name": "clock",
+            "Name": "Clock",
             "Image": "assets/icons/icon.png"
           }
         ],
         "Tooltip": "how a nice analog clock",
-        "UUID": "com.ulanzi.ulanzideck.analogclock.clock",
+        "UUID": "com.ulanzi.ulanzistudio.analogclock.clock",
         "SupportedInMultiActions": false
       }
     ],
@@ -20,14 +20,14 @@
     "Name": "Analog Clock",
     "Description": "Always be on time.",
     "Icon": "assets/icons/icon.png",
-    "Version": "1.0.0",
+    "Version": "1.0.1",
     "Category": "Analog Clock",
     "CategoryIcon": "assets/icons/categoryIcon.png",
     "CodePath": "plugin/app.html",
     "Type": "JavaScript",
     "SupportedInMultiActions": false,
     "PrivateAPI": true,
-    "UUID": "com.ulanzi.ulanzideck.analogclock",
+    "UUID": "com.ulanzi.ulanzistudio.analogclock",
     "OS": [
       {
         "Platform": "mac",

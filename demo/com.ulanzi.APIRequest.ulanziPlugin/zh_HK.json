@@ -1,0 +1,52 @@
+{
+	"Name": "API請求",
+	"Description": "API請求模擬器",
+	"Actions": [
+		{
+			"Name": "匹配響應",
+			"Tooltip": "匹配響應"
+		},
+		{
+			"Name": "顯示響應",
+			"Tooltip": "顯示響應"
+		}
+	],
+	"Localization": {
+		"URL": "網址",
+		"Request Parameters": "請求參數",
+		"HTTP Method": "HTTP 方法",
+		"Content Type": "內容格式",
+		"Request Headers": "請求標頭",
+		"Request Body": "請求主體",
+		"Response": "回應",
+		"Advanced Settings":"進階設定",
+		"Enable green success indicator":"啟用綠色成功提示",
+		"Set button image based on response":"根據回應設置按鈕圖片",
+		"Expand for Response parsing instructions":"查看回應解析說明",
+		"Specify the JSON path and expected value in the API response to choose which image to show on the key.":"在 API 回應中指定 JSON 路徑和預期值，以選擇要在按鍵上顯示的圖片。",
+		"A missing path will search for the expected value as a string anywhere in the response body.":"若缺少路徑，將在回應正文的任何位置以字串方式搜尋預期值。",
+		"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".":"若缺少預期值，將把 JSON 路徑處的欄位視為布林值，當為 true 時視為「匹配」。",
+		"JSON Path":"JSON 路徑",
+		"Expected Value":"預期值",
+		"Image to display when...":"根據匹配情況顯示的圖片：",
+		"..matched":"匹配",
+		"..unmatched":"未匹配",
+		"No file...":"點擊右側圖示選擇文件",
+		"Choose file...":"選擇圖片",
+		"Periodically poll a URL for status":"定期輪詢 URL 的狀態",
+		"Status URL":"請求的 URL",
+		"Poll Frequency":"輪詢頻率",
+		"seconds":"秒",
+		"Parse different field and value from status response":"從狀態回應中解析不同的欄位和值",
+		"res-tip1":"可以用 * 來顯示所有內容，或者使用 JSON 路徑，如 data.follower。",
+		"res-tip2":"可以用雙大括號環住顯示多個欄位。用 \\n 進行換行。如：{{data.follower}}\\n{{info.name}}",
+		"Color":"顏色",
+		"White":"白色",
+		"Green":"綠色",
+		"Yellow":"黃色",
+		"Blue":"藍色",
+		"Red":"紅色",
+		"Black":"黑色",
+		"Transparent":"透明"
+	}
+}

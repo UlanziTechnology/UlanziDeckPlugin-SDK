@@ -1,95 +1,128 @@
-# com.ulanzi.analogclock.ulanziPlugin (HTML Version Example)
+# com.ulanzi.analogclock.ulanziPlugin (HTML Example)
 
-<p align="start">
-   <strong>English</strong> | <a href="./README.zh.md">简体中文</a>
-</p>
+**English** | [简体中文](./README.zh.md)
 
 ## Introduction
-To demonstrate the use of the general library HTML version more intuitively, we use analogclock as a plugin example.
 
-```bash
-The current version is written according to the Ulanzi JS Plugin Development Protocol-V1.2.2
-```
+To more intuitively demonstrate how to use the common HTML library, we use analogclock as the plugin example.
 
+> The current version is written according to the **Ulanzi JS Plugin Development Protocol - V2.1.2**.
 
-## File Description
-```bash
-com.ulanzi.analogclock.ulanziPlugin
-├── assets         //Mainly used to store the display of UlanziDeck icons and action state switching
-│   └── icons      
+For detailed descriptions of the `manifest.json` fields, see **[manifest.md](https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK/blob/main/manifest.md)**.
+
+---
+
+## File Overview
+
+```text
+com.ulanzi.analogclock.ulanziPlugin/
+├── assets/
+│   └── icons/
 │       └── icon.png
-├── libs    //Plugin HTML common library (referenced by action pages). This is not described in detail here, please refer to the UlanziTechnology/plugin-common-html directory. For updated versions of libs, please refer to the UlanziTechnology/plugin-common-html directory.
-├── plugin  //Main JS functional modules, including action handling
-│   ├── actions   //Handle specific action logic
-│   ├── app.html  //Main service HTML, serves as the entry point
-│   └── app.js    //Main service JS
-├── property-inspector // Configuration HTML and form reading/writing
-│   └── clock      //Action name
-│       ├── inspector.html  //Configuration HTML
-│       └── inspector.js  //Configuration JS, used for socket connection and form handling
-├── manifest.json         //For specific configuration items, please refer to the plugin protocol
-├── zh_CN.json      //Chinese translation file
-├── en.json         //English translation file
+├── libs/
+├── plugin/
+│   ├── actions/
+│   ├── app.html
+│   └── app.js
+├── property-inspector/
+│   └── clock/
+│       ├── inspector.html
+│       └── inspector.js
+├── manifest.json
+├── de_DE.json
+├── en.json
+├── es_ES.json
+├── ja_JP.json
+├── ko_KR.json
+├── pt_PT.json
+├── zh_CN.json
+└── zh_HK.json
 ```
 
+| Path | Description |
+| --- | --- |
+| `assets/` | Mainly stores host icon display assets and action state switching assets. |
+| `libs/` | Common HTML library for the plugin (referenced by action pages). It is not described in detail here; please see **[UlanziTechnology/plugin-common-html](https://github.com/UlanziTechnology/plugin-common-html)**. Updates to `libs` should follow that directory. |
+| `plugin/` | Main JS functional module directory, including action handling. |
+| `plugin/actions/` | Handles specific action logic. |
+| `plugin/app.html` | Main service HTML and entry point. |
+| `plugin/app.js` | Main service JS. |
+| `property-inspector/` | Directory for configuration HTML and form read/write logic. |
+| `property-inspector/clock/` | Example action directory. |
+| `property-inspector/clock/inspector.html` | Configuration HTML. |
+| `property-inspector/clock/inspector.js` | Configuration JS used for socket connection and form handling. |
+| `manifest.json` | Plugin configuration file. For field details, see **[manifest.md](https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK/blob/main/manifest.md)**. |
+| `de_DE.json`, `en.json`, `es_ES.json`, `ja_JP.json`, `ko_KR.json`, `pt_PT.json`, `zh_CN.json`, `zh_HK.json` | Multi-language translation files. |
 
 ## Usage
 
-### Some Explanations and Conventions
-```bash
-1. The main service of the plugin library (e.g., app.html) will always be connected to the UlanziDeck for main functionality, including updating the UlanziDeck icon.
+### Notes and Conventions
 
-2. The configuration item of the plugin library (e.g., inspector.html), which we later refer to as action, will be destroyed after switching function buttons and is not suitable for functional processing. It is mainly used to send configuration items to the UlanziDeck and synchronize UlanziDeck data.
+1. **Main service** (`app.html`) stays connected to the UlanziStudio at all times. It implements the plugin's core logic, receives param changes from actions, and updates icon states.
 
-3. For unified management, our plugin package name is com.ulanzi.pluginName.ulanziPlugin
+2. **Action / PropertyInspector** (`inspector.html`) is destroyed when the user switches buttons. Keep it lightweight — only use it to send/receive configuration params.
 
-4. For the normal use of the common library, we stipulate that the UUID of the main service connection is 4 in length. Example: com.ulanzi.ulanzideck.pluginName
+3. Plugin package naming: `com.ulanzi.{pluginName}.ulanziPlugin`
 
-5. The UUID of the configuration item connection should be greater than 4 to distinguish it. Example: com.ulanzi.ulanzideck.pluginName.pluginAction
+4. The **main service UUID** must have exactly **4** dot-separated segments:
+   `com.ulanzi.ulanzistudio.{pluginName}`
 
-6. Localization files are placed in the plugin root directory, at the same level as the libs plugin common library. Example: zh_CN.json en.json
+5. An **action UUID** must have **more than 4** segments to be distinguished from the main service:
+   `com.ulanzi.ulanzistudio.{pluginName}.{actionName}`
 
-7. For UI font consistency, we have already set the open-source font Source Han Sans SC in udpi.css, and app.html also needs to reference the font library. Please use 'Source Han Sans SC' uniformly when drawing icons.
+6. Localization JSON files go in the **plugin root directory** (same level as `libs/`). Supported file names:
+   `zh_CN.json` `zh_HK.json` `en.json` `ja_JP.json` `de_DE.json` `ko_KR.json` `pt_PT.json` `es_ES.json`
 
-8. The background color of the UlanziDeck is '#282828', and the common CSS (udpi.css) has already set '--udpi-bgcolor: #282828;'. If you want to customize the background color of an action, it should be the same as the UlanziDeck's background color to avoid the plugin's background color being too jarring.
+7. The built-in font **Source Han Sans SC** is referenced in `uspi.css`. Reference the same font in `app.html` when drawing icons on canvas.
 
-```
+8. The UlanziStudio background color is `#1e1f22` (set as `--uspi-bodybg` in `uspi.css`). Match this color when customizing action backgrounds.
 
-## Localization Translation File Writing Rules
+9. The `controller` URL parameter indicates device type: `Keypad` (button) or `Encoder` (dial). Read it via `$UD.controller` after connecting.
+
+10. H5 Plugin Development SDK: **[UlanziTechnology/plugin-common-html](https://github.com/UlanziTechnology/plugin-common-html)**
+
+11. Node.js Plugin Development SDK: **[UlanziTechnology/plugin-common-node](https://github.com/UlanziTechnology/plugin-common-node)**
+
+---
+
+## Localization Translation File Rules
 
 ### Parameter Introduction
-```bash
-Taking zh_CN.json as an example
 
-name: Plugin name
-description: Plugin description
-actions: Plugin action list, in array form. Each action needs to fill in name (action name) and tooltip (hover tip)
+Take `zh_CN.json` as an example:
 
-localization: Plugin content localization
-There are two ways of localization:
+- `name`: plugin name
+- `description`: plugin description
+- `actions`: the plugin action list in array form. Each action should define `name` (action name) and `tooltip` (hover tooltip)
+- `localization`: plugin content localization
 
-1. Translation based on English content
-Usage rule: In the action's HTML page, add the data-localize attribute to nodes that need translation. The HTML SDK will automatically read the node's English content for corresponding translation.
-Note: In this case, data-localize does not need to be assigned a value, but please use English when writing the page. Then add the corresponding language environment JSON in the root directory, such as zh_CN.json
+There are two ways to localize content:
 
-2. Translation based on the value of data-localize
-Usage rule: In the action's HTML page, add the attribute data-localize="Blue" to nodes that need translation.
-Note: Unlike the first method, the SDK will translate according to the value of data-localize (e.g., Blue).
+#### 1. Translate Based on English Content
 
-```
+Usage: in the action HTML page, add the `data-localize` attribute to the nodes that need translation. The HTML SDK will automatically read the English content of the node and translate it accordingly.
 
-### Example of zh_CN.json
+Note: in this case, `data-localize` does not need a value, but the page content should be written in English. Then add the corresponding language JSON file in the root directory, such as `zh_CN.json`.
+
+#### 2. Translate Based on the Value of `data-localize`
+
+Usage: in the action HTML page, add `data-localize="Blue"` to the nodes that need translation.
+
+Note: unlike the first method, the SDK will translate according to the value of `data-localize` (for example, `Blue`).
+
+### Example `zh_CN.json`
+
 ```json
 {
   "Name" : "时钟模拟",
-  "Description": "实时显示时间", 
+  "Description": "实时显示时间",
   "Actions" :[
     {
       "Name": "设置时钟",
       "Tooltip": "更改时钟样式"
     }
   ],
-  "Localization": {  
+  "Localization": {
     "Face": "钟面",
     "Digital": "数字",
     "Black" : "黑色",
@@ -101,5 +134,4 @@ Note: Unlike the first method, the SDK will translate according to the value of 
     "Transparent": "透明"
   }
 }
-
-``` 
+```

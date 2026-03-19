@@ -1,0 +1,52 @@
+{
+	"Name": "Solicitação de API",
+	"Description": "Simulador de requisições API",
+	"Actions": [
+		{
+			"Name": "Corresponder Resposta",
+			"Tooltip": "Corresponder Resposta"
+		},
+		{
+			"Name": "Mostrar Resposta",
+			"Tooltip": "Mostrar Resposta"
+		}
+	],
+	"Localization": {
+		"URL": "URL",
+		"Request Parameters": "Parâmetros da requisição",
+		"HTTP Method": "Método HTTP",
+		"Content Type": "Tipo de conteúdo",
+		"Request Headers": "Cabeçalhos da solicitação",
+		"Request Body": "Corpo da solicitação",
+		"Response": "Resposta",
+		"Advanced Settings":"Configurações avançadas",
+		"Enable green success indicator":"Ativar indicador verde de sucesso",
+		"Set button image based on response":"Definir imagem do botão com base na resposta",
+		"Expand for Response parsing instructions":"Expandir para instruções de análise de resposta",
+		"Specify the JSON path and expected value in the API response to choose which image to show on the key.":"Especifique o caminho JSON e o valor esperado na resposta da API para escolher qual imagem mostrar na tecla.",
+		"A missing path will search for the expected value as a string anywhere in the response body.":"Se o caminho estiver ausente, procurará o valor esperado como uma string em qualquer lugar do corpo da resposta.",
+		"A missing expected value will treat the field at the JSON path as a Boolean, where true is considered \"matched\".":"Se o valor esperado estiver ausente, o campo no caminho JSON será tratado como booleano, onde true é considerado \"corresponde\".",
+		"JSON Path":"Caminho JSON",
+		"Expected Value":"Valor esperado",
+		"Image to display when...":"Imagem a exibir quando...",
+		"..matched":"Corresponde",
+		"..unmatched":"Não corresponde",
+		"No file...":"Sem ficheiro... Clique no ícone à direita para escolher um ficheiro",
+		"Choose file...":"Escolher ficheiro...",
+		"Periodically poll a URL for status":"Consultar periodicamente uma URL para estado",
+		"Status URL":"URL de estado",
+		"Poll Frequency":"Frequência de consulta",
+		"seconds":"segundos",
+		"Parse different field and value from status response":"Analisar campo e valor diferentes da resposta de estado",
+		"res-tip1":"Pode usar * para mostrar tudo, ou usar um caminho JSON como data.follower.",
+		"res-tip2":"Pode envolver múltiplos campos com chavetas duplas. Use \\n para nova linha. Exemplo: {{data.follower}}\\n{{info.name}}",
+		"Color":"Cor",
+		"White":"Branco",
+		"Green":"Verde",
+		"Yellow":"Amarelo",
+		"Blue":"Azul",
+		"Red":"Vermelho",
+		"Black":"Preto",
+		"Transparent":"Transparente"
+	}
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+  <title>action</title>
+  <link rel="stylesheet" href="../../libs/css/uspi.css">
+  <style>
+    .uspi-item-label {
+      width: 112px;
+  }
+  </style>
+  </style>
+</head>
+
+<body>
+  <div class="udpi-wrapper hidden uspi-wrapper">
+
+    <form id="property-inspector">
+
+      <div class="uspi-item">
+        <div class="uspi-item-label" data-localize>URL</div>
+        <input class="uspi-item-value" type="text" id="request_url" name="request_url" required>
+      </div>
+
+      <div class="uspi-heading" data-localize>Request Parameters</div>
+
+      <div class="uspi-item">
+        <div class="uspi-item-label" data-localize>HTTP Method</div>
+        <select class="uspi-item-value select" id="request_method" name="request_method">
+          <option value="GET" selected>GET</option>
+          <option value="POST">POST</option>
+          <option value="HEAD">HEAD</option>
+          <option value="PUT">PUT</option>
+          <option value="PATCH">PATCH</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </div>
+
+      <div class="uspi-item">
+        <div class="uspi-item-label" data-localize>Content Type</div>
+        <select class="uspi-item-value select" id="request_content_type" name="request_content_type">
+          <option value="" selected>&lt;none&gt;</option>
+          <option value="application/json">application/json</option>
+          <option value="application/xml">application/xml</option>
+          <option value="text/plain">text/plain</option>
+          <option value="text/html">text/html</option>
+        </select>
+      </div>
+
+      <div type="textarea" class="uspi-item alignTop">
+        <div class="uspi-item-label" data-localize>Request Headers</div>
+          <textarea type="textarea" class="uspi-item-value" id="request_headers" name="request_headers"
+            placeholder="Authorization: Bearer [token]"></textarea>
+      </div>
+
+      <div type="textarea" class="uspi-item alignTop">
+        <div class="uspi-item-label" data-localize>Request Body</div>
+          <textarea type="textarea" class="uspi-item-value" id="request_body" name="request_body"></textarea>
+        
+      </div>
+
+      <div class="uspi-heading" data-localize>Advanced Settings</div>
+
+      <div class="uspi-item">
+        <div class="uspi-item-value">
+          <div class="uspi-item-child">
+            <input id="enable_success_indicator" type="checkbox" name="enable_success_indicator">
+            <label for="enable_success_indicator" ><span></span><ud data-localize>Enable green success
+              indicator</ud></label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="uspi-item">
+        <div class="uspi-item-value">
+          <div class="uspi-item-child">
+            <input id="response_parse" type="checkbox" name="response_parse">
+            <label for="response_parse" ><span></span><ud data-localize>Set button image based on response</ud></label>
+          </div>
+        </div>
+      </div>
+      <div id="response_parse_settings" style="display:none">
+        <details>
+          <summary data-localize>Expand for Response parsing instructions</summary>
+          <p data-localize>Specify the JSON path and expected value in the API response to choose which image to show on the key.</p>
+          <p data-localize>A missing path will search for the expected value as a string anywhere in the response body.</p>
+          <p data-localize>A missing expected value will treat the field at the JSON path as a Boolean, where true is considered "matched".</p>
+        </details>
+        <div class="uspi-item">
+          <div class="uspi-item-label" data-localize>JSON Path</div>
+          <input class="uspi-item-value" type="text" id="response_parse_field" name="response_parse_field">
+        </div>
+        <div class="uspi-item">
+          <div class="uspi-item-label" data-localize>Expected Value</div>
+          <input class="uspi-item-value" type="text" id="response_parse_value" name="response_parse_value">
+        </div>
+        <div class="uspi-item" style="margin-left: 6px;" data-localize>Image to display when...</div>
+        <!-- <div class="uspi-item">
+          <div class="uspi-item-label" data-localize>..matched</div>
+          <div class="uspi-item-group file" id="matchedfilepickergroup">
+            <input class="uspi-item-value" type="file" id="image_matched" accept=".jpg, .jpeg, .png" name="image_matched_file">
+            <label class="uspi-file-info " for="image_matched" >...</label>
+            <label class="uspi-file-label" for="image_matched" data-localize>Choose file...</label>
+          </div>
+        </div>
+        <div class="uspi-item">
+          <div class="uspi-item-label" data-localize>..unmatched</div>
+          <div class="uspi-item-group file" id="unmatchedfilepickergroup">
+            <input class="uspi-item-value" type="file" id="image_unmatched" accept=".jpg, .jpeg, .png" name="image_unmatched_file">
+            <label class="uspi-file-info " for="image_unmatched" >...</label>
+            <label class="uspi-file-label" for="image_unmatched"  data-localize>Choose file...</label>
+          </div>
+        </div> -->
+
+        <div class="uspi-item" type="file">
+            <div class="uspi-item-label" data-localize>..matched</div>
+            <div class="uspi-item-value">
+                <input class="uspi-file-info" id="image_matched" name="image_matched" placeholder="No file..." data-localize/>
+                <div class="uspi-file-label">
+                  <img src="../../libs/assets/u_file.svg" onclick="showFileDialog('image_matched')" />
+                </div>
+            </div>
+        </div>
+        <div class="uspi-item" type="file">
+            <div class="uspi-item-label" data-localize>..unmatched</div>
+            <div class="uspi-item-value" >
+                <input class="uspi-file-info" id="image_unmatched" name="image_unmatched" placeholder="No file..." data-localize/>
+                <div class="uspi-file-label">
+                  <img src="../../libs/assets/u_file.svg" onclick="showFileDialog('image_unmatched')" />
+                </div>
+            </div>
+        </div>
+
+        <div class="uspi-item">
+          <div class="uspi-item-value">
+            <div class="uspi-item-child">
+              <input id="poll_status" type="checkbox" name="poll_status">
+              <label for="poll_status" ><span></span><ud data-localize>Periodically poll a URL for status</ud></label>
+            </div>
+          </div>
+        </div>
+        <div id="poll_status_settings" style="display:none">
+          <div class="uspi-item">
+            <div class="uspi-item-label"  data-localize>Status URL</div>
+            <input class="uspi-item-value" type="text" id="poll_status_url" name="poll_status_url">
+          </div>
+          <div class="uspi-item">
+            <div class="uspi-item-label" data-localize>HTTP Method</div>
+            <select class="uspi-item-value select" id="poll_status_method" name="poll_status_method">
+              <option value="GET" selected>GET</option>
+              <option value="POST">POST</option>
+              <option value="HEAD">HEAD</option>
+              <option value="PUT">PUT</option>
+              <option value="PATCH">PATCH</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+          </div>
+          <div class="uspi-item">
+            <div class="uspi-item-label" data-localize>Poll Frequency</div>
+            <input class="uspi-item-value max10" type="text" id="poll_status_frequency" pattern="\d+" value="15" name="poll_status_frequency">
+            <ud data-localize style="line-height: 26px;">seconds</ud>
+          </div>
+          <div class="uspi-item">
+            <div class="uspi-item-value">
+              <div class="uspi-item-child">
+                <input id="poll_status_parse" type="checkbox" name="poll_status_parse">
+                <label for="poll_status_parse" ><span></span><ud data-localize>Parse different field and value from status response</ud></label>
+              </div>
+            </div>
+          </div>
+          <div id="poll_status_parse_settings" style="display:none">
+            <div class="uspi-item">
+              <div class="uspi-item-label" data-localize>JSON Path</div>
+              <input class="uspi-item-value" type="text" id="poll_status_parse_field" name="poll_status_parse_field">
+            </div>
+            <div class="uspi-item">
+              <div class="uspi-item-label" data-localize>Expected Value</div>
+              <input class="uspi-item-value" type="text" id="poll_status_parse_value" name="poll_status_parse_value">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <script src="../../libs/js/constants.js"></script>
+  <script src="../../libs/js/eventEmitter.js"></script>
+  <script src="../../libs/js/timers.js"></script>
+  <script src="../../libs/js/utils.js"></script>
+  <script src="../../libs/js/ulanziApi.js"></script>
+
+
+  <script src="./inspector.js"></script>
+
+</body>
+
+</html>
