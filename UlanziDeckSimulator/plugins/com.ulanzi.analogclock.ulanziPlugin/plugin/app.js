@@ -1,5 +1,5 @@
 const ACTION_CACHES = {}
-$UD.connect('com.ulanzi.ulanzideck.analogclock')
+$UD.connect('com.ulanzi.ulanzistudio.analogclock')
 $UD.onConnected(conn => {})
 
 

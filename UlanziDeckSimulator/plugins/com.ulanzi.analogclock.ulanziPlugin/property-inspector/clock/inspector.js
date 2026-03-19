@@ -1,6 +1,6 @@
 let ACTION_SETTING = {}
 let form = ''
-$UD.connect('com.ulanzi.ulanzideck.analogclock.clock')
+$UD.connect()
 
 $UD.onConnected(conn => {
   //获取表单
@@ -18,7 +18,7 @@ $UD.onConnected(conn => {
 
 
   //连接上socket,显示配置项
-  const el = document.querySelector('.udpi-wrapper');
+  const el = document.querySelector('.uspi-wrapper');
   el.classList.remove('hidden');
 
 

@@ -17,7 +17,23 @@ const Events = Object.freeze({
 	STATE:'state',
 	OPENURL:'openurl',
 	OPENVIEW:'openview',
-	SELECTDIALOG:'selectdialog'
+	SELECTDIALOG:'selectdialog',
+	LOGMESSAGE:'logMessage',
+	HOTKEY:'hotkey',
+	SHOWALERT:'showAlert',
+	SENDTOPROPERTYINSPECTOR:'sendToPropertyInspector',
+	SENDTOPLUGIN:'sendToPlugin',
+	GETSETTINGS:'getSettings',
+	SETSETTINGS:'setSettings',
+	DIDRECEIVESETTINGS:'didReceiveSettings',
+	SETGLOBALSETTINGS:'setGlobalSettings',
+	GETGLOBALSETTINGS:'getGlobalSettings',
+	DIDRECEIVEGLOBALSETTINGS:'didReceiveGlobalSettings',
+	KEYDOWN:'keydown',
+	KEYUP:'keyup',
+	DIALEDOWN:'dialdown',
+	DIALEUP:'dialup',
+	DIALROTATE:'dialrotate'
 });
 
 /**

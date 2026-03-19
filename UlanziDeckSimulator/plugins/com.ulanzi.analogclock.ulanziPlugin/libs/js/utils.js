@@ -66,6 +66,7 @@ class UlanziUtils {
 
 				if (isCheckOrRadio) {
 					const isSingle = value === element.value;
+					console.warn('-----setFormValue isSingle:', isSingle, value, element.value)
 					if (isSingle || (Array.isArray(value) && value.includes(element.value))) {
 						element.checked = true;
 					}
@@ -446,15 +447,15 @@ class UlanziUtils {
 		}
 	
 		
-	
-		const fSize = text.length > 8 ? 30 - text.length / 2 : 40;
+		const font = `"Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif`;
+		const fSize = text.length > 6 ? 40 : 50;
 
 
-		ctx.strokeStyle = "#000";
-		ctx.lineWidth = 4;
+		// ctx.strokeStyle = "#000";
+		// ctx.lineWidth = 4;
 		
 		ctx.fillStyle = stroke;
-		ctx.font = `bold ${fSize}px "Source Han Sans SC"`;
+		ctx.font = `bold ${fSize}px ${font}`;
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 
@@ -462,7 +463,7 @@ class UlanziUtils {
 		ctx.fillText(text, ctx.canvas.width / 2, ctx.canvas.height / 2 );
 	
 		if(textLabel){
-			ctx.font = `bold 24px "Source Han Sans SC"`;
+			ctx.font = `bold 24px ${font}`;
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'left';
 			ctx.fillText(textLabel, 10, 20);

@@ -1,10 +1,10 @@
 {
   "Name": "Analog Clock",
-  "Description": "Always be on time.",
+  "Description": "Display time in real-time",
   "Actions": [
     {
-      "Name": "clock",
-      "Tooltip": "Show a nice analog clock"
+      "Name": "Clock",
+      "Tooltip": "Change clock style"
     }
   ],
   "Localization": {
