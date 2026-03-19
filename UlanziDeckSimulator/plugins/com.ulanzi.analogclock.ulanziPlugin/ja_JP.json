@@ -1,0 +1,21 @@
+{
+  "Name": "時計シミュレーション",
+  "Description": "リアルタイムで時刻を表示",
+  "Actions": [
+    {
+      "Name": "時計を設定",
+      "Tooltip": "時計のスタイルを変更"
+    }
+  ],
+  "Localization": {
+    "Face": "文字盤",
+    "Digital": "デジタル",
+    "Black": "ブラック",
+    "Blue": "ブルー",
+    "Blueish": "ライトブルー",
+    "Green": "グリーン",
+    "Red": "レッド",
+    "White": "ホワイト",
+    "Transparent": "透明"
+  }
+}

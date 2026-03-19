@@ -20,7 +20,7 @@
     "Name": "Analog Clock",
     "Description": "Always be on time.",
     "Icon": "assets/icons/icon.png",
-    "Version": "1.0.1",
+    "Version": "1.0.8",
     "Category": "Analog Clock",
     "CategoryIcon": "assets/icons/categoryIcon.png",
     "CodePath": "plugin/app.html",
@@ -39,6 +39,6 @@
       }
     ],
     "Software": {
-      "MinimumVersion": "6.1"
+      "MinVersion": "2.1.4"
     }
   }

@@ -53,6 +53,6 @@
     }
   ],
   "Software": {
-    "MinimumVersion": "6.1"
+      "MinVersion": "2.1.4"
   }
 }

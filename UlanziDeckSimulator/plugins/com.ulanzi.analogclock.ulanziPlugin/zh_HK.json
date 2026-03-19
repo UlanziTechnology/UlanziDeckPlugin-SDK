@@ -1,0 +1,21 @@
+{
+  "Name": "時鐘模擬",
+  "Description": "即時顯示時間",
+  "Actions": [
+    {
+      "Name": "設置時鐘",
+      "Tooltip": "更改時鐘樣式"
+    }
+  ],
+  "Localization": {
+    "Face": "錶面",
+    "Digital": "數字",
+    "Black": "黑色",
+    "Blue": "藍色",
+    "Blueish": "淺藍",
+    "Green": "綠色",
+    "Red": "紅色",
+    "White": "白色",
+    "Transparent": "透明"
+  }
+}

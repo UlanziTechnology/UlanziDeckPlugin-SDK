@@ -58,7 +58,8 @@
   function drawDigitalClock(date, h, m, s) {
       // const sTime = `${pad(h)}:${pad(m)}:${pad(s)}`;
       // const sTime = s % 2 == 0 ? date.toLocaleTimeString('en-US') : date.toLocaleTimeString();
-      const sTime = date.toLocaleTimeString();
+      const language = $UD.language.replace(/_/g, '-');
+      const sTime = date.toLocaleTimeString(language);
       const fSize = sTime.length > 8 ? 30 - sTime.length / 2 : 32;
       ctx.fillStyle = colors.stroke;
       ctx.font = `${fSize}px 'Source Han Sans SC'`;

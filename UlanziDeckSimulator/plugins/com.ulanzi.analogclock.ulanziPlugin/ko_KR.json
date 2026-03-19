@@ -1,0 +1,21 @@
+{
+  "Name": "시계 시뮬레이션",
+  "Description": "실시간 시간 표시",
+  "Actions": [
+    {
+      "Name": "시계 설정",
+      "Tooltip": "시계 스타일 변경"
+    }
+  ],
+  "Localization": {
+    "Face": "시계판",
+    "Digital": "디지털",
+    "Black": "검정",
+    "Blue": "파랑",
+    "Blueish": "연파랑",
+    "Green": "초록",
+    "Red": "빨강",
+    "White": "흰색",
+    "Transparent": "투명"
+  }
+}
